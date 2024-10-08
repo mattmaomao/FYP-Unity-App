@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,20 +9,17 @@ using UnityEngine.UI;
 public class TimerManager : MonoBehaviour
 {
     // variables
-    int prepareSec;
-    int readySec;
-    int endSec;
-    float prepareTimer;
-    float readyTimer;
-    float endTimer;
+    int prepareSec, readySec, endSec;
+    float prepareTimer, readyTimer, endTimer;
+    bool prepareEnded, readyEnded, endEnded;
     bool isRounded;
     bool isRoundA;
 
     // timer
     int displaySec;
     bool isRunning;
-
     bool isSetting;
+    bool playingSE;
 
     // env objs
     [SerializeField] TextMeshProUGUI timerDisplayText;
@@ -48,6 +46,7 @@ public class TimerManager : MonoBehaviour
         isRounded = false;
         isRoundA = true;
         isSetting = true;
+        playingSE = false;
 
         ResetTimer();
     }
@@ -56,29 +55,65 @@ public class TimerManager : MonoBehaviour
     {
         if (isRunning)
         {
-
+            // ready time
             if (prepareTimer > 0)
             {
                 prepareTimer -= Time.deltaTime;
                 displaySec = (int)Mathf.Ceil(prepareTimer);
             }
+            // ready time
             else if (readyTimer > 0)
             {
-                readyTimer -= Time.deltaTime;
-                displaySec = (int)Mathf.Ceil(readyTimer);
+                if (!prepareEnded)
+                {
+                    prepareEnded = true;
+                    StartCoroutine(playXBeep(2));
+                }
+                if (!playingSE)
+                {
+                    readyTimer -= Time.deltaTime;
+                    displaySec = (int)Mathf.Ceil(readyTimer);
+                }
             }
+            // end time
             else if (endTimer > 0)
             {
-                endTimer -= Time.deltaTime;
-                displaySec = (int)Mathf.Ceil(endTimer);
+                if (!readyEnded)
+                {
+                    readyEnded = true;
+                    StartCoroutine(playXBeep(1));
+                }
+                if (!playingSE)
+                {
+                    endTimer -= Time.deltaTime;
+                    displaySec = (int)Mathf.Ceil(endTimer);
+                }
             }
+            // switch round
             else if (isRounded && isRoundA)
             {
-                resetTimerCounter();
+                if (!endEnded)
+                {
+                    endEnded = true;
+                    StartCoroutine(playXBeep(3));
+                }
+                if (!playingSE)
+                {
+                    resetTimerCounter();
+                }
             }
+            // reset timer
             else
             {
-                ResetTimer();
+                if (!endEnded)
+                {
+                    endEnded = true;
+                    StartCoroutine(playXBeep(3));
+                }
+                if (!playingSE)
+                {
+                    ResetTimer();
+                }
             }
 
             // update display text
@@ -125,6 +160,18 @@ public class TimerManager : MonoBehaviour
 
     }
 
+    // play sound X times
+    IEnumerator playXBeep(int i)
+    {
+        playingSE = true;
+        for (int j = 0; j < i; j++)
+        {
+            float waitTime = AudioManager.instance.PlaySE(AudioManager.instance.beepbeep);
+            yield return new WaitForSeconds(waitTime);
+        }
+        playingSE = false;
+    }
+
     // switch between setting and control
     public void ConfirmSetting()
     {
@@ -149,6 +196,7 @@ public class TimerManager : MonoBehaviour
     public void ResetTimer()
     {
         isRunning = false;
+        prepareEnded = false;
         resetTimerCounter();
     }
 
@@ -160,6 +208,9 @@ public class TimerManager : MonoBehaviour
         prepareSecInput.text = prepareSec.ToString();
         readySecInput.text = readySec.ToString();
         endSecInput.text = endSec.ToString();
+
+        readyEnded = false;
+        endEnded = false;
 
         // auto start again if is round A
         if (isRunning && isRounded && isRoundA)
