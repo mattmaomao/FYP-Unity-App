@@ -20,7 +20,8 @@ public class DelayCameraManager : MonoBehaviour
 
     void Start()
     {
-        delayDisplay.rectTransform.sizeDelta = new Vector2(webCamTexture.width, webCamTexture.height);
+        delayDisplay.rectTransform.sizeDelta = new Vector2((float)Screen.height/webCamTexture.height*webCamTexture.width, Screen.height);
+        delayDisplay.rectTransform.localScale = new Vector2(-1, 1);
 
         timer = 0;
         updateInterval = 1f / FPS;
@@ -29,7 +30,7 @@ public class DelayCameraManager : MonoBehaviour
     void Update()
     {
         // // Capture frames and save them into the list
-        Texture2D frame = new Texture2D((int)(webCamTexture.height / delayDisplay.rectTransform.sizeDelta.y * webCamTexture.width), (int)delayDisplay.rectTransform.sizeDelta.y);
+        Texture2D frame = new Texture2D(webCamTexture.width, webCamTexture.height);
         frame.SetPixels(webCamTexture.GetPixels());
         frame.Apply();
         if (capturedFrames.Count < 1000)
