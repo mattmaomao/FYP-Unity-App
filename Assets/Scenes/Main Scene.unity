@@ -5483,7 +5483,7 @@ MonoBehaviour:
   homeIcon: {fileID: 774855531}
   userIcon: {fileID: 920774756}
   settingIcon: {fileID: 807170134}
-  homeIconSprite: {fileID: 21300000, guid: e54e7f558b82e8e489b5a9a847db2a8e, type: 3}
+  homeIconSprite: {fileID: 21300000, guid: aac64f9a8d6d98f41bcd2ba29e516063, type: 3}
   userIconSprite: {fileID: 21300000, guid: d363a4749f6570748ad8ab85e5c12955, type: 3}
   settingIconSprite: {fileID: 21300000, guid: 3c0845b823887284e958b457816da3be, type: 3}
   homeIconSprite_filled: {fileID: 21300000, guid: 6638bc5b17eafb34ea2bd998bd5488d1, type: 3}
