@@ -19,8 +19,9 @@ public class SlowMotionCameraManager : MonoBehaviour
 
     void Start()
     {
-        delayDisplay.rectTransform.sizeDelta = new Vector2((float)Screen.height/webCamTexture.height*webCamTexture.width, Screen.height);
-        delayDisplay.rectTransform.localScale = new Vector2(-1, 1);
+        delayDisplay.rectTransform.sizeDelta = new Vector2(webCamTexture.width, webCamTexture.height);
+        float scale = (float)Screen.height / webCamTexture.height;
+        delayDisplay.rectTransform.localScale = new Vector2(-scale, scale);
 
         timer = 0;
         updateInterval = 1f / FPS;
