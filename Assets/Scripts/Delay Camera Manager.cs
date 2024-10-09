@@ -78,7 +78,16 @@ public class DelayCameraManager : MonoBehaviour
     void OnEnable()
     {
         // Get the device camera
-        webCamTexture = new WebCamTexture();
+        // webCamTexture = new WebCamTexture();
+        WebCamDevice[] devices = WebCamTexture.devices;
+        foreach (WebCamDevice device in devices)
+        {
+            if (device.isFrontFacing)
+            {
+                webCamTexture = new WebCamTexture(device.name);
+                break;
+            }
+        }
     }
 
     void OnDisable()

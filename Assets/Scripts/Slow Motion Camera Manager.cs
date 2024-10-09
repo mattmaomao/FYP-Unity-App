@@ -29,35 +29,33 @@ public class SlowMotionCameraManager : MonoBehaviour
 
     void Update()
     {
-        // // Capture frames and save them into the list
-        if (capturedFrames.Count < 100)
-        {
-            Texture2D frame = new Texture2D(webCamTexture.width, webCamTexture.height);
-            frame.SetPixels(webCamTexture.GetPixels());
-            frame.Apply();
-            capturedFrames.Add(frame);
-        }
+        Texture2D frame = new Texture2D(webCamTexture.width, webCamTexture.height);
+        frame.SetPixels(webCamTexture.GetPixels());
+        frame.Apply();
+        capturedFrames.Add(frame);
 
-        // limit fps by device
-        _fps = 1 / Time.deltaTime;
-        updateInterval = 1f / Mathf.Min(FPS, _fps);
-
-        timer += Time.deltaTime;
-        // fps control
-        if (timer > updateInterval)
+        if (capturedFrames.Count > 1)
         {
-            timer = 0;
-            delayDisplay.texture = capturedFrames[0];
+            delayDisplay.texture = capturedFrames[1];
+            capturedFrames[0].hideFlags = HideFlags.HideAndDontSave;
+            Destroy(capturedFrames[0]);
+            capturedFrames.RemoveAt(0);
         }
-        capturedFrames[0].hideFlags = HideFlags.HideAndDontSave;
-        Destroy(capturedFrames[0]);
-        capturedFrames.RemoveAt(0);
     }
 
     void OnEnable()
     {
         // Get the device camera
-        webCamTexture = new WebCamTexture();
+        WebCamDevice[] devices = WebCamTexture.devices;
+        foreach (WebCamDevice device in devices)
+        {
+            if (device.isFrontFacing)
+            {
+                webCamTexture = new WebCamTexture(device.name);
+                break;
+            }
+        }
+
         webCamTexture.Play();
     }
 
@@ -86,10 +84,5 @@ public class SlowMotionCameraManager : MonoBehaviour
             webCamTexture.Stop();
             Destroy(webCamTexture);
         }
-    }
-
-    public void changeFPS(int i)
-    {
-        FPS = i;
     }
 }
