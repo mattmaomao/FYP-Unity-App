@@ -30,11 +30,11 @@ public class SlowMotionCameraManager : MonoBehaviour
     void Update()
     {
         // // Capture frames and save them into the list
-        Texture2D frame = new Texture2D(webCamTexture.width, webCamTexture.height);
-        frame.SetPixels(webCamTexture.GetPixels());
-        frame.Apply();
-        if (capturedFrames.Count < 1000)
+        if (capturedFrames.Count < 100)
         {
+            Texture2D frame = new Texture2D(webCamTexture.width, webCamTexture.height);
+            frame.SetPixels(webCamTexture.GetPixels());
+            frame.Apply();
             capturedFrames.Add(frame);
         }
 
@@ -49,6 +49,8 @@ public class SlowMotionCameraManager : MonoBehaviour
             timer = 0;
             delayDisplay.texture = capturedFrames[0];
         }
+        capturedFrames[0].hideFlags = HideFlags.HideAndDontSave;
+        Destroy(capturedFrames[0]);
         capturedFrames.RemoveAt(0);
     }
 
@@ -66,6 +68,14 @@ public class SlowMotionCameraManager : MonoBehaviour
         {
             webCamTexture.Stop();
         }
+
+        // Clear the list of captured frames
+        foreach (Texture2D frame in capturedFrames)
+        {
+            frame.hideFlags = HideFlags.HideAndDontSave;
+            Destroy(frame);
+        }
+        capturedFrames.Clear();
     }
 
     void OnDestroy()
