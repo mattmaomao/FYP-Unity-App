@@ -18,6 +18,7 @@ public class DelayCameraManager : MonoBehaviour
     float updateInterval = 1;
 
     public RawImage delayDisplay;
+    Quaternion baseRotation;
     float displayWidth, displayHeight;
     public TextMeshProUGUI hintText;
     [SerializeField] float textureScaleDown;
@@ -29,6 +30,10 @@ public class DelayCameraManager : MonoBehaviour
     {
         timer = 0;
         updateInterval = 1f / FPS;
+
+        // rotate image for mobile
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+            delayDisplay.rectTransform.localRotation = Quaternion.Euler(0, 0, -90);
     }
 
     void Update()

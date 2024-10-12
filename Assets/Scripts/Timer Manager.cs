@@ -35,6 +35,7 @@ public class TimerManager : MonoBehaviour
     [SerializeField] TMP_InputField readySecInput;
     [SerializeField] TMP_InputField endSecInput;
     [SerializeField] Toggle roundedToggle;
+    [SerializeField] ScrollRectSnap prepareSecScroll;
 
     void Start()
     {
@@ -121,33 +122,7 @@ public class TimerManager : MonoBehaviour
         }
         else if (isSetting)
         {
-            // read input field
-            if (prepareSecInput.text == "")
-                prepareSecInput.text = "0";
-            else
-                prepareSec = int.Parse(prepareSecInput.text);
-
-            if (readySecInput.text == "")
-                readySecInput.text = "0";
-            else
-                readySec = int.Parse(readySecInput.text);
-
-            if (endSecInput.text == "")
-                endSecInput.text = "0";
-            else
-                endSec = int.Parse(endSecInput.text);
-
-            isRounded = roundedToggle.isOn;
-            if (isRounded)
-            {
-                roundsA.SetActive(true);
-                roundsB.SetActive(true);
-            }
-            else
-            {
-                roundsA.SetActive(false);
-                roundsB.SetActive(false);
-            }
+            UpdateInputField();
 
             // update display text
             timerDisplayText.text = int.Parse(endSecInput.text).ToString("D4");
@@ -158,6 +133,54 @@ public class TimerManager : MonoBehaviour
         settingBtns.SetActive(isSetting);
         controlBtns.SetActive(!isSetting);
 
+    }
+
+    void OnDisable()
+    {
+        isSetting = true;
+        ResetTimer();
+    }
+
+    void UpdateInputField()
+    {
+        // read input field
+        if (prepareSecInput.text == "")
+            prepareSecInput.text = "0";
+        else
+        {
+            prepareSec = int.Parse(prepareSecInput.text);
+            prepareSecInput.text = prepareSec.ToString();
+        }
+        Debug.Log(prepareSecScroll.getItem());
+
+        if (readySecInput.text == "")
+            readySecInput.text = "0";
+        else
+        {
+            readySec = int.Parse(readySecInput.text);
+            readySecInput.text = readySec.ToString();
+        }
+
+        if (endSecInput.text == "")
+            endSecInput.text = "0";
+        else
+        {
+            endSec = int.Parse(endSecInput.text);
+            endSecInput.text = endSec.ToString();
+        }
+
+        // rounded
+        isRounded = roundedToggle.isOn;
+        if (isRounded)
+        {
+            roundsA.SetActive(true);
+            roundsB.SetActive(true);
+        }
+        else
+        {
+            roundsA.SetActive(false);
+            roundsB.SetActive(false);
+        }
     }
 
     // play sound X times
@@ -182,6 +205,13 @@ public class TimerManager : MonoBehaviour
     {
         isRunning = false;
         isSetting = true;
+    }
+
+    // timer setting
+    public void ChangeEndSec(int s)
+    {
+        endSecInput.text = s.ToString();
+        endSec = s;
     }
 
     // timer control
