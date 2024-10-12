@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,17 +10,17 @@ public class TimerManager : MonoBehaviour
     // variables
     int prepareSec, readySec, endSec;
     float prepareTimer, readyTimer, endTimer;
-    bool prepareEnded, readyEnded, endEnded;
+    bool readySEPlayed, endSEPlayed, roundSEPlayed;
     bool isRounded;
     bool isRoundA;
 
-    // timer
+    [Header("Timer")]
     int displaySec;
     bool isRunning;
     bool isSetting;
     bool playingSE;
 
-    // env objs
+    [Header("Env Objs")]
     [SerializeField] TextMeshProUGUI timerDisplayText;
     [SerializeField] GameObject roundsA;
     [SerializeField] GameObject roundsB;
@@ -30,12 +29,11 @@ public class TimerManager : MonoBehaviour
     [SerializeField] GameObject pauseBtn;
 
 
-    // inputs
-    [SerializeField] TMP_InputField prepareSecInput;
-    [SerializeField] TMP_InputField readySecInput;
+    [Header("Inputs")]
+    [SerializeField] ScrollRectSnap prepareSecScroll;
+    [SerializeField] ScrollRectSnap readySecScroll;
     [SerializeField] TMP_InputField endSecInput;
     [SerializeField] Toggle roundedToggle;
-    [SerializeField] ScrollRectSnap prepareSecScroll;
 
     void Start()
     {
@@ -65,9 +63,9 @@ public class TimerManager : MonoBehaviour
             // ready time
             else if (readyTimer > 0)
             {
-                if (!prepareEnded)
+                if (!readySEPlayed)
                 {
-                    prepareEnded = true;
+                    readySEPlayed = true;
                     StartCoroutine(playXBeep(2));
                 }
                 if (!playingSE)
@@ -79,9 +77,9 @@ public class TimerManager : MonoBehaviour
             // end time
             else if (endTimer > 0)
             {
-                if (!readyEnded)
+                if (!endSEPlayed)
                 {
-                    readyEnded = true;
+                    endSEPlayed = true;
                     StartCoroutine(playXBeep(1));
                 }
                 if (!playingSE)
@@ -93,9 +91,9 @@ public class TimerManager : MonoBehaviour
             // switch round
             else if (isRounded && isRoundA)
             {
-                if (!endEnded)
+                if (!roundSEPlayed)
                 {
-                    endEnded = true;
+                    roundSEPlayed = true;
                     StartCoroutine(playXBeep(3));
                 }
                 if (!playingSE)
@@ -106,9 +104,9 @@ public class TimerManager : MonoBehaviour
             // reset timer
             else
             {
-                if (!endEnded)
+                if (!roundSEPlayed)
                 {
-                    endEnded = true;
+                    roundSEPlayed = true;
                     StartCoroutine(playXBeep(3));
                 }
                 if (!playingSE)
@@ -144,22 +142,8 @@ public class TimerManager : MonoBehaviour
     void UpdateInputField()
     {
         // read input field
-        if (prepareSecInput.text == "")
-            prepareSecInput.text = "0";
-        else
-        {
-            prepareSec = int.Parse(prepareSecInput.text);
-            prepareSecInput.text = prepareSec.ToString();
-        }
-        Debug.Log(prepareSecScroll.getItem());
-
-        if (readySecInput.text == "")
-            readySecInput.text = "0";
-        else
-        {
-            readySec = int.Parse(readySecInput.text);
-            readySecInput.text = readySec.ToString();
-        }
+        prepareSec = int.Parse(prepareSecScroll.getItem());
+        readySec = int.Parse(readySecScroll.getItem());
 
         if (endSecInput.text == "")
             endSecInput.text = "0";
@@ -226,7 +210,7 @@ public class TimerManager : MonoBehaviour
     public void ResetTimer()
     {
         isRunning = false;
-        prepareEnded = false;
+        readySEPlayed = false;
         resetTimerCounter();
     }
 
@@ -235,12 +219,12 @@ public class TimerManager : MonoBehaviour
         prepareTimer = prepareSec;
         readyTimer = readySec;
         endTimer = endSec;
-        prepareSecInput.text = prepareSec.ToString();
-        readySecInput.text = readySec.ToString();
+        prepareSecScroll.initSnap(prepareSec);
+        readySecScroll.initSnap(readySec.ToString());
         endSecInput.text = endSec.ToString();
 
-        readyEnded = false;
-        endEnded = false;
+        endSEPlayed = false;
+        roundSEPlayed = false;
 
         // auto start again if is round A
         if (isRunning && isRounded && isRoundA)
