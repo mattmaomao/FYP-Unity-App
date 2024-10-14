@@ -26,6 +26,7 @@ public class TimerManager : MonoBehaviour
     [SerializeField] GameObject roundsB;
     [SerializeField] GameObject settingBtns;
     [SerializeField] GameObject controlBtns;
+    [SerializeField] GameObject startBtn;
     [SerializeField] GameObject pauseBtn;
 
 
@@ -127,6 +128,7 @@ public class TimerManager : MonoBehaviour
 
         }
 
+        startBtn.SetActive(!isRunning);
         pauseBtn.SetActive(isRunning);
         settingBtns.SetActive(isSetting);
         controlBtns.SetActive(!isSetting);
