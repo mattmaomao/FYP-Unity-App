@@ -5,14 +5,19 @@ using UnityEngine;
 
 public enum RecordType { Competition, Practice, Other }
 
+public struct ArrowRecord
+{
+    public int score;
+    public Vector2 landPos;
+}
+
 // one record of Round
 [System.Serializable]
 public class ScoreNote
 {
     public float timestamp;
     public RecordType recordType;
-    public List<List<int>> scores;
-    public List<List<Vector2>> landPos;
+    public List<List<ArrowRecord>> records;
     public int endArrow;    // 3, 6
     public int endNum;    // 6, 12
     public int roundNum = 2;
@@ -40,40 +45,59 @@ public class ScoreNote
     public void initScores()
     {
         // clear all scores
-        if (scores != null) {
-            foreach (List<int> temp in scores)
+        if (records != null)
+        {
+            foreach (List<ArrowRecord> temp in records)
                 temp.Clear();
-            scores.Clear();
+            records.Clear();
         }
 
-        // create list of scores (-1)
-        scores = new();
-        for (int i = 0; i < endArrow / 3 * endNum; i++)
+        // create list of scores (-1, default)
+        records = new();
+        for (int i = 0; i < endNum; i++)
         {
-            List<int> temp = new();
-            for (int j = 0; j < 3; j++)
-                temp.Add(-1);
-            scores.Add(temp);
+            List<ArrowRecord> temp = new();
+            for (int j = 0; j < endArrow; j++)
+                temp.Add(new ArrowRecord { score = -1, landPos = default });
+            records.Add(temp);
         }
     }
 
-    public void addScore(int end, int arrow, int score)
+    public void updateScore(int end, int arrow, int score, Vector2 landPos)
     {
-        scores[end][arrow] = score;
+        records[end][arrow] = new ArrowRecord { score = score, landPos = landPos };
     }
-    public void addScore(int score)
+    public void addScore(int score, Vector2 landPos)
     {
-        for (int i = 0; i < scores.Count; i++)
+        for (int i = 0; i < records.Count; i++)
         {
-            for (int j = 0; j < scores[i].Count; j++)
+            for (int j = 0; j < records[i].Count; j++)
             {
-                if (scores[i][j] == -1)
+                if (records[i][j].score == -1)
                 {
-                    scores[i][j] = score;
+                    records[i][j] = new ArrowRecord { score = score, landPos = landPos };
                     return;
                 }
             }
         }
     }
 
+    public int currentEnd()
+    {
+        for (int i = 0; i < records.Count; i++)
+            for (int j = 0; j < records[i].Count; j++)
+                if (records[i][j].score == -1)
+                    return i;
+
+        return records.Count;
+    }
+    public int currentArrowIdx()
+    {
+        int end = currentEnd();
+        for (int i = 0; i < records[end].Count; i++)
+            if (records[end][i].score == -1)
+                return i;
+
+        return -1;
+    }
 }
