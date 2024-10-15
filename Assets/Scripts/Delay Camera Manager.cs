@@ -12,7 +12,7 @@ public class DelayCameraManager : MonoBehaviour
 
     [SerializeField] float timer = 0f;
     [SerializeField] float FPSTimer = 0f;
-    [SerializeField] float delayTime = 3;
+    [SerializeField] public float delayTime = 0;
     [SerializeField] int FPS = 60;
     [SerializeField] int maxFrameStorage = 1000;
     float updateInterval = 1;
@@ -80,7 +80,7 @@ public class DelayCameraManager : MonoBehaviour
         usedMB = memoryUsage / (1024 * 1024);
     }
 
-    void OnEnable()
+    public void OnEnable()
     {
         // Get the device camera
         // webCamTexture = new WebCamTexture();
@@ -95,7 +95,7 @@ public class DelayCameraManager : MonoBehaviour
         }
     }
 
-    void OnDisable()
+    public void OnDisable()
     {
         // Stop the webcam when the GameObject is deactivated
         if (webCamTexture != null && webCamTexture.isPlaying)
@@ -110,6 +110,7 @@ public class DelayCameraManager : MonoBehaviour
             Destroy(frame);
         }
         capturedFrames.Clear();
+        timer = 0;
     }
 
     void OnDestroy()
