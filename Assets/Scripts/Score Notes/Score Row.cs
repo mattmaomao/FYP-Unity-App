@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScoreRow : MonoBehaviour
 {
@@ -12,6 +13,11 @@ public class ScoreRow : MonoBehaviour
     [SerializeField] TextMeshProUGUI endTotalText;
     [SerializeField] TextMeshProUGUI cumTotalText;
 
+    [Header("btns")]
+    [SerializeField] Button arrow1Btn;
+    [SerializeField] Button arrow2Btn;
+    [SerializeField] Button arrow3Btn;
+
     public void updateRow(List<int> scores, int endTotal, int cumTotal)
     {
         arrow1.text = scores[0] == -1 ? "" : scores[0] == 0 ? "M" : scores[0] == 11 ? "X" : scores[0].ToString();
@@ -21,13 +27,25 @@ public class ScoreRow : MonoBehaviour
         cumTotalText.text = cumTotal == -1 ? "" : cumTotal.ToString();
     }
 
-    public void initRow(int idx)
+    public void initRow(int i, bool arrow6)
     {
         clearRow();
-        arrowIdx.text = idx.ToString();
+        arrowIdx.text = ((i+1)*3).ToString();
+
+        // init btns
+        if (i % 2 == 0) {
+            arrow1Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell(i/2, 0); });
+            arrow2Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell(i/2, 1); });
+            arrow3Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell(i/2, 2); });
+        }
+        else if (arrow6) {
+            arrow1Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell((i-1)/2, 3); });
+            arrow2Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell((i-1)/2, 4); });
+            arrow3Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell((i-1)/2, 5); });
+        }
     }
 
-    public void clearRow()
+    void clearRow()
     {
         arrowIdx.text = "";
         arrow1.text = "";

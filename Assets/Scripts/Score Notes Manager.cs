@@ -1,17 +1,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
 
 public class ScoreNotesManager : MonoBehaviour
 {
+    #region Singleton
+    public static ScoreNotesManager instance;
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        // DontDestroyOnLoad(gameObject);
+        else
+            Destroy(gameObject);
+    }
+    #endregion
+
+    ScoreNote scoreNote;
     List<ScoreRow> scoreRows = new List<ScoreRow>();
     [SerializeField] GameObject rowParent;
     [SerializeField] GameObject rowPrefab;
-    ScoreNote scoreNote;
     [SerializeField] List<GameObject> arrowKnobs;
-    [SerializeField] bool canAdd = true;
+    bool canAdd = true;
+    [SerializeField] GameObject numPad;
+    [SerializeField] GameObject numPad_hideBtn;
+    [SerializeField] Vector2 selectedCell;
 
     void Start()
     {
@@ -26,8 +41,10 @@ public class ScoreNotesManager : MonoBehaviour
         }
 
         setGrid();
+        hideNumPad();
     }
 
+    #region display
     // init grid for score display
     void setGrid()
     {
@@ -41,7 +58,7 @@ public class ScoreNotesManager : MonoBehaviour
         for (int i = 0; i < totalEnds; i++)
         {
             scoreRows[i].gameObject.SetActive(true);
-            scoreRows[i].initRow((i + 1) * 3);
+            scoreRows[i].initRow(i, scoreNote.endArrow == 6);
         }
     }
     void updateGrid()
@@ -91,7 +108,7 @@ public class ScoreNotesManager : MonoBehaviour
     void updateMark()
     {
         clearMark();
-        
+
         int end = canAdd ? scoreNote.currentEnd() : scoreNote.currentEnd() - 1;
         for (int i = 0; i < scoreNote.records[end].Count; i++)
         {
@@ -113,6 +130,7 @@ public class ScoreNotesManager : MonoBehaviour
         foreach (GameObject obj in arrowKnobs)
             obj.SetActive(false);
     }
+    #endregion
 
     // add score, land position to the current end      => for target click
     public void addScore(int score, Vector2 landPos)
@@ -132,6 +150,7 @@ public class ScoreNotesManager : MonoBehaviour
         addScore(score, default);
     }
 
+    #region UI btns
     // remove previous input
     public void removelastInput()
     {
@@ -141,17 +160,22 @@ public class ScoreNotesManager : MonoBehaviour
             scoreNote.records[scoreNote.currentEnd() - 1][scoreNote.endArrow - 1] = new ArrowRecord { score = -1, landPos = default };
         else
             scoreNote.records[scoreNote.currentEnd()][scoreNote.currentArrowIdx() - 1] = new ArrowRecord { score = -1, landPos = default };
-        updateGrid();
         // remove last mark
         for (int i = arrowKnobs.Count - 1; i >= 0; i--)
+        {
             if (arrowKnobs[i].activeSelf)
             {
                 arrowKnobs[i].SetActive(false);
                 break;
             }
-        updateMark();
+        }
 
         canAdd = true;
+
+        selectedCell = new(scoreNote.currentEnd(), scoreNote.currentArrowIdx());
+
+        updateMark();
+        updateGrid();
     }
     // move to the next end
     public void nextEnd()
@@ -160,6 +184,42 @@ public class ScoreNotesManager : MonoBehaviour
         {
             clearMark();
             canAdd = true;
+
+            selectedCell = new(scoreNote.currentEnd(), scoreNote.currentArrowIdx());
         }
     }
+    #endregion
+
+    #region NumPad
+    public void showNumPad()
+    {
+        numPad.SetActive(true);
+        numPad_hideBtn.SetActive(true);
+    }
+    public void hideNumPad()
+    {
+        numPad.SetActive(false);
+        numPad_hideBtn.SetActive(false);
+    }
+    public void selectCell(int end, int arrow)
+    {
+        showNumPad();
+        selectedCell = new(end, arrow);
+    }
+    public void inputNum(int num)
+    {
+        if (!canAdd) return;
+
+        // calculate end, arrow idx from selected cell
+        scoreNote.updateScore((int)selectedCell.x, (int)selectedCell.y, num, default);
+
+        selectedCell = new(scoreNote.currentEnd(), scoreNote.currentArrowIdx());
+
+        if (scoreNote.currentArrowIdx() == 0)
+            canAdd = false;
+
+        updateGrid();
+    }
+    #endregion
+
 }
