@@ -4,11 +4,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class DelayCameraManager : MonoBehaviour
 {
 
     private WebCamTexture webCamTexture;
     private List<Texture2D> capturedFrames = new List<Texture2D>();
+
+    public Slider slider;
+    public Button button;
+    public TextMeshProUGUI prompt;
 
     [SerializeField] float timer = 0f;
     [SerializeField] float FPSTimer = 0f;
@@ -80,7 +85,7 @@ public class DelayCameraManager : MonoBehaviour
         usedMB = memoryUsage / (1024 * 1024);
     }
 
-    public void OnEnable()
+    void OnEnable()
     {
         // Get the device camera
         // webCamTexture = new WebCamTexture();
@@ -93,9 +98,13 @@ public class DelayCameraManager : MonoBehaviour
                 break;
             }
         }
+        slider.value = 1;
+        prompt.gameObject.SetActive(true);
+        slider.gameObject.SetActive(true);
+        button.gameObject.SetActive(true);
     }
 
-    public void OnDisable()
+    void OnDisable()
     {
         // Stop the webcam when the GameObject is deactivated
         if (webCamTexture != null && webCamTexture.isPlaying)
@@ -145,5 +154,10 @@ public class DelayCameraManager : MonoBehaviour
     public void changeDelayTime(int i)
     {
         delayTime = i;
+    }
+
+    public void disableCamera()
+    {
+        OnDisable();
     }
 }
