@@ -17,7 +17,7 @@ public class ScoreRow : MonoBehaviour
         arrow1.text = scores[0] == -1 ? "" : scores[0] == 0 ? "M" : scores[0] == 11 ? "X" : scores[0].ToString();
         arrow2.text = scores[1] == -1 ? "" : scores[1] == 0 ? "M" : scores[1] == 11 ? "X" : scores[1].ToString();
         arrow3.text = scores[2] == -1 ? "" : scores[2] == 0 ? "M" : scores[2] == 11 ? "X" : scores[2].ToString();
-        endTotalText.text = endTotal.ToString();
+        endTotalText.text = endTotal == -1? "" : endTotal.ToString();
         cumTotalText.text = cumTotal == -1 ? "" : cumTotal.ToString();
     }
 

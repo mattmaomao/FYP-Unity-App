@@ -14,19 +14,15 @@ public class TargetClick : MonoBehaviour
         maxBound = image.rectTransform.rect.height / 2;
     }
 
-    void Update()
+    public void readInput()
     {
-        if (Input.GetMouseButtonDown(0))
+        // Convert the screen point of the click to local position within the image's RectTransform
+        Vector2 localPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(image.rectTransform, Input.mousePosition, null, out localPoint);
+
+        if (localPoint.y <= maxBound && localPoint.y >= -maxBound)
         {
-            RectTransform rectTransform = image.rectTransform;
-
-            // Convert the screen point of the click to local position within the image's RectTransform
-            Vector2 localPoint;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTransform, Input.mousePosition, null, out localPoint);
-
-            if (localPoint.y <= maxBound && localPoint.y >= -maxBound) {
-                scoreNotesManager.addScore(calculateScore(localPoint), localPoint);
-            }
+            scoreNotesManager.addScore(calculateScore(localPoint), localPoint);
         }
     }
 
