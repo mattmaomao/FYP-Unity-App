@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class ScoreNotesManager : MonoBehaviour
 {
@@ -31,10 +32,26 @@ public class ScoreNotesManager : MonoBehaviour
     void Start()
     {
         // debug
-        scoreNote = new ScoreNote(0, RecordType.Practice, 6, 12, 2, 70);
+        scoreNote = new(
+            timestamp: Time.time,
+            title: "test",
+            recordType: RecordType.Practice,
+            distance: 18,
+            targetType: 1,
+            numOfRound: 2,
+            numOfEnd: 12,
+            arrowPerEnd: 6
+        );
+
+        initScoreNote(scoreNote);
+    }
+
+    public void initScoreNote(ScoreNote note)
+    {
+        scoreNote = note;
 
         scoreRows = new();
-        for (int i = 0; i < scoreNote.endArrow / 3 * scoreNote.endNum; i++)
+        for (int i = 0; i < scoreNote.arrowPerEnd / 3 * scoreNote.numOfEnd; i++)
         {
             GameObject row = Instantiate(rowPrefab, rowParent.transform);
             scoreRows.Add(row.GetComponent<ScoreRow>());
@@ -44,6 +61,7 @@ public class ScoreNotesManager : MonoBehaviour
         hideNumPad();
     }
 
+
     #region display
     // init grid for score display
     void setGrid()
@@ -51,14 +69,14 @@ public class ScoreNotesManager : MonoBehaviour
         foreach (ScoreRow row in scoreRows)
             row.gameObject.SetActive(false);
 
-        int totalEnds = scoreNote.endArrow / 3 * scoreNote.endNum;
+        int totalEnds = scoreNote.arrowPerEnd / 3 * scoreNote.numOfEnd;
         if (totalEnds > scoreRows.Count)
             Debug.LogError("not enough rows");
 
         for (int i = 0; i < totalEnds; i++)
         {
             scoreRows[i].gameObject.SetActive(true);
-            scoreRows[i].initRow(i, scoreNote.endArrow == 6);
+            scoreRows[i].initRow(i, scoreNote.arrowPerEnd == 6);
         }
     }
     void updateGrid()
@@ -76,10 +94,10 @@ public class ScoreNotesManager : MonoBehaviour
                     emptyRecord++;
                 scores.Add(scoreNote.records[i][j].score);
             }
-            if (emptyRecord == scoreNote.endArrow)
+            if (emptyRecord == scoreNote.arrowPerEnd)
             {
-                scoreRows[i * (scoreNote.endArrow / 3)].updateRow(new() { -1, -1, -1 }, -1, -1);
-                scoreRows[i * (scoreNote.endArrow / 3) + 1].updateRow(new() { -1, -1, -1 }, -1, -1);
+                scoreRows[i * (scoreNote.arrowPerEnd / 3)].updateRow(new() { -1, -1, -1 }, -1, -1);
+                scoreRows[i * (scoreNote.arrowPerEnd / 3) + 1].updateRow(new() { -1, -1, -1 }, -1, -1);
                 break;
             }
 
@@ -91,15 +109,15 @@ public class ScoreNotesManager : MonoBehaviour
             for (int j = 0; j < 3; j++)
                 subTotal += Mathf.Clamp(scores[j], 0, 10);
             cumTotal += subTotal;
-            scoreRows[i * (scoreNote.endArrow / 3)].updateRow(scores.GetRange(0, 3), subTotal, scoreNote.endArrow == 3 ? cumTotal : -1);
+            scoreRows[i * (scoreNote.arrowPerEnd / 3)].updateRow(scores.GetRange(0, 3), subTotal, scoreNote.arrowPerEnd == 3 ? cumTotal : -1);
 
-            if (scoreNote.endArrow == 6)
+            if (scoreNote.arrowPerEnd == 6)
             {
                 subTotal = 0;
                 for (int j = 3; j < 6; j++)
                     subTotal += Mathf.Clamp(scores[j], 0, 10);
                 cumTotal += subTotal;
-                scoreRows[i * (scoreNote.endArrow / 3) + 1].updateRow(scores.GetRange(3, 3), subTotal, cumTotal);
+                scoreRows[i * (scoreNote.arrowPerEnd / 3) + 1].updateRow(scores.GetRange(3, 3), subTotal, cumTotal);
             }
         }
     }
@@ -157,7 +175,7 @@ public class ScoreNotesManager : MonoBehaviour
         if (scoreNote.currentEnd() == 0 && scoreNote.currentArrowIdx() == 0) return;
 
         if (scoreNote.currentArrowIdx() == 0)
-            scoreNote.records[scoreNote.currentEnd() - 1][scoreNote.endArrow - 1] = new ArrowRecord { score = -1, landPos = default };
+            scoreNote.records[scoreNote.currentEnd() - 1][scoreNote.arrowPerEnd - 1] = new ArrowRecord { score = -1, landPos = default };
         else
             scoreNote.records[scoreNote.currentEnd()][scoreNote.currentArrowIdx() - 1] = new ArrowRecord { score = -1, landPos = default };
         // remove last mark

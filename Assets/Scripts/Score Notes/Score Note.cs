@@ -16,27 +16,29 @@ public struct ArrowRecord
 public class ScoreNote
 {
     public float timestamp;
+    public string title;
     public RecordType recordType;
-    public List<List<ArrowRecord>> records;
-    public int endArrow;    // 3, 6
-    public int endNum;    // 6, 12
-    public int roundNum = 2;
-
-    // preset used? (competition type)
-    // todo
-    public int distance;
+    public int distance;    // 18, 30, 50, 70, 90
+    public int targetType;    // 6, 10
+    public int numOfRound;    // 1, 2
+    public int numOfEnd;    // 6, 12
+    public int arrowPerEnd;    // 3, 6
 
     // used equipment
     // todo
 
-    public ScoreNote(float timestamp, RecordType recordType, int endArrow, int endNum, int roundNum, int distance, bool init = true)
+    public List<List<ArrowRecord>> records;
+
+    public ScoreNote(float timestamp, string title, RecordType recordType, int distance, int targetType, int numOfRound, int numOfEnd, int arrowPerEnd, bool init = true)
     {
         this.timestamp = timestamp;
+        this.title = title;
         this.recordType = recordType;
-        this.endArrow = endArrow;
-        this.endNum = endNum;
-        this.roundNum = roundNum;
         this.distance = distance;
+        this.targetType = targetType;
+        this.numOfRound = numOfRound;
+        this.numOfEnd = numOfEnd;
+        this.arrowPerEnd = arrowPerEnd;
 
         if (init)
             initScores();
@@ -54,10 +56,10 @@ public class ScoreNote
 
         // create list of scores (-1, default)
         records = new();
-        for (int i = 0; i < endNum; i++)
+        for (int i = 0; i < numOfEnd; i++)
         {
             List<ArrowRecord> temp = new();
-            for (int j = 0; j < endArrow; j++)
+            for (int j = 0; j < arrowPerEnd; j++)
                 temp.Add(new ArrowRecord { score = -1, landPos = default });
             records.Add(temp);
         }

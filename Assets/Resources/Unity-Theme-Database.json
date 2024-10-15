@@ -33,6 +33,14 @@
         {
             "guid": "e75d2a06-952c-4ae8-b402-d80e535eb746",
             "name": "On Background"
+        },
+        {
+            "guid": "46be30e0-0f2f-436c-a6c9-f08b48106403",
+            "name": "Cancel"
+        },
+        {
+            "guid": "bf780c05-76fe-4bfd-a331-5a6c5c8be729",
+            "name": "Primary Pale"
         }
     ],
     "themes": [
@@ -72,6 +80,14 @@
                 {
                     "guid": "e75d2a06-952c-4ae8-b402-d80e535eb746",
                     "colorHex": "#1C1B1FFF"
+                },
+                {
+                    "guid": "46be30e0-0f2f-436c-a6c9-f08b48106403",
+                    "colorHex": "#AAAAAAFF"
+                },
+                {
+                    "guid": "bf780c05-76fe-4bfd-a331-5a6c5c8be729",
+                    "colorHex": "#FFE596FF"
                 }
             ]
         },
@@ -111,6 +127,14 @@
                 {
                     "guid": "e75d2a06-952c-4ae8-b402-d80e535eb746",
                     "colorHex": "#FF00B6FF"
+                },
+                {
+                    "guid": "46be30e0-0f2f-436c-a6c9-f08b48106403",
+                    "colorHex": "#FFFFFFFF"
+                },
+                {
+                    "guid": "bf780c05-76fe-4bfd-a331-5a6c5c8be729",
+                    "colorHex": "#FFFFFFFF"
                 }
             ]
         }
