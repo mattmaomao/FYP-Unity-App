@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class CreateScoreNote : MonoBehaviour
 {
+    [SerializeField] ViewRecords viewRecords;
     [SerializeField] TMP_InputField titleName;
     [SerializeField] RadioSelection radio_recordType;
     [SerializeField] RadioSelection radio_distance;
@@ -27,24 +28,25 @@ public class CreateScoreNote : MonoBehaviour
     readonly List<int> arrowPerEnds = new() { 3, 6 };
 
     public void init() {
-        radio_recordType.initSelection();
-        radio_distance.initSelection();
-        radio_targetType.initSelection();
-        radio_numOfRound.initSelection();
-        radio_numOfEnd.initSelection();
-        radio_arrowPerEnd.initSelection();        
+        radio_recordType.init();
+        radio_distance.init();
+        radio_targetType.init();
+        radio_numOfRound.init();
+        radio_numOfEnd.init();
+        radio_arrowPerEnd.init();        
     }
 
     void Update()
     {
         // auto generate name
+        // todo
         titleName.placeholder.GetComponent<TextMeshProUGUI>().text = "Title 0";
     }
 
     public void createNote()
     {
         ScoreNote note = new(
-            timestamp: Time.time,
+            timestamp: System.DateTime.Now,
             title: titleName.text == "" ? titleName.placeholder.GetComponent<TextMeshProUGUI>().text : titleName.text,
             recordType: recordTypes[radio_recordType.selection],
             distance: distances[radio_distance.selection],
@@ -54,14 +56,11 @@ public class CreateScoreNote : MonoBehaviour
             arrowPerEnd: arrowPerEnds[radio_arrowPerEnd.selection]
         );
 
-        ScoreNotesManager.instance.initScoreNote(note);
-
-        // hide setting page
-        gameObject.SetActive(false);
+        viewRecords.openNote(note);
     }
 
     public void cancel()
     {
-
+        gameObject.SetActive(false);
     }
 }

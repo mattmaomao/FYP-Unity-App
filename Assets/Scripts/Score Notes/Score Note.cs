@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum RecordType { Competition, Practice, Other }
@@ -15,7 +14,7 @@ public struct ArrowRecord
 [System.Serializable]
 public class ScoreNote
 {
-    public float timestamp;
+    public System.DateTime timestamp;
     public string title;
     public RecordType recordType;
     public int distance;    // 18, 30, 50, 70, 90
@@ -29,7 +28,7 @@ public class ScoreNote
 
     public List<List<ArrowRecord>> records;
 
-    public ScoreNote(float timestamp, string title, RecordType recordType, int distance, int targetType, int numOfRound, int numOfEnd, int arrowPerEnd, bool init = true)
+    public ScoreNote(System.DateTime timestamp, string title, RecordType recordType, int distance, int targetType, int numOfRound, int numOfEnd, int arrowPerEnd, bool init = true)
     {
         this.timestamp = timestamp;
         this.title = title;
@@ -84,6 +83,7 @@ public class ScoreNote
         }
     }
 
+    #region get Data
     public int currentEnd()
     {
         for (int i = 0; i < records.Count; i++)
@@ -96,10 +96,22 @@ public class ScoreNote
     public int currentArrowIdx()
     {
         int end = currentEnd();
+        if (end == numOfEnd)
+            return 0;
+
         for (int i = 0; i < records[end].Count; i++)
             if (records[end][i].score == -1)
                 return i;
 
-        return -1;
+        return 0;
     }
+    public int getScore()
+    {
+        int score = 0;
+        foreach (List<ArrowRecord> end in records)
+            foreach (ArrowRecord arrow in end)
+                score += Mathf.Clamp(arrow.score, 0, 10);
+        return score;
+    }
+    #endregion
 }

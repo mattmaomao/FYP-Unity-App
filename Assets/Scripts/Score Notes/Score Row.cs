@@ -27,21 +27,21 @@ public class ScoreRow : MonoBehaviour
         cumTotalText.text = cumTotal == -1 ? "" : cumTotal.ToString();
     }
 
-    public void initRow(int i, bool arrow6)
+    public void initRow(int i, bool arrow6, ScoreNotesManager scoreNotesManager)
     {
         clearRow();
         arrowIdx.text = ((i+1)*3).ToString();
 
         // init btns
         if (i % 2 == 0) {
-            arrow1Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell(i/2, 0); });
-            arrow2Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell(i/2, 1); });
-            arrow3Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell(i/2, 2); });
+            arrow1Btn.onClick.AddListener(() => { scoreNotesManager.selectCell(i/2, 0); });
+            arrow2Btn.onClick.AddListener(() => { scoreNotesManager.selectCell(i/2, 1); });
+            arrow3Btn.onClick.AddListener(() => { scoreNotesManager.selectCell(i/2, 2); });
         }
         else if (arrow6) {
-            arrow1Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell((i-1)/2, 3); });
-            arrow2Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell((i-1)/2, 4); });
-            arrow3Btn.onClick.AddListener(() => { ScoreNotesManager.instance.selectCell((i-1)/2, 5); });
+            arrow1Btn.onClick.AddListener(() => { scoreNotesManager.selectCell((i-1)/2, 3); });
+            arrow2Btn.onClick.AddListener(() => { scoreNotesManager.selectCell((i-1)/2, 4); });
+            arrow3Btn.onClick.AddListener(() => { scoreNotesManager.selectCell((i-1)/2, 5); });
         }
     }
 

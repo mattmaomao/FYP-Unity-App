@@ -1,24 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class ScoreNotesManager : MonoBehaviour
 {
-    #region Singleton
-    public static ScoreNotesManager instance;
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-        // DontDestroyOnLoad(gameObject);
-        else
-            Destroy(gameObject);
-    }
-    #endregion
-
     ScoreNote scoreNote;
     List<ScoreRow> scoreRows = new List<ScoreRow>();
     [SerializeField] GameObject rowParent;
@@ -29,35 +15,24 @@ public class ScoreNotesManager : MonoBehaviour
     [SerializeField] GameObject numPad_hideBtn;
     [SerializeField] Vector2 selectedCell;
 
-    void Start()
-    {
-        // debug
-        scoreNote = new(
-            timestamp: Time.time,
-            title: "test",
-            recordType: RecordType.Practice,
-            distance: 18,
-            targetType: 1,
-            numOfRound: 2,
-            numOfEnd: 12,
-            arrowPerEnd: 6
-        );
-
-        initScoreNote(scoreNote);
-    }
-
     public void initScoreNote(ScoreNote note)
     {
         scoreNote = note;
 
+        foreach (ScoreRow row in scoreRows)
+            Destroy(row.gameObject);
+        scoreRows.Clear();
         scoreRows = new();
+
         for (int i = 0; i < scoreNote.arrowPerEnd / 3 * scoreNote.numOfEnd; i++)
         {
             GameObject row = Instantiate(rowPrefab, rowParent.transform);
             scoreRows.Add(row.GetComponent<ScoreRow>());
         }
 
+        canAdd = true;
         setGrid();
+        updateMark();
         hideNumPad();
     }
 
@@ -76,8 +51,9 @@ public class ScoreNotesManager : MonoBehaviour
         for (int i = 0; i < totalEnds; i++)
         {
             scoreRows[i].gameObject.SetActive(true);
-            scoreRows[i].initRow(i, scoreNote.arrowPerEnd == 6);
+            scoreRows[i].initRow(i, scoreNote.arrowPerEnd == 6, this);
         }
+        updateGrid();
     }
     void updateGrid()
     {
@@ -94,11 +70,14 @@ public class ScoreNotesManager : MonoBehaviour
                     emptyRecord++;
                 scores.Add(scoreNote.records[i][j].score);
             }
+            // if all empty, skip
             if (emptyRecord == scoreNote.arrowPerEnd)
             {
                 scoreRows[i * (scoreNote.arrowPerEnd / 3)].updateRow(new() { -1, -1, -1 }, -1, -1);
-                scoreRows[i * (scoreNote.arrowPerEnd / 3) + 1].updateRow(new() { -1, -1, -1 }, -1, -1);
-                break;
+                if (scoreNote.arrowPerEnd == 6)
+                    scoreRows[i * (scoreNote.arrowPerEnd / 3) + 1].updateRow(new() { -1, -1, -1 }, -1, -1);
+                // break;
+                continue;
             }
 
             scores.Sort();
