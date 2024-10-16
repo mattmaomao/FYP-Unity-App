@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum RecordType { Competition, Practice, Other }
+public enum TargetType { Ring6, Ring10 }
 
 public struct ArrowRecord
 {
@@ -18,7 +19,7 @@ public class ScoreNote
     public string title;
     public RecordType recordType;
     public int distance;    // 18, 30, 50, 70, 90
-    public int targetType;    // 6, 10
+    public TargetType targetType;    // 6, 10
     public int numOfRound;    // 1, 2
     public int numOfEnd;    // 6, 12
     public int arrowPerEnd;    // 3, 6
@@ -28,7 +29,7 @@ public class ScoreNote
 
     public List<List<ArrowRecord>> records;
 
-    public ScoreNote(System.DateTime timestamp, string title, RecordType recordType, int distance, int targetType, int numOfRound, int numOfEnd, int arrowPerEnd, bool init = true)
+    public ScoreNote(System.DateTime timestamp, string title, RecordType recordType, int distance, TargetType targetType, int numOfRound, int numOfEnd, int arrowPerEnd, bool init = true)
     {
         this.timestamp = timestamp;
         this.title = title;

@@ -20,12 +20,12 @@ public class RadioSelection : MonoBehaviour
         for (int i = 0; i < radioContainer.childCount; i++)
             radioBtns.Add(radioContainer.GetChild(i).gameObject);
 
-        for (int i = 0; i < radioBtns.Count; i++)
-        {
-            int bruh = i;
-            Button btn = radioBtns[i].GetComponent<Button>();
-            btn.onClick.AddListener(() => { selectRadio(bruh); });
-        }
+        // // add listeners to btns
+        // for (int i = 0; i < radioBtns.Count; i++)
+        // {
+        //     Button btn = radioBtns[i].GetComponent<Button>();
+        //     // btn.onClick.AddListener(() => { selectRadio(bruh); });
+        // }
 
         selectRadio(defaultSelection);
     }
@@ -42,7 +42,7 @@ public class RadioSelection : MonoBehaviour
     {
         foreach (GameObject btn in radioBtns)
             btn.GetComponent<RadioBtn>().setSelected(false);
-        
+
         radioBtns[idx].GetComponent<RadioBtn>().setSelected(true);
         selection = idx;
     }

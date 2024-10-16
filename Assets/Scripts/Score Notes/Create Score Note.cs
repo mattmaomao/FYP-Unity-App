@@ -21,8 +21,8 @@ public class CreateScoreNote : MonoBehaviour
 
     [Header("UI")]
     readonly List<RecordType> recordTypes = new() { RecordType.Practice, RecordType.Competition, RecordType.Other };
-    readonly List<int> distances = new() { 18, 30, 50, 70, 90 };
-    readonly List<int> targetTypes = new() { 6, 10 };
+    readonly List<int> distances = new() { 18, 30, 40, 50, 60, 70, 90 };
+    readonly List<TargetType> targetTypes = new() { TargetType.Ring6, TargetType.Ring10 };
     readonly List<int> numOfRounds = new() { 1, 2 };
     readonly List<int> numOfEnds = new() { 6, 12 };
     readonly List<int> arrowPerEnds = new() { 3, 6 };
@@ -50,7 +50,7 @@ public class CreateScoreNote : MonoBehaviour
             title: titleName.text == "" ? titleName.placeholder.GetComponent<TextMeshProUGUI>().text : titleName.text,
             recordType: recordTypes[radio_recordType.selection],
             distance: distances[radio_distance.selection],
-            targetType: 1,
+            targetType: targetTypes[radio_targetType.selection],
             numOfRound: numOfRounds[radio_numOfRound.selection],
             numOfEnd: numOfEnds[radio_numOfEnd.selection],
             arrowPerEnd: arrowPerEnds[radio_arrowPerEnd.selection]

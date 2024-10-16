@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ScoreNotesManager : MonoBehaviour
 {
-    ScoreNote scoreNote;
+    public ScoreNote scoreNote;
     List<ScoreRow> scoreRows = new List<ScoreRow>();
     [SerializeField] GameObject rowParent;
     [SerializeField] GameObject rowPrefab;
@@ -14,6 +14,10 @@ public class ScoreNotesManager : MonoBehaviour
     [SerializeField] GameObject numPad;
     [SerializeField] GameObject numPad_hideBtn;
     [SerializeField] Vector2 selectedCell;
+
+    [Header("Target Type")]
+    [SerializeField] GameObject target6;
+    [SerializeField] GameObject target10;
 
     public void initScoreNote(ScoreNote note)
     {
@@ -28,6 +32,17 @@ public class ScoreNotesManager : MonoBehaviour
         {
             GameObject row = Instantiate(rowPrefab, rowParent.transform);
             scoreRows.Add(row.GetComponent<ScoreRow>());
+        }
+
+        if (scoreNote.targetType == TargetType.Ring6)
+        {
+            target6.SetActive(true);
+            target10.SetActive(false);
+        }
+        else
+        {
+            target6.SetActive(false);
+            target10.SetActive(true);
         }
 
         canAdd = true;
@@ -206,6 +221,9 @@ public class ScoreNotesManager : MonoBehaviour
     public void inputNum(int num)
     {
         if (!canAdd) return;
+
+        // ignore [1, 5] input for ring 6
+        if (scoreNote.targetType == TargetType.Ring6 && num > 0 && num < 6)  return;
 
         // calculate end, arrow idx from selected cell
         scoreNote.updateScore((int)selectedCell.x, (int)selectedCell.y, num, default);

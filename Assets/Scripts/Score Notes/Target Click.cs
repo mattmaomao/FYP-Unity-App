@@ -29,9 +29,13 @@ public class TargetClick : MonoBehaviour
     int calculateScore(Vector2 clickPosition)
     {
         float distance = Vector2.Distance(Vector2.zero, clickPosition);
-        float temp = distance / maxBound * 10;
-        string score = temp <= 0.5f ? "X" : temp >= 10 ? "M" : Mathf.CeilToInt(10 - temp).ToString();
-
-        return temp <= 0.5f ? 11 : temp >= 10 ? 0 : Mathf.CeilToInt(10 - temp);
+        if (scoreNotesManager.scoreNote.targetType == TargetType.Ring10) {
+            float temp = distance / maxBound * 10;
+            return temp <= 0.5f ? 11 : temp >= 10 ? 0 : Mathf.CeilToInt(10 - temp);
+        }
+        else {
+            float temp = distance / maxBound * 5;
+            return temp <= 1f ? 11 : temp >= 5 ? 0 : Mathf.CeilToInt(10 - temp);
+        }
     }
 }

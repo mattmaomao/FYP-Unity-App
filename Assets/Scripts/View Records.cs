@@ -46,7 +46,7 @@ public class ViewRecords : MonoBehaviour
             title: "record 1",
             recordType: RecordType.Practice,
             distance: 18,
-            targetType: 1,
+            targetType: TargetType.Ring10,
             numOfRound: 2,
             numOfEnd: 12,
             arrowPerEnd: 6
