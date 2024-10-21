@@ -55,6 +55,7 @@ public class SlowMotionCameraManager : MonoBehaviour
             frame.SetPixels(webCamTexture.GetPixels());
             frame.Apply();
             capturedFrames.Add(frame);
+            delayDisplay.texture = frame;
             timer += frameInterval;
         } else { recording = false; }
 
