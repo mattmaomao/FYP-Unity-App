@@ -35,14 +35,16 @@ public class ViewRecords : MonoBehaviour
     // read from save file
     void loadRecords()
     {
+        foreach (GameObject obj in recordList)
+            Destroy(obj);
+        if (recordList != null)
+            recordList.Clear();
+        recordList = new();
+
         // spawn object for each record
         for (int i = 0; i < DataManager.instance.scoreNoteList.Count; i++)
         {
             int bruh = i;
-            foreach (GameObject obj in recordList)
-                Destroy(obj);
-            recordList.Clear();
-            recordList = new();
             GameObject record = Instantiate(recordPrefab, recordContainer);
             recordList.Add(record);
             record.GetComponent<RecordDisplay>().init(DataManager.instance.scoreNoteList[i]);
