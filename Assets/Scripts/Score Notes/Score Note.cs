@@ -57,7 +57,8 @@ public class ScoreNote
         }
 
         // create list of scores (-1, default)
-        records.Clear();
+        if (records != null)
+            records.Clear();
         records = new();
         for (int i = 0; i < numOfEnd; i++)
         {
