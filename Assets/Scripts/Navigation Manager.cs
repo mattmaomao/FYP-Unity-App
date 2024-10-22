@@ -10,12 +10,12 @@ public class NavigationManager : MonoBehaviour
     public List<GameObject> pages = new List<GameObject>();
     int currentPageIdx = 0;
 
-    // edges
+    [Header("Header, Footer")]
     [SerializeField] TextMeshProUGUI headerText;
     [SerializeField] GameObject headerBackBtn;
     [SerializeField] GameObject footer;
 
-    // footer icons
+    [Header("Footer")]
     [SerializeField] Image homeIcon;
     [SerializeField] Image userIcon;
     [SerializeField] Image settingIcon;
@@ -26,14 +26,17 @@ public class NavigationManager : MonoBehaviour
     [SerializeField] Sprite userIconSprite_filled;
     [SerializeField] Sprite settingIconSprite_filled;
 
+    List<int> pagesStack = new();
+
 
     // Start is called before the first frame update
     void Start()
     {
         ChangePage(0);
+        pagesStack.Add(0);
     }
 
-    public void ChangePage(int i)
+    public void ChangePage(int i, bool isBack)
     {
         // todo
         // make animation
@@ -52,6 +55,26 @@ public class NavigationManager : MonoBehaviour
         // show footer
         footer.SetActive(i < 3);
         changeFooterIcon(i);
+
+        if (i >= 3 && !isBack)
+            pagesStack.Add(i);
+    }
+    public void ChangePage(int i) {
+        ChangePage(i, false);
+    }
+
+
+    public void previousPage()
+    {
+        if (pagesStack.Count <= 1)
+        {
+            ChangePage(0, true);
+            return;
+        }
+
+        int i = pagesStack[^2];
+        pagesStack.RemoveAt(pagesStack.Count - 1);
+        ChangePage(i, true);
     }
 
     void changeFooterIcon(int i)
