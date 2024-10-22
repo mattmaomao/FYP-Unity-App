@@ -22,7 +22,8 @@ public class TargetClick : MonoBehaviour
 
         if (localPoint.y <= maxBound && localPoint.y >= -maxBound)
         {
-            scoreNotesManager.addScore(calculateScore(localPoint), localPoint);
+            float[] pos = new float[] {localPoint.x / maxBound, localPoint.y / maxBound};
+            scoreNotesManager.addScore(calculateScore(localPoint), pos);
         }
     }
 

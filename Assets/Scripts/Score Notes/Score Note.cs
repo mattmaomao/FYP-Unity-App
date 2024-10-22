@@ -8,7 +8,7 @@ public enum TargetType { Ring6, Ring10 }
 public struct ArrowRecord
 {
     public int score;
-    public Vector2 landPos;
+    public float[] landPos;
 }
 
 // one record of Round
@@ -29,7 +29,7 @@ public class ScoreNote
 
     public List<List<ArrowRecord>> records;
 
-    public ScoreNote(System.DateTime timestamp, string title, RecordType recordType, int distance, TargetType targetType, int numOfRound, int numOfEnd, int arrowPerEnd, bool init = true)
+    public ScoreNote(System.DateTime timestamp, string title, RecordType recordType, int distance, TargetType targetType, int numOfRound, int numOfEnd, int arrowPerEnd, List<List<ArrowRecord>> records = null)
     {
         this.timestamp = timestamp;
         this.title = title;
@@ -40,11 +40,13 @@ public class ScoreNote
         this.numOfEnd = numOfEnd;
         this.arrowPerEnd = arrowPerEnd;
 
-        if (init)
-            initScores();
+        if (records == null)
+            initRecord();
+        else
+            this.records = records;
     }
 
-    public void initScores()
+    public void initRecord()
     {
         // clear all scores
         if (records != null)
@@ -55,6 +57,7 @@ public class ScoreNote
         }
 
         // create list of scores (-1, default)
+        records.Clear();
         records = new();
         for (int i = 0; i < numOfEnd; i++)
         {
@@ -65,11 +68,11 @@ public class ScoreNote
         }
     }
 
-    public void updateScore(int end, int arrow, int score, Vector2 landPos)
+    public void updateScore(int end, int arrow, int score, float[] landPos)
     {
         records[end][arrow] = new ArrowRecord { score = score, landPos = landPos };
     }
-    public void addScore(int score, Vector2 landPos)
+    public void addScore(int score, float[] landPos)
     {
         for (int i = 0; i < records.Count; i++)
         {

@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class ViewRecords : MonoBehaviour
 {
-    // read list from save file
-    public List<ScoreNote> scoreNoteList = new List<ScoreNote>();
-
     [Header("sub pages")]
     [SerializeField] GameObject createScoreNote;
     [SerializeField] GameObject scoreNote;
@@ -18,7 +15,7 @@ public class ViewRecords : MonoBehaviour
     [SerializeField] Transform recordContainer;
     [SerializeField] GameObject recordPrefab;
 
-    void Start()
+    void OnEnable()
     {
         loadRecords();
 
@@ -38,25 +35,8 @@ public class ViewRecords : MonoBehaviour
     // read from save file
     void loadRecords()
     {
-        // todo
-        // debug temp
-        scoreNoteList.Add(new ScoreNote(
-            timestamp: System.DateTime.Now,
-            title: "record 1",
-            recordType: RecordType.Practice,
-            distance: 18,
-            targetType: TargetType.Ring10,
-            numOfRound: 2,
-            numOfEnd: 12,
-            arrowPerEnd: 6
-        ));
-        scoreNoteList[0].initScores();
-        for (int i = 0; i < scoreNoteList[0].numOfEnd / 2; i++)
-            for (int j = 0; j < scoreNoteList[0].arrowPerEnd; j++)
-                scoreNoteList[0].updateScore(i, j, Random.Range(0, 12), default);
-
         // spawn object for each record
-        for (int i = 0; i < scoreNoteList.Count; i++)
+        for (int i = 0; i < DataManager.instance.scoreNoteList.Count; i++)
         {
             int bruh = i;
             foreach (GameObject obj in recordList)
@@ -64,9 +44,10 @@ public class ViewRecords : MonoBehaviour
             recordList.Clear();
             recordList = new();
             GameObject record = Instantiate(recordPrefab, recordContainer);
-            record.GetComponent<RecordDisplay>().init(scoreNoteList[i]);
+            recordList.Add(record);
+            record.GetComponent<RecordDisplay>().init(DataManager.instance.scoreNoteList[i]);
             // add button to open corresponding record
-            record.GetComponent<Button>().onClick.AddListener(() => openNote(scoreNoteList[bruh]));
+            record.GetComponent<Button>().onClick.AddListener(() => openNote(DataManager.instance.scoreNoteList[bruh]));
         }
     }
 

@@ -1,14 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class ScoreAnalysis : MonoBehaviour
 {
-    // read list from save file
-    public List<ScoreNote> scoreNoteList = new List<ScoreNote>();
-
     [Header("setting")]
     [SerializeField] GameObject temp;
 
@@ -20,29 +17,15 @@ public class ScoreAnalysis : MonoBehaviour
     [SerializeField] RectTransform barContainer;
     [SerializeField] List<BarchartBarObj> scoreBars;
 
-    void Start()
+    void OnEnable()
     {
-        // debug temp
-        scoreNoteList.Add(new ScoreNote(
-            timestamp: System.DateTime.Now,
-            title: "record 1",
-            recordType: RecordType.Practice,
-            distance: 18,
-            targetType: TargetType.Ring10,
-            numOfRound: 2,
-            numOfEnd: 12,
-            arrowPerEnd: 6
-        ));
-        scoreNoteList[0].initScores();
-        for (int i = 0; i < scoreNoteList[0].numOfEnd * 0.75f; i++)
-            for (int j = 0; j < scoreNoteList[0].arrowPerEnd; j++)
-                scoreNoteList[0].updateScore(i, j, Random.Range(0, 12), default);
-
-        processScoreNote();
+        processScoreNote(DataManager.instance.scoreNoteList);
         updateBarchart();
+        updateGrouping();
     }
 
-    void processScoreNote()
+    // calculate statistics from score notes
+    void processScoreNote(List<ScoreNote> scoreNoteList)
     {
         // collect scores
         scoreRawList = new() { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -62,6 +45,7 @@ public class ScoreAnalysis : MonoBehaviour
             scorePercentageList[i] = (float)scoreRawList[i] / total * 100;
     }
 
+    // update bar chart display
     void updateBarchart()
     {
         float maxHeight = barContainer.rect.height
@@ -82,5 +66,12 @@ public class ScoreAnalysis : MonoBehaviour
             // calculate bar height
             scoreBars[i].changeBarHeight(maxHeight * scorePercentageList[i] / maxPercentage);
         }
+    }
+
+    // update grouping display
+    void updateGrouping() {
+        // todo
+        Debug.Log("update grouping");
+        Debug.Log("not yet implemented");
     }
 }

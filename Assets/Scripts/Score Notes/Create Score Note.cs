@@ -40,7 +40,7 @@ public class CreateScoreNote : MonoBehaviour
     {
         // auto generate name
         // todo
-        titleName.placeholder.GetComponent<TextMeshProUGUI>().text = "Title 0";
+        titleName.placeholder.GetComponent<TextMeshProUGUI>().text = "Record " + DataManager.instance.scoreNoteList.Count;
     }
 
     public void createNote()
@@ -56,6 +56,8 @@ public class CreateScoreNote : MonoBehaviour
             arrowPerEnd: arrowPerEnds[radio_arrowPerEnd.selection]
         );
 
+        DataManager.instance.scoreNoteList.Add(note);
+        DataManager.instance.SaveScoreNoteToFile();
         viewRecords.openNote(note);
     }
 

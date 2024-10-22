@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ScoreNotesManager : MonoBehaviour
 {
@@ -10,7 +10,7 @@ public class ScoreNotesManager : MonoBehaviour
     [SerializeField] GameObject rowParent;
     [SerializeField] GameObject rowPrefab;
     [SerializeField] List<GameObject> arrowKnobs;
-    bool canAdd = true;
+    bool canAdd = false;
     [SerializeField] GameObject numPad;
     [SerializeField] GameObject numPad_hideBtn;
     [SerializeField] Vector2 selectedCell;
@@ -18,6 +18,8 @@ public class ScoreNotesManager : MonoBehaviour
     [Header("Target Type")]
     [SerializeField] GameObject target6;
     [SerializeField] GameObject target10;
+    Image targetImage;
+
 
     public void initScoreNote(ScoreNote note)
     {
@@ -38,14 +40,19 @@ public class ScoreNotesManager : MonoBehaviour
         {
             target6.SetActive(true);
             target10.SetActive(false);
+            targetImage = target6.GetComponent<Image>();
         }
         else
         {
             target6.SetActive(false);
             target10.SetActive(true);
+            targetImage = target10.GetComponent<Image>();
         }
 
         canAdd = true;
+        if (scoreNote.currentEnd() == scoreNote.numOfEnd)
+            canAdd = false;
+
         setGrid();
         updateMark();
         hideNumPad();
@@ -130,7 +137,10 @@ public class ScoreNotesManager : MonoBehaviour
                 foreach (GameObject obj in arrowKnobs)
                     if (!obj.activeSelf)
                     {
-                        obj.transform.localPosition = scoreNote.records[end][i].landPos;
+                        obj.transform.localPosition = new Vector2(
+                            scoreNote.records[end][i].landPos[0] * targetImage.rectTransform.rect.height / 2,
+                            scoreNote.records[end][i].landPos[1] * targetImage.rectTransform.rect.height / 2
+                            );
                         obj.SetActive(true);
                         break;
                     }
@@ -145,7 +155,7 @@ public class ScoreNotesManager : MonoBehaviour
     #endregion
 
     // add score, land position to the current end      => for target click
-    public void addScore(int score, Vector2 landPos)
+    public void addScore(int score, float[] landPos)
     {
         if (!canAdd) return;
 
@@ -198,6 +208,7 @@ public class ScoreNotesManager : MonoBehaviour
             canAdd = true;
 
             selectedCell = new(scoreNote.currentEnd(), scoreNote.currentArrowIdx());
+            DataManager.instance.SaveScoreNoteToFile();
         }
     }
     #endregion
@@ -223,7 +234,7 @@ public class ScoreNotesManager : MonoBehaviour
         if (!canAdd) return;
 
         // ignore [1, 5] input for ring 6
-        if (scoreNote.targetType == TargetType.Ring6 && num > 0 && num < 6)  return;
+        if (scoreNote.targetType == TargetType.Ring6 && num > 0 && num < 6) return;
 
         // calculate end, arrow idx from selected cell
         scoreNote.updateScore((int)selectedCell.x, (int)selectedCell.y, num, default);
