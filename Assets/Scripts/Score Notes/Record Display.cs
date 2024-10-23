@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class RecordDisplay : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI recordTitle;
-    [SerializeField] TextMeshProUGUI recordDate;
-    [SerializeField] TextMeshProUGUI recordScore;
+    [SerializeField] public TextMeshProUGUI recordTitle;
+    [SerializeField] public TextMeshProUGUI recordDate;
+    [SerializeField] public TextMeshProUGUI recordScore;
 
     public void init(ScoreNote note) {
         recordTitle.text = note.title;
