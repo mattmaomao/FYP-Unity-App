@@ -34,13 +34,18 @@ public class ViewRecords : MonoBehaviour
     bool isNameAsc = true;
     bool isScoreAsc = true;
     bool isTimeAsc = true;
+    bool initSorted = false;
 
     void OnEnable()
     {
         currentScoreNoteList = DataManager.instance.scoreNoteList;
         showRecords();
 
-        sortByName();
+        if (currentSort != 2)
+            sortByTime();
+        if (!isTimeAsc)
+            sortByTime();
+
 
         // display all saved records
         recordsDisplay.SetActive(true);

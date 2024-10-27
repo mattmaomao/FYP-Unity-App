@@ -58,6 +58,9 @@ public class ScoreNotesManager : MonoBehaviour
         hideNumPad();
     }
 
+    void OnDisable() {
+        DataManager.instance.SaveScoreNoteToFile();
+    }
 
     #region display
     // init grid for score display
@@ -208,7 +211,7 @@ public class ScoreNotesManager : MonoBehaviour
             canAdd = true;
 
             selectedCell = new(scoreNote.currentEnd(), scoreNote.currentArrowIdx());
-            DataManager.instance.SaveScoreNoteToFile();
+            // DataManager.instance.SaveScoreNoteToFile();
         }
     }
     #endregion
