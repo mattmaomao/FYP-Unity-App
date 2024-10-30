@@ -34,6 +34,8 @@ public class NavigationManager : MonoBehaviour
     {
         ChangePage(0);
         pagesStack.Add(0);
+
+        Application.targetFrameRate = 240;
     }
 
     public void ChangePage(int i, bool isBack)
