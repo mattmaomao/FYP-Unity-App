@@ -40,7 +40,7 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(filePath_ScoreNote, json);
 
         Debug.Log("Data saved to file successfully. " + filePath_ScoreNote);
-        LoadScoreNoteFromFile();
+        // LoadScoreNoteFromFile();
     }
 
     [ContextMenu("Load Score Note from json")]

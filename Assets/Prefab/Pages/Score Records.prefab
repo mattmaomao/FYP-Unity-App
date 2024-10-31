@@ -715,7 +715,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4e424f4b39c7f494faefd764418e86a3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 301fe569da9047c4988d46c1707ea4e5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -924,7 +924,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 4e424f4b39c7f494faefd764418e86a3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 301fe569da9047c4988d46c1707ea4e5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1388,6 +1388,7 @@ MonoBehaviour:
   createScoreNote: {fileID: 5185973701426108548}
   scoreNote: {fileID: 2125357820360379547}
   recordsDisplay: {fileID: 607654569683666421}
+  currentScoreNoteList: []
   recordList: []
   recordContainer: {fileID: 5183048567392591436}
   recordPrefab: {fileID: 7120037369803166566, guid: bbafddb197b10a645b5908b6aca447c6, type: 3}

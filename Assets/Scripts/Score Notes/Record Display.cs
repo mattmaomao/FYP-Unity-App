@@ -11,7 +11,7 @@ public class RecordDisplay : MonoBehaviour
 
     public void init(ScoreNote note) {
         recordTitle.text = note.title;
-        recordDate.text = note.timestamp.ToString("dd/mm/yyyy");
+        recordDate.text = note.timestamp.ToString("dd/MM/yyyy");
         recordScore.text = note.getScore().ToString();
     }
 }

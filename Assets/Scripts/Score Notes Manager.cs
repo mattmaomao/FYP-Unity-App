@@ -5,11 +5,18 @@ using UnityEngine.UI;
 
 public class ScoreNotesManager : MonoBehaviour
 {
+    [Header("Regions")]
+    [SerializeField] GameObject targetRegion;
+    [SerializeField] GameObject gridRegion;
+
+    [Header("Score Note")]
     public ScoreNote scoreNote;
     List<ScoreRow> scoreRows = new List<ScoreRow>();
     [SerializeField] GameObject rowParent;
     [SerializeField] GameObject rowPrefab;
     [SerializeField] List<GameObject> arrowKnobs;
+
+    [Header("UI")]
     bool canAdd = false;
     [SerializeField] GameObject numPad;
     [SerializeField] GameObject numPad_hideBtn;
@@ -20,6 +27,25 @@ public class ScoreNotesManager : MonoBehaviour
     [SerializeField] GameObject target10;
     Image targetImage;
 
+    void Start()
+    {
+        adjustRegionRatio();
+    }
+
+    void adjustRegionRatio()
+    {
+        targetRegion.SetActive(true);
+        gridRegion.SetActive(true);
+
+        targetRegion.GetComponent<RectTransform>().sizeDelta = new Vector2(
+            targetRegion.GetComponent<RectTransform>().sizeDelta.x,
+            GetComponent<RectTransform>().rect.height * 0.5f
+        );
+        gridRegion.GetComponent<RectTransform>().sizeDelta = new Vector2(
+            gridRegion.GetComponent<RectTransform>().sizeDelta.x,
+            GetComponent<RectTransform>().rect.height * 0.5f
+        );
+    }
 
     public void initScoreNote(ScoreNote note)
     {
@@ -58,7 +84,8 @@ public class ScoreNotesManager : MonoBehaviour
         hideNumPad();
     }
 
-    void OnDisable() {
+    void OnDisable()
+    {
         DataManager.instance.SaveScoreNoteToFile();
     }
 
@@ -205,13 +232,16 @@ public class ScoreNotesManager : MonoBehaviour
     // move to the next end
     public void nextEnd()
     {
-        if (!canAdd && scoreNote.currentArrowIdx() == 0)
+        if (!canAdd && scoreNote.currentArrowIdx() == 0 && scoreNote.currentEnd() < scoreNote.numOfEnd)
         {
             clearMark();
             canAdd = true;
 
             selectedCell = new(scoreNote.currentEnd(), scoreNote.currentArrowIdx());
-            // DataManager.instance.SaveScoreNoteToFile();
+        }
+        if (scoreNote.currentEnd() == scoreNote.numOfEnd)
+        {
+            DataManager.instance.SaveScoreNoteToFile();
         }
     }
     #endregion

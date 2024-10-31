@@ -32,9 +32,8 @@ public class ViewRecords : MonoBehaviour
     [SerializeField] Sprite sprite_dec;
     int currentSort = -1;
     bool isNameAsc = true;
-    bool isScoreAsc = true;
-    bool isTimeAsc = true;
-    bool initSorted = false;
+    bool isScoreAsc = false;
+    bool isTimeAsc = false;
 
     void OnEnable()
     {
@@ -43,9 +42,8 @@ public class ViewRecords : MonoBehaviour
 
         if (currentSort != 2)
             sortByTime();
-        if (!isTimeAsc)
+        if (isTimeAsc)
             sortByTime();
-
 
         // display all saved records
         recordsDisplay.SetActive(true);
