@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
+//using UnityEngine.Experimental.Rendering;
 using UnityEngine.UI;
 
 public class SlowMotionCameraManager : MonoBehaviour
@@ -14,16 +14,20 @@ public class SlowMotionCameraManager : MonoBehaviour
     public TextMeshProUGUI load;
     public TextMeshProUGUI prompt;
     public Slider timeIntervalSlider;
-    public Slider rateSlider; 
+    public Slider rateSlider;
+    public Slider remainSlider;
     public Button button;
 
     [SerializeField] float timer = 0f;
-    [SerializeField] static int FPS = 30;
+    [SerializeField] static float FPS;
     [SerializeField] static float slowMotionRate = 0.5f;
-    [SerializeField] float frameInterval = 1f / FPS;
+    [SerializeField] float frameInterval;
     [SerializeField] float timeInterval = 4f;
     [SerializeField] float waiter = 0;
     [SerializeField] bool recording = false;
+    bool wait = true;
+    [SerializeField] float readyTime = 4f;
+
 
     float displayWidth, displayHeight;
     [SerializeField] float textureScaleDown;
@@ -39,6 +43,10 @@ public class SlowMotionCameraManager : MonoBehaviour
 
         timer = 0;
         recording = false;
+        FPS = 1.0f / Time.deltaTime;
+        frameInterval = 1f / FPS;
+        remainSlider.gameObject.SetActive(false);
+
 
     }
 
@@ -46,22 +54,41 @@ public class SlowMotionCameraManager : MonoBehaviour
     {
         if (!webCamTexture.isPlaying) return;
 
+        if ((wait == true) && (readyTime > 0))
+        {
+            wait = true;
+            readyTime -= Time.deltaTime;
+            int seconds = ((int)readyTime);
+            load.gameObject.SetActive(true);
+            load.SetText(seconds.ToString());
+            remainSlider.gameObject.SetActive(false);
+            delayDisplay.texture = null;
+
+        }
+        else
+        {
+            wait = false;
+            load.gameObject.SetActive(false);
+            readyTime = 4f;
+            recording = true;
+        }
 
         if (recording &&(timer < timeInterval))
         {
-            load.gameObject.SetActive(true);
-            delayDisplay.texture = null;
+            load.gameObject.SetActive(false);
+            remainSlider.gameObject.SetActive(true);
+            //delayDisplay.texture = null;
             Texture2D frame = new Texture2D(webCamTexture.width, webCamTexture.height);
             frame.SetPixels(webCamTexture.GetPixels());
             frame.Apply();
             capturedFrames.Add(frame);
             delayDisplay.texture = frame;
             timer += frameInterval;
-        } else { recording = false; }
 
-        if (!recording)
-        {
-            load.gameObject.SetActive(false);   
+        }
+        else { 
+            recording = false;
+            remainSlider.gameObject.SetActive(false);
         }
 
         if ((capturedFrames.Count > 1) && (!recording) && (waiter >= (1f / (FPS * slowMotionRate))))
@@ -76,7 +103,7 @@ public class SlowMotionCameraManager : MonoBehaviour
         else if ((capturedFrames.Count == 1) && !recording) {
             timer = 0;
             capturedFrames.Clear();
-            recording = true;
+            wait = true;
         }
         else if (waiter < (1f / (FPS * slowMotionRate))){
             waiter += frameInterval;
@@ -151,7 +178,7 @@ public class SlowMotionCameraManager : MonoBehaviour
             //webCamTexture.requestedHeight = (int)displayHeight;
 
             webCamTexture.Play();
-            recording = true;
+            wait = true;
         }
     }
 
@@ -165,6 +192,15 @@ public class SlowMotionCameraManager : MonoBehaviour
     public void disableCamera()
     {
         OnDisable();
+    }
+
+    public float getRemainTime()
+    {
+        return timeInterval - timer;
+    }
+    public float getInterval()
+    {
+        return timeInterval;
     }
 
 }
