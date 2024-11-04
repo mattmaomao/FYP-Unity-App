@@ -166,16 +166,16 @@ public class SlowMotionCameraManager : MonoBehaviour
     {
         if (webCamTexture != null)
         {
-            //displayWidth = 1280 / textureScaleDown;
-            //displayHeight = 720 / textureScaleDown;
+            displayWidth = 1280 / textureScaleDown;
+            displayHeight = 720 / textureScaleDown;
 
-            //float scale = Screen.height / displayHeight;
+            float scale = Screen.height / displayHeight;
 
-            //delayDisplay.rectTransform.sizeDelta = new Vector2(displayWidth, displayHeight);
-            //delayDisplay.rectTransform.localScale = new Vector2(-scale, scale);
+            delayDisplay.rectTransform.sizeDelta = new Vector2(displayWidth, displayHeight);
+            delayDisplay.rectTransform.localScale = new Vector2(-scale, scale);
 
-            //webCamTexture.requestedWidth = (int)displayWidth;
-            //webCamTexture.requestedHeight = (int)displayHeight;
+            webCamTexture.requestedWidth = (int)displayWidth;
+            webCamTexture.requestedHeight = (int)displayHeight;
 
             webCamTexture.Play();
             wait = true;
