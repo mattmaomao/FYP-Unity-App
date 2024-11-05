@@ -120,11 +120,13 @@ namespace Mediapipe.Unity
 
       if (!_IsPermitted)
       {
+        Debug.LogWarning("no permission");
         yield break;
       }
 
       if (webCamDevice != null)
       {
+        Debug.LogWarning("no WebCam");
         yield break;
       }
 
@@ -194,6 +196,7 @@ namespace Mediapipe.Unity
       }
 
       InitializeWebCamTexture();
+      Debug.Log("webCamTexture: " + webCamTexture.name);
       webCamTexture.Play();
       yield return WaitForWebCamTexture();
     }
@@ -239,11 +242,27 @@ namespace Mediapipe.Unity
     private void InitializeWebCamTexture()
     {
       Stop();
-      if (webCamDevice is WebCamDevice valueOfWebCamDevice)
+
+      // try to find the front camera
+      WebCamDevice[] devices = WebCamTexture.devices;
+      foreach (WebCamDevice device in devices)
       {
-        webCamTexture = new WebCamTexture(valueOfWebCamDevice.name, resolution.width, resolution.height, (int)resolution.frameRate);
-        return;
+        if (device.isFrontFacing)
+        {
+          Debug.Log(device.name);
+          webCamTexture = new WebCamTexture(device.name);
+          // return;
+        }
       }
+      return;
+
+      // if (webCamDevice is WebCamDevice valueOfWebCamDevice)
+      // {
+      //   Debug.Log("webCamDevice: " + webCamDevice);
+      //   Debug.Log("valueOfWebCamDevice: " + valueOfWebCamDevice + ", " + valueOfWebCamDevice.name);
+      //   webCamTexture = new WebCamTexture(valueOfWebCamDevice.name, resolution.width, resolution.height, (int)resolution.frameRate);
+      //   return;
+      // }
       throw new InvalidOperationException("Cannot initialize WebCamTexture because WebCamDevice is not selected");
     }
 
