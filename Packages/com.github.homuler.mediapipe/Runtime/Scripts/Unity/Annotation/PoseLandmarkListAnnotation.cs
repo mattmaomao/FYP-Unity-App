@@ -113,6 +113,12 @@ namespace Mediapipe.Unity
     }
 
     public PointAnnotation this[int index] => _landmarkListAnnotation[index];
+    public PointListAnnotation getPointListAnnotation() {
+      return _landmarkListAnnotation;
+    }
+    public ConnectionListAnnotation getConnectionListAnnotation() {
+      return _connectionListAnnotation;
+    }
 
     private void Start()
     {

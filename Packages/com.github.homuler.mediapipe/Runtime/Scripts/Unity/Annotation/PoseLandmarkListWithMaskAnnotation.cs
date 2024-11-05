@@ -20,6 +20,13 @@ namespace Mediapipe.Unity
     [SerializeField] private PoseLandmarkListAnnotation _poseLandmarkListAnnotation;
     [SerializeField] private MaskOverlayAnnotation _maskOverlayAnnotation;
 
+    public PointListAnnotation getPointListAnnotation() {
+      return _poseLandmarkListAnnotation.getPointListAnnotation();
+    }
+    public ConnectionListAnnotation getConnectionListAnnotation() {
+      return _poseLandmarkListAnnotation.getConnectionListAnnotation();
+    }
+
     public override bool isMirrored
     {
       set
