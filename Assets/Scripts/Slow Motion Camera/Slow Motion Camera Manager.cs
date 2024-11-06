@@ -41,6 +41,9 @@ public class SlowMotionCameraManager : MonoBehaviour
         //float scale = (float)Screen.height / webCamTexture.height;
         //delayDisplay.rectTransform.localScale = new Vector2(-scale, scale);
 
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+            delayDisplay.rectTransform.localRotation = Quaternion.Euler(0, 0, -90);
+
         timer = 0;
         recording = false;
         FPS = 1.0f / Time.deltaTime;
