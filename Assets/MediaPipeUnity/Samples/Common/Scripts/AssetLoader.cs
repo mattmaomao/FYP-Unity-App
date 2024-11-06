@@ -13,6 +13,7 @@ namespace Mediapipe.Unity.Sample
     private static IResourceManager _ResourceManager;
 
     public static void Provide(IResourceManager manager) => _ResourceManager = manager;
+    public static bool isManagerNull() => _ResourceManager == null;
 
     public static IEnumerator PrepareAssetAsync(string name, string uniqueKey, bool overwrite = false)
     {

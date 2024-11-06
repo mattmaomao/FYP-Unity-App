@@ -29,6 +29,8 @@ namespace Mediapipe.Unity.Sample.PoseLandmarkDetection
 
         protected override IEnumerator Run()
         {
+            GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nLandMarker Run()";
+
             Debug.Log($"Delegate = {config.Delegate}");
             Debug.Log($"Model = {config.ModelName}");
             Debug.Log($"Running Mode = {config.RunningMode}");
@@ -38,7 +40,12 @@ namespace Mediapipe.Unity.Sample.PoseLandmarkDetection
             Debug.Log($"MinTrackingConfidence = {config.MinTrackingConfidence}");
             Debug.Log($"OutputSegmentationMasks = {config.OutputSegmentationMasks}");
 
-            yield return AssetLoader.PrepareAssetAsync(config.ModelPath);
+            if (!AssetLoader.isManagerNull())
+                yield return AssetLoader.PrepareAssetAsync(config.ModelPath);
+            else
+                yield break;
+                
+            GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nImage Source Play()";
 
             options = config.GetPoseLandmarkerOptions(
                 config.RunningMode == Tasks.Vision.Core.RunningMode.LIVE_STREAM ?
@@ -47,6 +54,8 @@ namespace Mediapipe.Unity.Sample.PoseLandmarkDetection
             var imageSource = ImageSourceProvider.ImageSource;
             Debug.Log("ImageSource: " + imageSource);
             Debug.Log("ImageSourceProvider type: " + ImageSourceProvider.CurrentSourceType);
+
+            GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nImage Source Play()";
 
             yield return imageSource.Play();
 

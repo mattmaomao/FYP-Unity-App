@@ -120,13 +120,11 @@ namespace Mediapipe.Unity
 
       if (!_IsPermitted)
       {
-        Debug.LogWarning("no permission");
         yield break;
       }
 
       if (webCamDevice != null)
       {
-        Debug.LogWarning("no WebCam");
         yield break;
       }
 
@@ -189,6 +187,7 @@ namespace Mediapipe.Unity
 
     public override IEnumerator Play()
     {
+      GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nWebCam Source Play()";
       yield return Initialize();
       if (!_IsPermitted)
       {
@@ -196,7 +195,7 @@ namespace Mediapipe.Unity
       }
 
       InitializeWebCamTexture();
-      Debug.Log("webCamTexture: " + webCamTexture.name);
+      GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nWebCam Texture Play()";
       webCamTexture.Play();
       yield return WaitForWebCamTexture();
     }
@@ -243,27 +242,32 @@ namespace Mediapipe.Unity
     {
       Stop();
 
+#if ANDROID
+      GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nusing android";
+
       // try to find the front camera
       WebCamDevice[] devices = WebCamTexture.devices;
       foreach (WebCamDevice device in devices)
       {
         if (device.isFrontFacing)
         {
-          Debug.Log(device.name);
+          GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\ncamera: " + device.name;
           webCamTexture = new WebCamTexture(device.name);
-          // return;
+          return;
         }
       }
-      return;
+#else
+      GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nusing other device";
 
-      // if (webCamDevice is WebCamDevice valueOfWebCamDevice)
-      // {
-      //   Debug.Log("webCamDevice: " + webCamDevice);
-      //   Debug.Log("valueOfWebCamDevice: " + valueOfWebCamDevice + ", " + valueOfWebCamDevice.name);
-      //   webCamTexture = new WebCamTexture(valueOfWebCamDevice.name, resolution.width, resolution.height, (int)resolution.frameRate);
-      //   return;
-      // }
+      if (webCamDevice is WebCamDevice valueOfWebCamDevice)
+      {
+        GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\ncamera: " + webCamDevice;
+        webCamTexture = new WebCamTexture(valueOfWebCamDevice.name, resolution.width, resolution.height, (int)resolution.frameRate);
+        return;
+      }
       throw new InvalidOperationException("Cannot initialize WebCamTexture because WebCamDevice is not selected");
+#endif
+
     }
 
     private IEnumerator WaitForWebCamTexture()
