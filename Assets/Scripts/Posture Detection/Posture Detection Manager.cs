@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mediapipe.Unity;
-using Unity.VisualScripting;
+using Mediapipe.Unity.Sample.PoseLandmarkDetection;
 using UnityEngine;
 
 public enum PosePtIdx
@@ -52,28 +52,41 @@ public enum PoseConnectionIdx
     RightAnkle_RightHeel = 32, RightAnkle_RightFootIndex = 33, RightHeel_RightFootIndex = 34
 }
 
-public class PosureDetectionManager : MonoBehaviour
+public class PostureDetectionManager : MonoBehaviour
 {
-    [SerializeField] MultiPoseLandmarkListWithMaskAnnotation bruh;
+    [SerializeField] MyLandmarkerRunner myLandmarkerRunner;
+    [SerializeField] MultiPoseLandmarkListWithMaskAnnotation multiPoseLandmarkListWithMaskAnnotation;
     [SerializeField] List<PointAnnotation> pointAnnotations = new();
     [SerializeField] List<ConnectionAnnotation> connectionAnnotations = new();
     bool initedPointList = false;
 
-    // debug
+    [Header("Debug")]
     [SerializeField] GameObject anslystWindow;
+    [SerializeField] GameObject table;
+    [SerializeField] List<GameObject> rowList = new();
+    [SerializeField] GameObject rowPrefab;
+
+    void Start()
+    {
+        generateTable();
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (!initedPointList)
         {
-            if (bruh == null)
+            if (multiPoseLandmarkListWithMaskAnnotation == null)
                 return;
 
-            if (bruh[0] == null)
+            if (multiPoseLandmarkListWithMaskAnnotation.count <= 0)
                 return;
 
             getAnnoIntoList();
+        }
+        else
+        {
+            updateTable();
         }
     }
 
@@ -81,7 +94,7 @@ public class PosureDetectionManager : MonoBehaviour
     void getAnnoIntoList()
     {
         // point
-        PointListAnnotation pointListAnnotation = bruh[0].getPointListAnnotation();
+        PointListAnnotation pointListAnnotation = multiPoseLandmarkListWithMaskAnnotation[0].getPointListAnnotation();
 
         pointAnnotations?.Clear();
         pointAnnotations = new();
@@ -92,7 +105,7 @@ public class PosureDetectionManager : MonoBehaviour
         }
 
         // connection
-        ConnectionListAnnotation connectionListAnnotation = bruh[0].getConnectionListAnnotation();
+        ConnectionListAnnotation connectionListAnnotation = multiPoseLandmarkListWithMaskAnnotation[0].getConnectionListAnnotation();
 
         connectionAnnotations?.Clear();
         connectionAnnotations = new();
@@ -177,8 +190,59 @@ public class PosureDetectionManager : MonoBehaviour
         }
     }
 
+    string[] detectValue = new string[] {
+        "L shoulder Pos X", "L shoulder Pos Y", "L shoulder Pos Z",
+        "R shoulder Pos X", "R shoulder Pos Y", "R shoulder Pos Z"
+    };
+
+    void updateTable()
+    {
+        // calculate detect value
+        rowList[0].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.x);
+        rowList[1].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y);
+        rowList[2].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.z);
+        rowList[3].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.x);
+        rowList[4].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y);
+        rowList[5].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.z);
+    }
+
+    void generateTable()
+    {
+        // clear table
+        foreach (GameObject row in rowList)
+            Destroy(row);
+        rowList?.Clear();
+
+        // generate table
+        for (int i = 0; i < detectValue.Length; i++)
+        {
+            GameObject row = Instantiate(rowPrefab, table.transform);
+            rowList.Add(row);
+            rowList[i].GetComponent<TableData>().nameText.text = detectValue[i];
+        }
+    }
+
     // button
-    public void toggleAnalyst() {
-        anslystWindow.SetActive(anslystWindow.activeSelf);
+    public void toggleAnalyst()
+    {
+        anslystWindow.SetActive(!anslystWindow.activeSelf);
+    }
+
+    [SerializeField] int setting = 3;
+    [ContextMenu("Change Mode")]
+    // public void changeMode(int idx) {
+    public void changeMode() {
+        StartCoroutine(changeModeCoroutine());
+        
+    }
+
+    IEnumerator changeModeCoroutine()
+    {
+        myLandmarkerRunner.Stop();
+        yield return new WaitForSeconds(0.1f);
+        // myLandmarkerRunner.changeOptions(idx);
+        myLandmarkerRunner.changeOptions(setting);
+        yield return new WaitForSeconds(0.1f);
+        myLandmarkerRunner.Play();
     }
 }
