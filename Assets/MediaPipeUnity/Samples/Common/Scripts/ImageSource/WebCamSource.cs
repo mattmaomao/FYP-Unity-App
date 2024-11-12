@@ -187,7 +187,6 @@ namespace Mediapipe.Unity
 
     public override IEnumerator Play()
     {
-      GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nWebCam Source Play()";
       yield return Initialize();
       if (!_IsPermitted)
       {
@@ -195,7 +194,6 @@ namespace Mediapipe.Unity
       }
 
       InitializeWebCamTexture();
-      GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nWebCam Texture Play()";
       webCamTexture.Play();
       yield return WaitForWebCamTexture();
     }
@@ -243,7 +241,6 @@ namespace Mediapipe.Unity
       Stop();
 
 #if ANDROID
-      GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nusing android";
 
       // try to find the front camera
       WebCamDevice[] devices = WebCamTexture.devices;
@@ -251,17 +248,14 @@ namespace Mediapipe.Unity
       {
         if (device.isFrontFacing)
         {
-          GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\ncamera: " + device.name;
           webCamTexture = new WebCamTexture(device.name);
           return;
         }
       }
 #else
-      GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nusing other device";
 
       if (webCamDevice is WebCamDevice valueOfWebCamDevice)
       {
-        GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\ncamera: " + webCamDevice;
         webCamTexture = new WebCamTexture(valueOfWebCamDevice.name, resolution.width, resolution.height, (int)resolution.frameRate);
         return;
       }

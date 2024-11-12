@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mediapipe.Unity;
 using Mediapipe.Unity.Sample.PoseLandmarkDetection;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum PosePtIdx
 {
@@ -59,6 +60,9 @@ public class PostureDetectionManager : MonoBehaviour
     [SerializeField] List<PointAnnotation> pointAnnotations = new();
     [SerializeField] List<ConnectionAnnotation> connectionAnnotations = new();
     bool initedPointList = false;
+
+    [Header("Setting")]
+    [SerializeField] Dropdown _sourceInput;
 
     [Header("Debug")]
     [SerializeField] GameObject anslystWindow;
@@ -222,27 +226,29 @@ public class PostureDetectionManager : MonoBehaviour
         }
     }
 
-    // button
+    // debug
     public void toggleAnalyst()
     {
         anslystWindow.SetActive(!anslystWindow.activeSelf);
     }
 
-    [SerializeField] int setting = 3;
-    [ContextMenu("Change Mode")]
-    // public void changeMode(int idx) {
-    public void changeMode() {
-        StartCoroutine(changeModeCoroutine());
+    // change input mode
+    // later
+    // [SerializeField] int setting = 3;
+    // [ContextMenu("Change Mode")]
+    // // public void changeMode(int idx) {
+    // public void changeMode() {
+    //     StartCoroutine(changeModeCoroutine());
         
-    }
+    // }
 
-    IEnumerator changeModeCoroutine()
-    {
-        myLandmarkerRunner.Stop();
-        yield return new WaitForSeconds(0.1f);
-        // myLandmarkerRunner.changeOptions(idx);
-        myLandmarkerRunner.changeOptions(setting);
-        yield return new WaitForSeconds(0.1f);
-        myLandmarkerRunner.Play();
-    }
+    // IEnumerator changeModeCoroutine()
+    // {
+    //     myLandmarkerRunner.Stop();
+    //     yield return new WaitForSeconds(0.1f);
+    //     // myLandmarkerRunner.changeOptions(idx);
+    //     myLandmarkerRunner.changeOptions(setting);
+    //     yield return new WaitForSeconds(0.1f);
+    //     myLandmarkerRunner.Play();
+    // }
 }

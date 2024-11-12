@@ -29,33 +29,22 @@ namespace Mediapipe.Unity.Sample.PoseLandmarkDetection
 
         protected override IEnumerator Run()
         {
-            GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nLandMarker Run()";
+            // Debug.Log($"Delegate = {config.Delegate}");
+            // Debug.Log($"Model = {config.ModelName}");
+            // Debug.Log($"Running Mode = {config.RunningMode}");
+            // Debug.Log($"NumPoses = {config.NumPoses}");
+            // Debug.Log($"MinPoseDetectionConfidence = {config.MinPoseDetectionConfidence}");
+            // Debug.Log($"MinPosePresenceConfidence = {config.MinPosePresenceConfidence}");
+            // Debug.Log($"MinTrackingConfidence = {config.MinTrackingConfidence}");
+            // Debug.Log($"OutputSegmentationMasks = {config.OutputSegmentationMasks}");
 
-            Debug.Log($"Delegate = {config.Delegate}");
-            Debug.Log($"Model = {config.ModelName}");
-            Debug.Log($"Running Mode = {config.RunningMode}");
-            Debug.Log($"NumPoses = {config.NumPoses}");
-            Debug.Log($"MinPoseDetectionConfidence = {config.MinPoseDetectionConfidence}");
-            Debug.Log($"MinPosePresenceConfidence = {config.MinPosePresenceConfidence}");
-            Debug.Log($"MinTrackingConfidence = {config.MinTrackingConfidence}");
-            Debug.Log($"OutputSegmentationMasks = {config.OutputSegmentationMasks}");
-
-            if (!AssetLoader.isManagerNull())
-                yield return AssetLoader.PrepareAssetAsync(config.ModelPath);
-            else
-                yield break;
-                
-            GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nImage Source Play()";
+            yield return AssetLoader.PrepareAssetAsync(config.ModelPath);
 
             options = config.GetPoseLandmarkerOptions(
                 config.RunningMode == Tasks.Vision.Core.RunningMode.LIVE_STREAM ?
                     OnPoseLandmarkDetectionOutput : null);
             taskApi = PoseLandmarker.CreateFromOptions(options, GpuManager.GpuResources);
             var imageSource = ImageSourceProvider.ImageSource;
-            Debug.Log("ImageSource: " + imageSource);
-            Debug.Log("ImageSourceProvider type: " + ImageSourceProvider.CurrentSourceType);
-
-            GameObject.Find("posture debug text").GetComponent<TMPro.TextMeshProUGUI>().text += "\nImage Source Play()";
 
             yield return imageSource.Play();
 
@@ -116,22 +105,13 @@ namespace Mediapipe.Unity.Sample.PoseLandmarkDetection
                 }
                 else
                 {
-                    if (config.RunningMode == Tasks.Vision.Core.RunningMode.IMAGE)
-                    {
-                        Debug.Log("running with image----------------");
-                        textureFrame.ReadTextureAsync(Resources.Load<Texture2D>("sample_posture"), flipHorizontally, flipVertically);
-                        Debug.Log(Resources.Load<Texture2D>("sample_posture"));
-                    }
-                    else
-                    {
-                        req = textureFrame.ReadTextureAsync(imageSource.GetCurrentTexture(), flipHorizontally, flipVertically);
-                        yield return waitUntilReqDone;
+                    req = textureFrame.ReadTextureAsync(imageSource.GetCurrentTexture(), flipHorizontally, flipVertically);
+                    yield return waitUntilReqDone;
 
-                        if (req.hasError)
-                        {
-                            Debug.LogError($"Failed to read texture from the image source, exiting...");
-                            break;
-                        }
+                    if (req.hasError)
+                    {
+                        Debug.LogError($"Failed to read texture from the image source, exiting...");
+                        break;
                     }
                     image = textureFrame.BuildCPUImage();
                     textureFrame.Release();
