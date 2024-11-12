@@ -9,60 +9,57 @@ public enum PosePtIdx
 {
     // face
     Nose = 0,
-    LeftEyeInner = 1, LeftEye = 2, LeftEyeOuter = 3,
-    RightEyeInner = 4, RightEye = 5, RightEyeOuter = 6,
-    LeftEar = 7, RightEar = 8,
-    MouthLeft = 9, MouthRight = 10,
+    RightEyeInner = 1, RightEye = 2, RightEyeOuter = 3,
+    LeftEyeInner = 4, LeftEye = 5, LeftEyeOuter = 6,
+    RightEar = 7, LeftEar = 8,
+    MouthRight = 9, MouthLeft = 10,
     // upper body
-    LeftShoulder = 11, RightShoulder = 12,
-    LeftElbow = 13, RightElbow = 14,
-    LeftWrist = 15, RightWrist = 16,
-    LeftPinky = 17, RightPinky = 18,
-    LeftIndex = 19, RightIndex = 20,
-    LeftThumb = 21, RightThumb = 22,
+    RightShoulder = 11, LeftShoulder = 12,
+    RightElbow = 13, LeftElbow = 14,
+    RightWrist = 15, LeftWrist = 16,
+    RightPinky = 17, LeftPinky = 18,
+    RightIndex = 19, LeftIndex = 20,
+    RightThumb = 21, LeftThumb = 22,
     // lower body
-    LeftHip = 23, RightHip = 24,
-    LeftKnee = 25, RightKnee = 26,
-    LeftAnkle = 27, RightAnkle = 28,
-    LeftHeel = 29, RightHeel = 30,
-    LeftFootIndex = 31, RightFootIndex = 32
+    RightHip = 23, LeftHip = 24,
+    RightKnee = 25, LeftKnee = 26,
+    RightAnkle = 27, LeftAnkle = 28,
+    RightHeel = 29, LeftHeel = 30,
+    RightFootIndex = 31, LeftFootIndex = 32
 }
 
 public enum PoseConnectionIdx
 {
     // face
-    Nose_LeftEyeInner = 0, LeftEyeInner_LeftEye = 1, LeftEye_LeftEyeOuter = 2, LeftEyeOuter_LeftEar = 3,
-    Nose_RightEyeInner = 4, RightEyeInner_RightEye = 5, RightEye_RightEyeOuter = 6, RightEyeOuter_RightEar = 7,
-    MouthLeft_MouthRight = 8,
+    Nose_RightEyeInner = 0, RightEyeInner_RightEye = 1, RightEye_RightEyeOuter = 2, RightEyeOuter_RightEar = 3,
+    Nose_LeftEyeInner = 4, LeftEyeInner_LeftEye = 5, LeftEye_LeftEyeOuter = 6, LeftEyeOuter_LeftEar = 7,
+    MouthRight_MouthLeft = 8,
     // upper body
-    LeftShoulder_LeftElbow = 9, LeftElbow_LeftWrist = 10,
-    LeftWrist_LeftPinky = 11, LeftWrist_LeftIndex = 12, LeftWrist_LeftThumb = 13, LeftPinky_LeftIndex = 14,
+    RightShoulder_RightElbow = 9, RightElbow_RightWrist = 10,
+    RightWrist_RightPinky = 11, RightWrist_RightIndex = 12, RightWrist_RightThumb = 13, RightPinky_RightIndex = 14,
 
-    RightShoulder_RightElbow = 15, RightElbow_RightWrist = 16,
-    RightWrist_RightPinky = 17, RightWrist_RightIndex = 18, RightWrist_RightThumb = 19, RightPinky_RightIndex = 20,
+    LeftShoulder_LeftElbow = 15, LeftElbow_LeftWrist = 16,
+    LeftWrist_LeftPinky = 17, LeftWrist_LeftIndex = 18, LeftWrist_LeftThumb = 19, LeftPinky_LeftIndex = 20,
 
-    LeftShoulder_RightShoulder = 21,
-    LeftHip_RightHip = 23,
-    RightShoulder_RightHip = 22, LeftShoulder_LeftHip = 24,
+    RightShoulder_LeftShoulder = 21,
+    RightHip_LeftHip = 23,
+    LeftShoulder_LeftHip = 22, RightShoulder_RightHip = 24,
 
     // lower body
-    LeftHip_LeftKnee = 25, LeftKnee_LeftAnkle = 26,
-    LeftAnkle_LeftHeel = 27, LeftAnkle_LeftFootIndex = 28, LeftHeel_LeftFootIndex = 29,
+    RightHip_RightKnee = 25, RightKnee_RightAnkle = 26,
+    RightAnkle_RightHeel = 27, RightAnkle_RightFootIndex = 28, RightHeel_RightFootIndex = 29,
 
-    RightHip_RightKnee = 30, RightKnee_RightAnkle = 31,
-    RightAnkle_RightHeel = 32, RightAnkle_RightFootIndex = 33, RightHeel_RightFootIndex = 34
+    LeftHip_LeftKnee = 30, LeftKnee_LeftAnkle = 31,
+    LeftAnkle_LeftHeel = 32, LeftAnkle_LeftFootIndex = 33, LeftHeel_LeftFootIndex = 34
 }
 
 public class PostureDetectionManager : MonoBehaviour
 {
     [SerializeField] MyLandmarkerRunner myLandmarkerRunner;
     [SerializeField] MultiPoseLandmarkListWithMaskAnnotation multiPoseLandmarkListWithMaskAnnotation;
-    [SerializeField] List<PointAnnotation> pointAnnotations = new();
+    public List<PointAnnotation> pointAnnotations = new();
     [SerializeField] List<ConnectionAnnotation> connectionAnnotations = new();
     bool initedPointList = false;
-
-    [Header("Setting")]
-    [SerializeField] Dropdown _sourceInput;
 
     [Header("Debug")]
     [SerializeField] GameObject anslystWindow;
@@ -169,7 +166,7 @@ public class PostureDetectionManager : MonoBehaviour
             PoseConnectionIdx.RightEyeInner_RightEye,
             PoseConnectionIdx.RightEye_RightEyeOuter,
             PoseConnectionIdx.RightEyeOuter_RightEar,
-            PoseConnectionIdx.MouthLeft_MouthRight,
+            PoseConnectionIdx.MouthRight_MouthLeft,
 
             PoseConnectionIdx.LeftWrist_LeftPinky,
             PoseConnectionIdx.LeftWrist_LeftIndex,
@@ -194,20 +191,34 @@ public class PostureDetectionManager : MonoBehaviour
         }
     }
 
+
+    #region debug
     string[] detectValue = new string[] {
-        "L shoulder Pos X", "L shoulder Pos Y", "L shoulder Pos Z",
-        "R shoulder Pos X", "R shoulder Pos Y", "R shoulder Pos Z"
+        "L shoulder", "L Elbow", "L Wrist",
+        "R shoulder", "R Elbow", "R Wrist",
+        "L Hip", "L Knee", "L Ankle",
+        "R Hip", "R Knee", "R Ankle",
+    };
+    int[] detectIdx = new int[] {
+        (int)PosePtIdx.LeftShoulder,
+        (int)PosePtIdx.LeftElbow,
+        (int)PosePtIdx.LeftWrist,
+        (int)PosePtIdx.RightShoulder,
+        (int)PosePtIdx.RightElbow,
+        (int)PosePtIdx.RightWrist,
+        (int)PosePtIdx.LeftHip,
+        (int)PosePtIdx.LeftKnee,
+        (int)PosePtIdx.LeftAnkle,
+        (int)PosePtIdx.RightHip,
+        (int)PosePtIdx.RightKnee,
+        (int)PosePtIdx.RightAnkle
     };
 
     void updateTable()
     {
         // calculate detect value
-        rowList[0].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.x);
-        rowList[1].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y);
-        rowList[2].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.z);
-        rowList[3].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.x);
-        rowList[4].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y);
-        rowList[5].GetComponent<TableData>().readData(pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.z);
+        for (int i = 0; i < detectIdx.Length; i++)
+            rowList[i].GetComponent<TableData>().readData(pointAnnotations[detectIdx[i]].transform.localPosition);
     }
 
     void generateTable()
@@ -226,11 +237,11 @@ public class PostureDetectionManager : MonoBehaviour
         }
     }
 
-    // debug
     public void toggleAnalyst()
     {
         anslystWindow.SetActive(!anslystWindow.activeSelf);
     }
+    #endregion
 
     // change input mode
     // later
@@ -239,7 +250,7 @@ public class PostureDetectionManager : MonoBehaviour
     // // public void changeMode(int idx) {
     // public void changeMode() {
     //     StartCoroutine(changeModeCoroutine());
-        
+
     // }
 
     // IEnumerator changeModeCoroutine()

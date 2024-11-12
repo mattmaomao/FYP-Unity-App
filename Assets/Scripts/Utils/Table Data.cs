@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class TableData : MonoBehaviour
 {
-    float min;
-    float max;
+    Vector3 min;
+    Vector3 max;
     float dataCount;
-    float avg;
-    float fluctuate;
+    Vector3 avg;
+    Vector3 fluctuate;
 
     float timer = 0;
     float updateInterval = 3;
@@ -27,11 +27,11 @@ public class TableData : MonoBehaviour
         if (timer > updateInterval)
         {
             timer = 0;
-            min = 10000;
-            max = -10000;
+            min = new Vector3(10000, 10000, 10000);
+            max = new Vector3(-10000, -10000, -10000);
             dataCount = 0;
-            avg = 0;
-            fluctuate = 0;
+            avg = Vector3.zero;
+            fluctuate = Vector3.zero;
         }
 
         minText.text = min.ToString("F1");
@@ -40,12 +40,16 @@ public class TableData : MonoBehaviour
         fluctuateText.text = fluctuate.ToString("F1");
     }
 
-    public void readData(float data)
+    public void readData(Vector3 data)
     {
-        min = Mathf.Min(min, data);
-        max = Mathf.Max(max, data);
+        min = new Vector3(Mathf.Min(min.x, data.x), Mathf.Min(min.y, data.y), Mathf.Min(min.z, data.z));
+        max = new Vector3(Mathf.Max(max.x, data.x), Mathf.Max(max.y, data.y), Mathf.Max(max.z, data.z));
         avg = (avg * dataCount + data) / (dataCount + 1);
         dataCount++;
         fluctuate = max - min;
+    }
+
+    public string printSingleData() {
+        return $"{nameText.text}\t{min.x}\t{min.y}\t{min.z}\t{max.x}\t{max.y}\t{max.z}\t{avg.x}\t{avg.y}\t{avg.z}\t{fluctuate.x}\t{fluctuate.y}\t{fluctuate.z}";
     }
 }
