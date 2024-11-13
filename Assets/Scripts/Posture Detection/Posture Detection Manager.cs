@@ -62,6 +62,7 @@ public class PostureDetectionManager : MonoBehaviour
     bool initedPointList = false;
 
     [Header("Debug")]
+    [SerializeField] GameObject subposePanel;
     [SerializeField] GameObject anslystWindow;
     [SerializeField] GameObject table;
     [SerializeField] List<GameObject> rowList = new();
@@ -240,6 +241,10 @@ public class PostureDetectionManager : MonoBehaviour
     public void toggleAnalyst()
     {
         anslystWindow.SetActive(!anslystWindow.activeSelf);
+    }
+    public void toggleSubpose()
+    {
+        subposePanel.SetActive(!subposePanel.activeSelf);
     }
     #endregion
 

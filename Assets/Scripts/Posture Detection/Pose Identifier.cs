@@ -26,6 +26,7 @@ public class PoseIdentifier : MonoBehaviour
 
     // sub pose
     [SerializeField] float straightMargin = 50f;
+    [SerializeField] float armUpTolerance => shoulderWidth / 2;
     float shoulderWidth => (
         Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.x -
             PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.x)
@@ -46,23 +47,23 @@ public class PoseIdentifier : MonoBehaviour
         );
     bool pushArm_Up => (
         // elbow and wrist are above shoulder
-        PDM.pointAnnotations[(int)PosePtIdx.LeftElbow].transform.localPosition.y > PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y - shoulderWidth / 2 &&
-        PDM.pointAnnotations[(int)PosePtIdx.LeftWrist].transform.localPosition.y > PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y - shoulderWidth / 2 &&
+        PDM.pointAnnotations[(int)PosePtIdx.LeftElbow].transform.localPosition.y > PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y - armUpTolerance &&
+        PDM.pointAnnotations[(int)PosePtIdx.LeftWrist].transform.localPosition.y > PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y - armUpTolerance &&
         // elbow and wrist are near shoulder
         Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y -
-        PDM.pointAnnotations[(int)PosePtIdx.LeftElbow].transform.localPosition.y) < shoulderWidth / 2 &&
+        PDM.pointAnnotations[(int)PosePtIdx.LeftElbow].transform.localPosition.y) < armUpTolerance &&
         Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.LeftElbow].transform.localPosition.y -
-        PDM.pointAnnotations[(int)PosePtIdx.LeftWrist].transform.localPosition.y) < shoulderWidth / 2
+        PDM.pointAnnotations[(int)PosePtIdx.LeftWrist].transform.localPosition.y) < armUpTolerance
         );
     bool pullArm_Up => (
         // elbow and wrist are above shoulder
-        PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y > PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - shoulderWidth / 2 &&
-        PDM.pointAnnotations[(int)PosePtIdx.RightWrist].transform.localPosition.y > PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - shoulderWidth / 2 &&
+        PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y > PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - armUpTolerance &&
+        PDM.pointAnnotations[(int)PosePtIdx.RightWrist].transform.localPosition.y > PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - armUpTolerance &&
         // elbow and wrist are near shoulder
         Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y -
-        PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y) < shoulderWidth / 2 &&
+        PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y) < armUpTolerance &&
         Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y -
-        PDM.pointAnnotations[(int)PosePtIdx.RightWrist].transform.localPosition.y) < shoulderWidth / 2
+        PDM.pointAnnotations[(int)PosePtIdx.RightWrist].transform.localPosition.y) < armUpTolerance
         );
     bool pullArm_Bend => (
         // elbow is behind wrist
@@ -87,6 +88,10 @@ public class PoseIdentifier : MonoBehaviour
             $"pushArm_Straight: {pushArm_Straight}\n" +
             $"pushArm_Up: {pushArm_Up}\n" +
             $"pullArm_Up: {pullArm_Up}\n" +
+            $"{PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y.ToString("F2")}, {(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - armUpTolerance).ToString("F2")}\n" +
+            $"{PDM.pointAnnotations[(int)PosePtIdx.RightWrist].transform.localPosition.y.ToString("F2")}, {(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - armUpTolerance).ToString("F2")}\n" +
+            $"{Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y).ToString("F2")}\n" +
+            $"{Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y - PDM.pointAnnotations[(int)PosePtIdx.RightWrist].transform.localPosition.y).ToString("F2")}\n" +
             $"pullArm_Bend: {pullArm_Bend}\n" +
             $"pullArm_BetweenShoulder: {pullArm_BetweenShoulder}\n";
 
@@ -107,10 +112,10 @@ public class PoseIdentifier : MonoBehaviour
         switch (currentPose)
         {
             case Pose.Idle:
-                if (PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y < PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - shoulderWidth / 2 &&
-                    PDM.pointAnnotations[(int)PosePtIdx.RightWrist].transform.localPosition.y < PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - shoulderWidth / 2 &&
-                    PDM.pointAnnotations[(int)PosePtIdx.LeftElbow].transform.localPosition.y < PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y - shoulderWidth / 2 &&
-                    PDM.pointAnnotations[(int)PosePtIdx.LeftWrist].transform.localPosition.y < PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y - shoulderWidth / 2)
+                if (PDM.pointAnnotations[(int)PosePtIdx.RightElbow].transform.localPosition.y < PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - armUpTolerance &&
+                    PDM.pointAnnotations[(int)PosePtIdx.RightWrist].transform.localPosition.y < PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].transform.localPosition.y - armUpTolerance &&
+                    PDM.pointAnnotations[(int)PosePtIdx.LeftElbow].transform.localPosition.y < PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y - armUpTolerance &&
+                    PDM.pointAnnotations[(int)PosePtIdx.LeftWrist].transform.localPosition.y < PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder].transform.localPosition.y - armUpTolerance)
                     currentPose = Pose.Draw_Ready;
                 break;
             case Pose.Draw_Ready:
