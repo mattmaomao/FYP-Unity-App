@@ -698,6 +698,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fps viewer
       objectReference: {fileID: 0}
+    - target: {fileID: 7220346534767698648, guid: e9dd20a9152a181469cdfa1d78efbfb4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
