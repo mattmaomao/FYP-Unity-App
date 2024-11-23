@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,7 +19,7 @@ public class TargetClick : MonoBehaviour
     {
         // Convert the screen point of the click to local position within the image's RectTransform
         Vector2 localPoint;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(image.rectTransform, Input.mousePosition, null, out localPoint);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(image.rectTransform, Input.mousePosition, Camera.main, out localPoint);
 
         if (localPoint.y <= maxBound && localPoint.y >= -maxBound)
         {
