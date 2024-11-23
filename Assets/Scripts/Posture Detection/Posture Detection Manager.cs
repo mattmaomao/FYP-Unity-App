@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Mediapipe.Unity;
-using Mediapipe.Unity.Sample.PoseLandmarkDetection;
 using UnityEngine;
-using UnityEngine.UI;
 
 public enum PosePtIdx
 {
@@ -55,11 +53,27 @@ public enum PoseConnectionIdx
 
 public class PostureDetectionManager : MonoBehaviour
 {
-    [SerializeField] MyLandmarkerRunner myLandmarkerRunner;
+    [System.Serializable]
+    struct ptBuffer
+    {
+        public Vector3 pt;
+        public float timestamp;
+
+        public ptBuffer(Vector3 pos, float time) : this()
+        {
+            pt = pos;
+            timestamp = time;
+        }
+    }
+
     [SerializeField] MultiPoseLandmarkListWithMaskAnnotation multiPoseLandmarkListWithMaskAnnotation;
-    public List<PointAnnotation> pointAnnotations = new();
+    List<Queue<ptBuffer>> pointAnnotationsBuffer = new();
+    public List<PointAnnotation> pointAnnotations_temp = new();
+    public List<Vector3> pointAnnotations = new();
     [SerializeField] List<ConnectionAnnotation> connectionAnnotations = new();
     bool initedPointList = false;
+    // buffer
+    float bufferDuration = 0.5f;
 
     [Header("Debug")]
     [SerializeField] GameObject subposePanel;
@@ -71,6 +85,9 @@ public class PostureDetectionManager : MonoBehaviour
     void Start()
     {
         generateTable();
+
+        pointAnnotationsBuffer?.Clear();
+        pointAnnotationsBuffer = new();
     }
 
     // Update is called once per frame
@@ -88,6 +105,7 @@ public class PostureDetectionManager : MonoBehaviour
         }
         else
         {
+            updatePointList();
             updateTable();
         }
     }
@@ -98,12 +116,12 @@ public class PostureDetectionManager : MonoBehaviour
         // point
         PointListAnnotation pointListAnnotation = multiPoseLandmarkListWithMaskAnnotation[0].getPointListAnnotation();
 
-        pointAnnotations?.Clear();
-        pointAnnotations = new();
+        pointAnnotations_temp?.Clear();
+        pointAnnotations_temp = new();
         for (int i = 0; i < pointListAnnotation.count; i++)
         {
             PointAnnotation point = pointListAnnotation[i];
-            pointAnnotations.Add(point);
+            pointAnnotations_temp.Add(point);
         }
 
         // connection
@@ -122,10 +140,48 @@ public class PostureDetectionManager : MonoBehaviour
         initedPointList = true;
     }
 
+    void updatePointList()
+    {
+        // init buffer
+        if (pointAnnotationsBuffer.Count == 0)
+            for (int i = 0; i < pointAnnotations_temp.Count; i++)
+                pointAnnotationsBuffer.Add(new());
+        // init
+        if (pointAnnotations.Count == 0)
+            for (int i = 0; i < pointAnnotations_temp.Count; i++)
+                pointAnnotations.Add(new());
+
+        // get new points
+        for (int i = 0; i < pointAnnotations_temp.Count; i++)
+        {
+            PointAnnotation point = pointAnnotations_temp[i];
+            pointAnnotationsBuffer[i].Enqueue(new ptBuffer(point.transform.localPosition, Time.time));
+        }
+        // Remove old pts
+        for (int i = 0; i < pointAnnotationsBuffer.Count; i++)
+        {
+            while (pointAnnotationsBuffer[i].Count > 0 && Time.time - bufferDuration > pointAnnotationsBuffer[i].Peek().timestamp)
+                pointAnnotationsBuffer[i].Dequeue();
+        }
+
+        // Calculate the average position
+        for (int i = 0; i < pointAnnotationsBuffer.Count; i++)
+        {
+            Queue<ptBuffer> pointList = pointAnnotationsBuffer[i];
+            Vector3 averagePosition = Vector3.zero;
+            foreach (ptBuffer point in pointList)
+                averagePosition += point.pt;
+            if (pointList.Count > 0)
+                averagePosition /= pointList.Count;
+
+            pointAnnotations[i] = averagePosition;
+        }
+    }
+
     // hide useless annotations (face, hands, feet)
     void disableUselessAnno()
     {
-        // disable face nodes
+        // disable nodes
         List<PosePtIdx> disablePts = new() {
             PosePtIdx.Nose,
             PosePtIdx.LeftEyeInner,
@@ -151,13 +207,14 @@ public class PostureDetectionManager : MonoBehaviour
             PosePtIdx.LeftFootIndex,
             PosePtIdx.RightFootIndex
         };
-        for (int i = 0; i <= pointAnnotations.Count; i++)
+        for (int i = 0; i <= pointAnnotations_temp.Count; i++)
         {
             if (disablePts.Contains((PosePtIdx)i))
-                pointAnnotations[i].SetRadius(0.0f);
+                // multiPoseLandmarkListWithMaskAnnotation[0].getPointListAnnotation()[i].SetRadius(0.0f);
+                pointAnnotations_temp[i].SetRadius(0.0f);
         }
 
-        // disable face nodes
+        // disable face connections
         List<PoseConnectionIdx> disableCons = new() {
             PoseConnectionIdx.Nose_LeftEyeInner,
             PoseConnectionIdx.LeftEyeInner_LeftEye,
@@ -219,7 +276,7 @@ public class PostureDetectionManager : MonoBehaviour
     {
         // calculate detect value
         for (int i = 0; i < detectIdx.Length; i++)
-            rowList[i].GetComponent<TableData>().readData(pointAnnotations[detectIdx[i]].transform.localPosition);
+            rowList[i].GetComponent<TableData>().readData(pointAnnotations[detectIdx[i]]);
     }
 
     void generateTable()
