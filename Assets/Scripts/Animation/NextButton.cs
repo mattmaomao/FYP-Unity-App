@@ -49,7 +49,7 @@ public class NextButton : MonoBehaviour
             legButton.gameObject.SetActive(false);
             handButton.gameObject.SetActive(false);
             headButton.gameObject.SetActive(false);
-            explainGuide.text = "Pre-draw: Raise both hands towards eye-level.\n Draw: Draw the bow until right hand reaches the chin while keep the left hand straight.\n Aim: Move the sight until it aligns with the target.\n Release: Gently relax right hand fingers to let the string slide through";
+            explainGuide.text = "FULL";
             explainGuide.gameObject.SetActive(true);
         } else if (fullBodyPlayer.isActiveAndEnabled)
         {
