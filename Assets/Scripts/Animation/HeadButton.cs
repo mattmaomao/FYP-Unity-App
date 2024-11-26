@@ -31,7 +31,7 @@ public class HeadButton : MonoBehaviour
         headPlayer.gameObject.SetActive(true);
         headPlayer.enabled = true;
         guide.gameObject.SetActive(false);
-        explainGuide.text = "HEAD";
+        explainGuide.text = "Before drawing, simply turn your head towards the target without moving the body. Locate the target you are going to shoot and feel the straight line between the target and you";
         explainGuide.gameObject.SetActive(true);
         
     }
