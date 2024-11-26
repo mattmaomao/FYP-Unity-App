@@ -31,7 +31,7 @@ public class HandButton : MonoBehaviour
         handPlayer.gameObject.SetActive(true);
         handPlayer.enabled = true;
         guide.gameObject.SetActive(false);
-        explainGuide.text = "HAND";
+        explainGuide.text = "For right hand, the index finger, middle finger and ring finger hook the string in the knuckle furthest from the hand.\nFor left hand, relax the wrist and bends to match the angle of the bow grip";
         explainGuide.gameObject.SetActive(true);
         
     }
