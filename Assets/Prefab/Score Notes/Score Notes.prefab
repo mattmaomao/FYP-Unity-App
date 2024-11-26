@@ -277,7 +277,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreNotesManager: {fileID: 7450988679441404194}
-  image: {fileID: 1408743540448944447}
+  tappableImg: {fileID: 1408743540448944447}
+  targetImg: {fileID: 7823225929878337956}
 --- !u!114 &9113184221740896813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4652,7 +4653,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreNotesManager: {fileID: 7450988679441404194}
-  image: {fileID: 1904143213453809111}
+  tappableImg: {fileID: 1904143213453809111}
+  targetImg: {fileID: 5887313451113105824}
 --- !u!114 &599820898558876957
 MonoBehaviour:
   m_ObjectHideFlags: 0

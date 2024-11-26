@@ -28,14 +28,27 @@ public class NavigationManager : MonoBehaviour
 
     List<int> pagesStack = new();
 
-
     // Start is called before the first frame update
+    [System.Obsolete]
     void Start()
     {
         ChangePage(0);
         pagesStack.Add(0);
 
-        Application.targetFrameRate = 240;
+        changeFps();
+    }
+
+    // change fps
+    [System.Obsolete]
+    void changeFps()
+    {
+        // QualitySettings.vSyncCount = 0;
+        // Application.targetFrameRate = 144;
+
+        // var res = Screen.currentResolution;
+        // Screen.SetResolution(res.width, res.height, true, 1000);
+
+        Application.targetFrameRate = Screen.currentResolution.refreshRate;
     }
 
     public void ChangePage(int i, bool isBack)
@@ -61,7 +74,8 @@ public class NavigationManager : MonoBehaviour
         if (i >= 3 && !isBack)
             pagesStack.Add(i);
     }
-    public void ChangePage(int i) {
+    public void ChangePage(int i)
+    {
         ChangePage(i, false);
     }
 
