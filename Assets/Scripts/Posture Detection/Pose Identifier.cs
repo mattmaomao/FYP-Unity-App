@@ -205,6 +205,7 @@ public class PoseIdentifier : MonoBehaviour
             case Pose.Draw:
                 if (pushArm_Up && pushArm_Straight && pullArm_Up && pullArm_BetweenShoulder && pullArm_Bend)
                 {
+                    // check if wrist is stable
                     if (aimfluctuate < aimTolerance)
                     {
                         currentPose = Pose.Aim;
@@ -220,6 +221,7 @@ public class PoseIdentifier : MonoBehaviour
             case Pose.Aim:
                 if (pushArm_Up && pushArm_Straight && pullArm_Up && pullArm_Bend)
                 {
+                    // check if wrist is stable
                     if (aimfluctuate > aimTolerance)
                         currentPose = Pose.Release;
                 }
