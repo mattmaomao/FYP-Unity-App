@@ -1,9 +1,3 @@
-// Copyright (c) 2021 homuler
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file or at
-// https://opensource.org/licenses/MIT.
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +6,9 @@ using UnityEngine.UI;
 using Mediapipe.Unity.Sample;
 using Mediapipe.Unity.Sample.PoseLandmarkDetection;
 using TMPro;
+using System.Collections;
 
-public class CaneraSourceSetting : Mediapipe.Unity.Sample.UI.ModalContents
+public class CaneraSourceSetting : MonoBehaviour
 {
     [SerializeField] MyLandmarkerRunner myLandmarkerRunner;
     [SerializeField] GameObject settingPanel;
@@ -26,8 +21,42 @@ public class CaneraSourceSetting : Mediapipe.Unity.Sample.UI.ModalContents
 
     void Start()
     {
+        StartCoroutine(initSetting());
+    }
+
+    IEnumerator initSetting()
+    {
+        yield return new WaitUntil(() => myLandmarkerRunner.isRunning);
         InitializeContents();
+
+        // select front camera for mobile
+        myLandmarkerRunner.Pause();
+
+        // set source type to web cam
+        sourceTypeInput.value = 0;
+        ImageSourceProvider.Switch(ImageSourceType.WebCamera);
+        isChanged = true;
+        InitializeContents();
+
+        // get front camera
+        WebCamDevice[] devices = WebCamTexture.devices;
+        foreach (WebCamDevice device in devices)
+        {
+            if (device.isFrontFacing)
+            {
+                if (!string.IsNullOrEmpty(device.name))
+                    selectSource(device.name);
+                break;
+            }
+        }
+
+        myLandmarkerRunner.Play();
         settingPanel.SetActive(false);
+
+        // disable setting
+        sourceTypeInput.interactable = false;
+        resolutionInput.gameObject.SetActive(false);
+        isHorizontallyFlippedInput.gameObject.SetActive(false);
     }
 
     void InitializeContents()
@@ -95,6 +124,15 @@ public class CaneraSourceSetting : Mediapipe.Unity.Sample.UI.ModalContents
             isChanged = true;
             InitializeResolution();
         });
+    }
+
+    void selectSource(string cameraName)
+    {
+        var options = new List<string>(ImageSourceProvider.ImageSource.sourceCandidateNames);
+        int idx = options.FindIndex(option => option == cameraName);
+        sourceInput.value = idx == -1 ? 0 : idx;
+        isChanged = true;
+        InitializeResolution();
     }
 
     void InitializeResolution()
