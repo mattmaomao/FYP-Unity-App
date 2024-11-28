@@ -4,6 +4,7 @@ using TMPro;
 
 public class SlowMotionReset : MonoBehaviour
 {
+    [SerializeField] SlowMotionCameraManager slowMotionCameraManager;
 
     public Slider timeIntervalSlider;
     public Slider rateSlider;
@@ -27,6 +28,9 @@ public class SlowMotionReset : MonoBehaviour
         timeIntervalSlider.gameObject.SetActive(true);
         rateSlider.gameObject.SetActive(true);
         button.gameObject.SetActive(true);
+        slowMotionCameraManager.remainSlider.gameObject.SetActive(false);
+        slowMotionCameraManager.delayDisplay.gameObject.SetActive(true);
+        slowMotionCameraManager.resetLoadingTime();
 
         Debug.Log("Slow Motion reset");
 

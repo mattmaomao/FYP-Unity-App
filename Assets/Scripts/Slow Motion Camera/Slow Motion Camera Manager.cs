@@ -26,7 +26,7 @@ public class SlowMotionCameraManager : MonoBehaviour
     [SerializeField] float waiter = 0;
     [SerializeField] bool recording = false;
     bool wait = true;
-    [SerializeField] float readyTime = 4f;
+    [SerializeField] float readyTime;
 
 
     float displayWidth, displayHeight;
@@ -48,6 +48,7 @@ public class SlowMotionCameraManager : MonoBehaviour
         recording = false;
         FPS = 1.0f / Time.deltaTime;
         frameInterval = 1f / FPS;
+        resetLoadingTime();
         remainSlider.gameObject.SetActive(false);
 
 
@@ -72,7 +73,7 @@ public class SlowMotionCameraManager : MonoBehaviour
         {
             wait = false;
             load.gameObject.SetActive(false);
-            readyTime = 4f;
+            resetLoadingTime();
             recording = true;
         }
 
@@ -132,7 +133,7 @@ public class SlowMotionCameraManager : MonoBehaviour
         timeIntervalSlider.gameObject.SetActive(true);
         rateSlider.gameObject.SetActive(true); 
         button.gameObject.SetActive(true);
-
+        resetLoadingTime();
 
     }
 
@@ -165,8 +166,14 @@ public class SlowMotionCameraManager : MonoBehaviour
         }
     }
 
+    public void resetLoadingTime() {
+        readyTime = 4f;
+    }
+
     public void playWebCam()
     {
+        delayDisplay.gameObject.SetActive(true);
+
         if (webCamTexture != null)
         {
             displayWidth = 1280 / textureScaleDown;
