@@ -24,6 +24,8 @@ public class DelayReset : MonoBehaviour
         prompt.gameObject.SetActive(true);
         slider.gameObject.SetActive(true);
         button.gameObject.SetActive(true);
+        cameraManager.delayDisplay.gameObject.SetActive(false);
+        cameraManager.hintText.gameObject.SetActive(false);
 
         Debug.Log("Delay time reset");
 

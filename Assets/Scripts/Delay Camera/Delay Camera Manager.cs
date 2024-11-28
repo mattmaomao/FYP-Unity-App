@@ -134,6 +134,8 @@ public class DelayCameraManager : MonoBehaviour
 
     public void playWebCam()
     {
+        delayDisplay.gameObject.SetActive(true);
+        
         if (webCamTexture != null)
         {
             displayWidth = 1280 / textureScaleDown;
