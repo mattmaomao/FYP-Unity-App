@@ -23,6 +23,7 @@ public class DelayCameraManager : MonoBehaviour
     float updateInterval = 1;
 
     public RawImage delayDisplay;
+    bool initDisplaySize = false;
     Quaternion baseRotation;
     float displayWidth, displayHeight;
     public TextMeshProUGUI hintText;
@@ -48,6 +49,12 @@ public class DelayCameraManager : MonoBehaviour
         timer += Time.deltaTime;
         FPSTimer += Time.deltaTime;
         updateInterval = 1f / Mathf.Min(FPS, 1 / Time.deltaTime);
+
+        // init display size
+        if (!initDisplaySize && webCamTexture.isPlaying)
+        {
+            resizeDisplay();
+        }
 
         // Capture frames and save them into the list
         if (capturedFrames.Count < maxFrameStorage)
@@ -135,22 +142,24 @@ public class DelayCameraManager : MonoBehaviour
     public void playWebCam()
     {
         delayDisplay.gameObject.SetActive(true);
-        
+
         if (webCamTexture != null)
         {
-            displayWidth = 1280 / textureScaleDown;
-            displayHeight = 720 / textureScaleDown;
-
-            float scale = Screen.height / displayHeight;
-
-            delayDisplay.rectTransform.sizeDelta = new Vector2(displayWidth, displayHeight);
-            delayDisplay.rectTransform.localScale = new Vector2(-scale, scale);
-
-            webCamTexture.requestedWidth = (int)displayWidth;
-            webCamTexture.requestedHeight = (int)displayHeight;
-
             webCamTexture.Play();
         }
+    }
+
+    void resizeDisplay()
+    {
+        displayWidth = webCamTexture.width;
+        displayHeight = webCamTexture.height;
+
+        float scale = Screen.height / displayHeight;
+
+        delayDisplay.rectTransform.sizeDelta = new Vector2(displayWidth, displayHeight);
+        delayDisplay.rectTransform.localScale = new Vector2(-scale, scale);
+
+        initDisplaySize = true;
     }
 
     public void changeDelayTime(int i)

@@ -34,6 +34,7 @@ public class SlowMotionCameraManager : MonoBehaviour
 
 
     public RawImage delayDisplay;
+    bool initDisplaySize = false;
 
     void Start()
     {
@@ -57,6 +58,12 @@ public class SlowMotionCameraManager : MonoBehaviour
     void Update()
     {
         if (!webCamTexture.isPlaying) return;
+
+        // init display size
+        if (!initDisplaySize && webCamTexture.isPlaying)
+        {
+            resizeDisplay();
+        }
 
         if ((wait == true) && (readyTime > 0))
         {
@@ -154,6 +161,9 @@ public class SlowMotionCameraManager : MonoBehaviour
         capturedFrames.Clear();
         timer = 0;
         load.gameObject.SetActive(false);
+        remainSlider.gameObject.SetActive(false);
+        delayDisplay.gameObject.SetActive(false);
+        resetLoadingTime();
     }
 
     void OnDestroy()
@@ -176,20 +186,22 @@ public class SlowMotionCameraManager : MonoBehaviour
 
         if (webCamTexture != null)
         {
-            displayWidth = 1280 / textureScaleDown;
-            displayHeight = 720 / textureScaleDown;
-
-            float scale = Screen.height / displayHeight;
-
-            delayDisplay.rectTransform.sizeDelta = new Vector2(displayWidth, displayHeight);
-            delayDisplay.rectTransform.localScale = new Vector2(-scale, scale);
-
-            webCamTexture.requestedWidth = (int)displayWidth;
-            webCamTexture.requestedHeight = (int)displayHeight;
-
             webCamTexture.Play();
             wait = true;
         }
+    }
+
+    void resizeDisplay()
+    {
+        displayWidth = webCamTexture.width;
+        displayHeight = webCamTexture.height;
+
+        float scale = Screen.height / displayHeight;
+
+        delayDisplay.rectTransform.sizeDelta = new Vector2(displayWidth, displayHeight);
+        delayDisplay.rectTransform.localScale = new Vector2(-scale, scale);
+
+        initDisplaySize = true;
     }
 
     public void changeValue(float rate, float interval)
