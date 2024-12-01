@@ -183,6 +183,12 @@ MonoBehaviour:
   - {fileID: 8367532100672208652}
   numPad: {fileID: 3644535255781647065}
   numPad_hideBtn: {fileID: 5087004660878812192}
+  smolNumBtns:
+  - {fileID: 6264108583638662750}
+  - {fileID: 7895297682083411977}
+  - {fileID: 4127359858964542747}
+  - {fileID: 5043957165009962031}
+  - {fileID: 8649159770532442856}
   selectedCell: {x: 0, y: 0}
   target6: {fileID: 5157087495253968818}
   target10: {fileID: 798856095247058396}

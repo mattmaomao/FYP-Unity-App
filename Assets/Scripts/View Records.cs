@@ -84,7 +84,6 @@ public class ViewRecords : MonoBehaviour
     }
 
     #region sort display
-    // todo, later
     public void sortByName()
     {
         sortBtn_byName.GetComponent<Image>().color = Theme.Instance.GetColorByName("Primary Pale").Color;
@@ -158,5 +157,12 @@ public class ViewRecords : MonoBehaviour
         scoreNote.SetActive(true);
         createScoreNote.SetActive(false);
         recordsDisplay.SetActive(false);
+        NavigationManager.instance.inScoreNote = true;
+    }
+
+    public void closeNote() {
+        scoreNote.SetActive(false);
+        recordsDisplay.SetActive(true);
+        NavigationManager.instance.inScoreNote = false;
     }
 }

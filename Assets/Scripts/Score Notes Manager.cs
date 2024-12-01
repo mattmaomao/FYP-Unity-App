@@ -20,6 +20,7 @@ public class ScoreNotesManager : MonoBehaviour
     bool canAdd = false;
     [SerializeField] GameObject numPad;
     [SerializeField] GameObject numPad_hideBtn;
+    [SerializeField] List<Button> smolNumBtns;
     [SerializeField] Vector2 selectedCell;
 
     [Header("Target Type")]
@@ -81,6 +82,13 @@ public class ScoreNotesManager : MonoBehaviour
 
         setGrid();
         updateMark();
+        // disable 1-5 btns for ring 6
+        foreach (Button btn in smolNumBtns) {
+            if (scoreNote.targetType == TargetType.Ring6)
+                btn.interactable = false;
+            else
+                btn.interactable = true;
+        }
         hideNumPad();
     }
 

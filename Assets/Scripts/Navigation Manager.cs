@@ -6,6 +6,18 @@ using UnityEngine.UI;
 
 public class NavigationManager : MonoBehaviour
 {
+    #region Singleton
+    public static NavigationManager instance;
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        // DontDestroyOnLoad(gameObject);
+        else
+            Destroy(gameObject);
+    }
+    #endregion
+
     // pages
     public List<GameObject> pages = new List<GameObject>();
     int currentPageIdx = 0;
@@ -27,6 +39,11 @@ public class NavigationManager : MonoBehaviour
     [SerializeField] Sprite settingIconSprite_filled;
 
     List<int> pagesStack = new();
+
+    // todo : back for sub pages (score notes)
+    // temp
+    public bool inScoreNote = false;
+    [SerializeField] ViewRecords viewRecords;
 
     // Start is called before the first frame update
     [System.Obsolete]
@@ -82,6 +99,13 @@ public class NavigationManager : MonoBehaviour
 
     public void previousPage()
     {
+        // todo : change for sub page
+        if (inScoreNote)
+        {
+            viewRecords.closeNote();
+            return;
+        }
+        
         if (pagesStack.Count <= 1)
         {
             ChangePage(0, true);
