@@ -67,20 +67,26 @@ public class PostureDetectionManager : MonoBehaviour
     }
 
     [SerializeField] MultiPoseLandmarkListWithMaskAnnotation multiPoseLandmarkListWithMaskAnnotation;
+    // store annotations along time
     List<Queue<ptBuffer>> pointAnnotationsBuffer = new();
+    // original points
     public List<PointAnnotation> pointAnnotations_temp = new();
-    public List<Vector3> pointAnnotations = new();
+    // original connections
     [SerializeField] List<ConnectionAnnotation> connectionAnnotations = new();
+    // adjusted points
+    public List<Vector3> pointAnnotations = new();
+    // adjusted nodes
+    [SerializeField] List<GameObject> adjustedNodes = new();
     bool initedPointList = false;
     // buffer
-    float bufferDuration = 0.5f;
+    float bufferDuration = 0.1f;
 
     [Header("Debug")]
-    [SerializeField] GameObject subposePanel;
     [SerializeField] GameObject anslystWindow;
     [SerializeField] GameObject table;
     [SerializeField] List<GameObject> rowList = new();
     [SerializeField] GameObject rowPrefab;
+
 
     void Start()
     {
@@ -175,6 +181,7 @@ public class PostureDetectionManager : MonoBehaviour
                 averagePosition /= pointList.Count;
 
             pointAnnotations[i] = averagePosition;
+            adjustedNodes[i].transform.localPosition = averagePosition;
         }
     }
 
@@ -207,11 +214,17 @@ public class PostureDetectionManager : MonoBehaviour
             PosePtIdx.LeftFootIndex,
             PosePtIdx.RightFootIndex
         };
-        for (int i = 0; i <= pointAnnotations_temp.Count; i++)
+        for (int i = 0; i < pointAnnotations_temp.Count; i++)
         {
-            if (disablePts.Contains((PosePtIdx)i))
+            if (disablePts.Contains((PosePtIdx)i)) {
                 // multiPoseLandmarkListWithMaskAnnotation[0].getPointListAnnotation()[i].SetRadius(0.0f);
                 pointAnnotations_temp[i].SetRadius(0.0f);
+            }
+            else {
+                adjustedNodes[i].SetActive(true);
+            }
+            // temp disable all default nodes
+            pointAnnotations_temp[i].SetRadius(0.0f);
         }
 
         // disable face connections
@@ -242,7 +255,7 @@ public class PostureDetectionManager : MonoBehaviour
             PoseConnectionIdx.RightAnkle_RightFootIndex,
             PoseConnectionIdx.RightHeel_RightFootIndex,
         };
-        for (int i = 0; i <= connectionAnnotations.Count; i++)
+        for (int i = 0; i < connectionAnnotations.Count; i++)
         {
             if (disableCons.Contains((PoseConnectionIdx)i))
                 connectionAnnotations[i].SetLineWidth(0.0f);
@@ -298,10 +311,6 @@ public class PostureDetectionManager : MonoBehaviour
     public void toggleAnalyst()
     {
         anslystWindow.SetActive(!anslystWindow.activeSelf);
-    }
-    public void toggleSubpose()
-    {
-        subposePanel.SetActive(!subposePanel.activeSelf);
     }
     #endregion
 

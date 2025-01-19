@@ -20,11 +20,7 @@ public class PoseIdentifier : MonoBehaviour
     }
     List<PositionData> positionHistory = new();
 
-    [Header("Debug")]
-    [SerializeField] TextMeshProUGUI subPoseText;
-    [SerializeField] TextMeshProUGUI poseText;
-
-    // sub pose
+    [Header("Sub Pose")]
     [SerializeField] float straightMargin = 50f;
     [SerializeField] float armUpTolerance => shoulderWidth / 2;
     float shoulderWidth;
@@ -33,6 +29,33 @@ public class PoseIdentifier : MonoBehaviour
     bool pullArm_Up;
     bool pullArm_Bend;
     bool pullArm_BetweenShoulder;
+
+    // small part for scoring
+    // todo
+    // wrist, elbow, shoulder
+    float frontElbowAngle => Vector2.Angle(
+        (PDM.pointAnnotations[(int)PosePtIdx.LeftElbow] - PDM.pointAnnotations[(int)PosePtIdx.LeftWrist]), 
+        (PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder] - PDM.pointAnnotations[(int)PosePtIdx.LeftElbow]));
+    float backElbowAngle => Vector2.Angle(
+        (PDM.pointAnnotations[(int)PosePtIdx.RightElbow] - PDM.pointAnnotations[(int)PosePtIdx.RightWrist]), 
+        (PDM.pointAnnotations[(int)PosePtIdx.RightShoulder] - PDM.pointAnnotations[(int)PosePtIdx.RightElbow]));
+    // elbow, shoulder, shoulder
+    float frontShoulderAngle => Vector2.Angle(
+        (PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder] - PDM.pointAnnotations[(int)PosePtIdx.LeftElbow]), 
+        (PDM.pointAnnotations[(int)PosePtIdx.RightShoulder] - PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder]));
+    float backShoulderAngle => Vector2.Angle(
+        (PDM.pointAnnotations[(int)PosePtIdx.RightShoulder] - PDM.pointAnnotations[(int)PosePtIdx.RightElbow]), 
+        (PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder] - PDM.pointAnnotations[(int)PosePtIdx.RightShoulder]));
+    // fluctuate within 1 sec of releasing
+    float fluctureTime = 1f;
+    List<float> frontWristFluctuate = new();
+    List<float> backWristFluctuate = new();
+
+    [Header("Debug")]
+    [SerializeField] TextMeshProUGUI subPoseText;
+    [SerializeField] TextMeshProUGUI poseText;
+    [SerializeField] GameObject debugPanel;
+    [SerializeField] TextMeshProUGUI debugPanelText;
 
     void Update()
     {
@@ -51,18 +74,19 @@ public class PoseIdentifier : MonoBehaviour
 
         // debug texts
         poseText.text = currentPose.ToString();
-        subPoseText.text = "sub pose:" +
-            $"shoulder width: {shoulderWidth.ToString("F2")}\n" +
-            $"pushArm_Straight: {pushArm_Straight}\n" +
-            $"pushArm_Up: {pushArm_Up}\n" +
-            $"pullArm_Up: {pullArm_Up}\n" +
-            $"{PDM.pointAnnotations[(int)PosePtIdx.RightElbow].y.ToString("F2")}, {(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].y - armUpTolerance).ToString("F2")}\n" +
-            $"{PDM.pointAnnotations[(int)PosePtIdx.RightWrist].y.ToString("F2")}, {(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].y - armUpTolerance).ToString("F2")}\n" +
-            $"{Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].y - PDM.pointAnnotations[(int)PosePtIdx.RightElbow].y).ToString("F2")}\n" +
-            $"{Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightElbow].y - PDM.pointAnnotations[(int)PosePtIdx.RightWrist].y).ToString("F2")}\n" +
-            $"pullArm_Bend: {pullArm_Bend}\n" +
-            $"pullArm_BetweenShoulder: {pullArm_BetweenShoulder}\n";
-        subPoseText.text += aimfluctuate.ToString("F2");
+        // subPoseText.text = "sub pose:" +
+        //     $"shoulder width: {shoulderWidth.ToString("F2")}\n" +
+        //     $"pushArm_Straight: {pushArm_Straight}\n" +
+        //     $"pushArm_Up: {pushArm_Up}\n" +
+        //     $"pullArm_Up: {pullArm_Up}\n" +
+        //     $"{PDM.pointAnnotations[(int)PosePtIdx.RightElbow].y.ToString("F2")}, {(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].y - armUpTolerance).ToString("F2")}\n" +
+        //     $"{PDM.pointAnnotations[(int)PosePtIdx.RightWrist].y.ToString("F2")}, {(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].y - armUpTolerance).ToString("F2")}\n" +
+        //     $"{Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].y - PDM.pointAnnotations[(int)PosePtIdx.RightElbow].y).ToString("F2")}\n" +
+        //     $"{Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightElbow].y - PDM.pointAnnotations[(int)PosePtIdx.RightWrist].y).ToString("F2")}\n" +
+        //     $"pullArm_Bend: {pullArm_Bend}\n" +
+        //     $"pullArm_BetweenShoulder: {pullArm_BetweenShoulder}\n";
+        // subPoseText.text += aimfluctuate.ToString("F2");
+        DebugTable();
     }
 
     void checkSubPose()
@@ -241,5 +265,22 @@ public class PoseIdentifier : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    // debug
+    void DebugTable() {
+        debugPanelText.text = "front Elbow Angle\n";
+        debugPanelText.text += frontElbowAngle.ToString("F2");
+        debugPanelText.text += "\n\nback Elbow Angle\n";
+        debugPanelText.text += backElbowAngle.ToString("F2");
+        debugPanelText.text += "\n\nfront Shoulder Angle\n";
+        debugPanelText.text += frontShoulderAngle.ToString("F2");
+        debugPanelText.text += "\n\nback Shoulder Angle\n";
+        debugPanelText.text += backShoulderAngle.ToString("F2");
+    }
+
+    public void toggleDebug()
+    {
+        debugPanel.SetActive(!debugPanel.activeSelf);
     }
 }

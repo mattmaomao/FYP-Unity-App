@@ -44,6 +44,11 @@ namespace Mediapipe.Unity
       ApplyRadius(_radius);
     }
 
+    public float GetRadius()
+    {
+      return _radius;
+    }
+
     public void Draw(Vector3 position)
     {
       SetActive(true); // Vector3 is not nullable
