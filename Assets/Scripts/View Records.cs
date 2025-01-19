@@ -51,11 +51,28 @@ public class ViewRecords : MonoBehaviour
         scoreNote.SetActive(false);
     }
 
-    void OnDisable()
+    void readRecords()
     {
-        recordsDisplay.SetActive(true);
-        createScoreNote.SetActive(false);
-        scoreNote.SetActive(false);
+        currentScoreNoteList = DataManager.instance.scoreNoteList;
+        showRecords();
+
+        switch (currentSort)
+        {
+            case 0:
+                currentSort = -1;
+                sortByName();
+                break;
+            case 1:
+                currentSort = -1;
+                sortByTime();
+                break;
+            case 2:
+                currentSort = -1;
+                sortByScore();
+                break;
+            default:
+                break;
+        }
     }
 
     // read from save file
@@ -160,9 +177,13 @@ public class ViewRecords : MonoBehaviour
         NavigationManager.instance.inScoreNote = true;
     }
 
-    public void closeNote() {
+    public void closeNote()
+    {
         scoreNote.SetActive(false);
         recordsDisplay.SetActive(true);
         NavigationManager.instance.inScoreNote = false;
+
+        // check if notes updated
+        readRecords();
     }
 }
