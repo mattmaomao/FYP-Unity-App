@@ -34,22 +34,29 @@ public class PoseIdentifier : MonoBehaviour
     // todo
     // wrist, elbow, shoulder
     float frontElbowAngle => Vector2.Angle(
-        (PDM.pointAnnotations[(int)PosePtIdx.LeftElbow] - PDM.pointAnnotations[(int)PosePtIdx.LeftWrist]), 
+        (PDM.pointAnnotations[(int)PosePtIdx.LeftElbow] - PDM.pointAnnotations[(int)PosePtIdx.LeftWrist]),
         (PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder] - PDM.pointAnnotations[(int)PosePtIdx.LeftElbow]));
     float backElbowAngle => Vector2.Angle(
-        (PDM.pointAnnotations[(int)PosePtIdx.RightElbow] - PDM.pointAnnotations[(int)PosePtIdx.RightWrist]), 
+        (PDM.pointAnnotations[(int)PosePtIdx.RightElbow] - PDM.pointAnnotations[(int)PosePtIdx.RightWrist]),
         (PDM.pointAnnotations[(int)PosePtIdx.RightShoulder] - PDM.pointAnnotations[(int)PosePtIdx.RightElbow]));
     // elbow, shoulder, shoulder
     float frontShoulderAngle => Vector2.Angle(
-        (PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder] - PDM.pointAnnotations[(int)PosePtIdx.LeftElbow]), 
+        (PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder] - PDM.pointAnnotations[(int)PosePtIdx.LeftElbow]),
         (PDM.pointAnnotations[(int)PosePtIdx.RightShoulder] - PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder]));
     float backShoulderAngle => Vector2.Angle(
-        (PDM.pointAnnotations[(int)PosePtIdx.RightShoulder] - PDM.pointAnnotations[(int)PosePtIdx.RightElbow]), 
+        (PDM.pointAnnotations[(int)PosePtIdx.RightShoulder] - PDM.pointAnnotations[(int)PosePtIdx.RightElbow]),
         (PDM.pointAnnotations[(int)PosePtIdx.LeftShoulder] - PDM.pointAnnotations[(int)PosePtIdx.RightShoulder]));
     // fluctuate within 1 sec of releasing
     float fluctureTime = 1f;
-    List<float> frontWristFluctuate = new();
-    List<float> backWristFluctuate = new();
+    float timer = 0;
+    float fluctureTimer = 0;
+    float recordInterval = 0.1f;
+    float frontWristFluctuate;
+    float backWristFluctuate;
+    List<Vector3> frontWristPts = new();
+    List<Vector3> backWristPts = new();
+    bool released = false;
+    float releaseTime = 0;
 
     [Header("Debug")]
     [SerializeField] TextMeshProUGUI subPoseText;
@@ -61,6 +68,14 @@ public class PoseIdentifier : MonoBehaviour
     {
         checkSubPose();
         checkPose();
+
+        if (!released && currentPose == Pose.Release)
+        {
+            released = true;
+            releaseTime = timer;
+        }
+        if (currentPose == Pose.Aim || currentPose == Pose.Release)
+            checkFluctuate();
 
         // record wrist position
         positionHistory.Add(new PositionData { position = PDM.pointAnnotations[(int)PosePtIdx.RightWrist], timestamp = Time.time });
@@ -267,8 +282,57 @@ public class PoseIdentifier : MonoBehaviour
         }
     }
 
+    void checkFluctuate()
+    {
+        timer += Time.deltaTime;
+        if (released && timer - releaseTime > 0.5f)
+        {
+            currentPose = Pose.Idle;
+            released = false;
+            timer = 0;
+            return;
+        }
+
+        fluctureTimer += Time.deltaTime;
+        if (fluctureTimer > recordInterval)
+        {
+            // remove old data
+            if (timer > fluctureTime && frontWristPts.Count > 0 && backWristPts.Count > 0)
+            {
+                frontWristPts.RemoveAt(0);
+                backWristPts.RemoveAt(0);
+            }
+            // record new data
+            frontWristPts.Add(PDM.pointAnnotations[(int)PosePtIdx.LeftWrist]);
+            backWristPts.Add(PDM.pointAnnotations[(int)PosePtIdx.RightWrist]);
+
+            Vector3 avgPt = Vector3.zero;
+            for (int i = 0; i < frontWristPts.Count; i++)
+                avgPt += frontWristPts[i];
+            avgPt /= frontWristPts.Count;
+            frontWristFluctuate = 0;
+            for (int i = 0; i < frontWristPts.Count; i++)
+            {
+                frontWristFluctuate += Vector2.Distance(avgPt, frontWristPts[i]);
+            }
+            frontWristFluctuate /= frontWristPts.Count;
+
+            avgPt = Vector3.zero;
+            for (int i = 0; i < backWristPts.Count; i++)
+                avgPt += backWristPts[i];
+            avgPt /= backWristPts.Count;
+            backWristFluctuate = 0;
+            for (int i = 0; i < backWristPts.Count; i++)
+                backWristFluctuate += Vector3.Distance(avgPt, backWristPts[i]);
+            backWristFluctuate /= backWristPts.Count;
+
+            fluctureTimer = 0;
+        }
+    }
+
     // debug
-    void DebugTable() {
+    void DebugTable()
+    {
         debugPanelText.text = "front Elbow Angle\n";
         debugPanelText.text += frontElbowAngle.ToString("F2");
         debugPanelText.text += "\n\nback Elbow Angle\n";
@@ -277,6 +341,10 @@ public class PoseIdentifier : MonoBehaviour
         debugPanelText.text += frontShoulderAngle.ToString("F2");
         debugPanelText.text += "\n\nback Shoulder Angle\n";
         debugPanelText.text += backShoulderAngle.ToString("F2");
+        debugPanelText.text += "\n\nfront Wrist Fluctuate\n";
+        debugPanelText.text += frontWristFluctuate.ToString("F2");
+        debugPanelText.text += "\n\nback Wrist Fluctuate\n";
+        debugPanelText.text += backWristFluctuate.ToString("F2");
     }
 
     public void toggleDebug()
