@@ -33,13 +33,11 @@ public class MLPoseClassifier : Agent
             else if (poseIdentifier.currentPose == Pose.Draw_Ready)
                 SetReward(1f);
             else {
-                Debug.Log("correct!!");
                 SetReward(3f);
             }
         }
         else
         {
-            Debug.Log("wrong!!");
             SetReward(-3f);
         }
         EndEpisode();

@@ -81,13 +81,11 @@ public class PoseIdentifier : MonoBehaviour
         positionHistory.Add(new PositionData { position = PDM.pointAnnotations[(int)PosePtIdx.RightWrist], timestamp = Time.time });
         positionHistory.RemoveAll(pos => Time.time - pos.timestamp > 1.0f);
         // calculate average position
-        if (pullArm_BetweenShoulder && currentPose == Pose.Draw || currentPose == Pose.Aim) {
-            Vector2 avg = Vector2.zero;
-            foreach (PositionData data in positionHistory)
-                avg += data.position;
-            avg /= positionHistory.Count;
-            aimfluctuate = Vector2.Distance(PDM.pointAnnotations[(int)PosePtIdx.RightWrist], avg);
-        }
+        Vector2 avg = Vector2.zero;
+        foreach (PositionData data in positionHistory)
+            avg += data.position;
+        avg /= positionHistory.Count;
+        aimfluctuate = Vector2.Distance(PDM.pointAnnotations[(int)PosePtIdx.RightWrist], avg);
 
         // debug texts
         poseText.text = currentPose.ToString();
