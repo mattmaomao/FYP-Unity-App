@@ -81,6 +81,8 @@ public class PostureDetectionManager : MonoBehaviour
     // buffer
     float bufferDuration = 0.1f;
 
+    [SerializeField] MLPoseClassifier MLPC;
+
     [Header("Debug")]
     [SerializeField] GameObject anslystWindow;
     [SerializeField] GameObject table;
@@ -214,6 +216,7 @@ public class PostureDetectionManager : MonoBehaviour
             PosePtIdx.LeftFootIndex,
             PosePtIdx.RightFootIndex
         };
+        List<Transform> temp = new();
         for (int i = 0; i < pointAnnotations_temp.Count; i++)
         {
             if (disablePts.Contains((PosePtIdx)i)) {
@@ -221,11 +224,13 @@ public class PostureDetectionManager : MonoBehaviour
                 pointAnnotations_temp[i].SetRadius(0.0f);
             }
             else {
+                temp.Add(adjustedNodes[i].transform);
                 adjustedNodes[i].SetActive(true);
             }
             // temp disable all default nodes
             pointAnnotations_temp[i].SetRadius(0.0f);
         }
+        MLPC.Setup(temp);
 
         // disable face connections
         List<PoseConnectionIdx> disableCons = new() {
