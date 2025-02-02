@@ -81,11 +81,13 @@ public class PoseIdentifier : MonoBehaviour
         positionHistory.Add(new PositionData { position = PDM.pointAnnotations[(int)PosePtIdx.RightWrist], timestamp = Time.time });
         positionHistory.RemoveAll(pos => Time.time - pos.timestamp > 1.0f);
         // calculate average position
-        Vector2 avg = Vector2.zero;
-        foreach (PositionData data in positionHistory)
-            avg += data.position;
-        avg /= positionHistory.Count;
-        aimfluctuate = Vector2.Distance(PDM.pointAnnotations[(int)PosePtIdx.RightWrist], avg);
+        if (pullArm_BetweenShoulder && currentPose == Pose.Draw) {
+            Vector2 avg = Vector2.zero;
+            foreach (PositionData data in positionHistory)
+                avg += data.position;
+            avg /= positionHistory.Count;
+            aimfluctuate = Vector2.Distance(PDM.pointAnnotations[(int)PosePtIdx.RightWrist], avg);
+        }
 
         // debug texts
         poseText.text = currentPose.ToString();
@@ -106,6 +108,8 @@ public class PoseIdentifier : MonoBehaviour
 
     void checkSubPose()
     {
+        if (PDM.pointAnnotations.Count <= 0) return;
+
         if (SystemInfo.deviceType != DeviceType.Handheld)
         {
             shoulderWidth = (
