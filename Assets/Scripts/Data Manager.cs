@@ -23,11 +23,11 @@ public class DataManager : MonoBehaviour
 
     // score note
     public List<ScoreNote> scoreNoteList = new List<ScoreNote>();
-    string filePath_ScoreNote = "score_notes.json";
+    string filePath_ScoreNote = "/score_notes.json";
 
     // posture data
     public List<PostureData> postureDataList = new List<PostureData>();
-    string filePath_PostureData = "posture_data.json";
+    string filePath_PostureData = "/posture_data.json";
 
 
     void Start()
