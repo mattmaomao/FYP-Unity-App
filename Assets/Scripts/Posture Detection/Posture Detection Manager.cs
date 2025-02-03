@@ -83,6 +83,10 @@ public class PostureDetectionManager : MonoBehaviour
 
     [SerializeField] MLPoseClassifier MLPC;
 
+    [Header("UI")]
+    [SerializeField] GameObject pointDisplay;
+    [SerializeField] GameObject connectionDisplay;
+
     [Header("Debug")]
     [SerializeField] GameObject anslystWindow;
     [SerializeField] GameObject table;
@@ -230,7 +234,7 @@ public class PostureDetectionManager : MonoBehaviour
             // temp disable all default nodes
             pointAnnotations_temp[i].SetRadius(0.0f);
         }
-        MLPC.Setup(temp);
+        // MLPC.Setup(temp);
 
         // disable face connections
         List<PoseConnectionIdx> disableCons = new() {
@@ -267,6 +271,18 @@ public class PostureDetectionManager : MonoBehaviour
         }
     }
 
+    #region UI
+    public void showAnnotations()
+    {
+        pointDisplay.SetActive(true);
+        connectionDisplay.SetActive(true);
+    }
+    public void hideAnnotations()
+    {
+        pointDisplay.SetActive(false);
+        connectionDisplay.SetActive(false);
+    }
+    #endregion
 
     #region debug
     string[] detectValue = new string[] {

@@ -10,6 +10,7 @@ using System.Collections;
 
 public class CaneraSourceSetting : MonoBehaviour
 {
+    [SerializeField] PostureDetectionManager PDM;
     [SerializeField] MyLandmarkerRunner myLandmarkerRunner;
     [SerializeField] GameObject settingPanel;
     [SerializeField] TMP_Dropdown sourceTypeInput;
@@ -182,10 +183,13 @@ public class CaneraSourceSetting : MonoBehaviour
     #region buttons
     public void toggleSettingPanel()
     {
-        if (!settingPanel.activeSelf)
+        if (!settingPanel.activeSelf) {
+            PDM.hideAnnotations();
             myLandmarkerRunner.Pause();
+        }
         else
         {
+            PDM.showAnnotations();
             if (isChanged)
                 myLandmarkerRunner.Play();
             else
