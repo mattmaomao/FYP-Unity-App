@@ -18,38 +18,47 @@ public class DataManager : MonoBehaviour
     }
     #endregion
 
+    // setting
+    JsonSerializerSettings settings;
+
+    // score note
     public List<ScoreNote> scoreNoteList = new List<ScoreNote>();
-    public string filePath_ScoreNote;
+    string filePath_ScoreNote = "score_notes.json";
+
+    // posture data
+    public List<PostureData> postureDataList = new List<PostureData>();
+    string filePath_PostureData = "posture_data.json";
 
 
     void Start()
     {
-        filePath_ScoreNote = Application.persistentDataPath + "score_notes.json";
+        // config
+        settings = new JsonSerializerSettings();
+        settings.Converters.Add(new Vector3Converter());
+
+        // init
+        filePath_ScoreNote = Application.persistentDataPath + filePath_ScoreNote;
         LoadScoreNoteFromFile();
+
+        filePath_PostureData = Application.persistentDataPath + filePath_PostureData;
+        LoadPostureDataFromFile();
     }
 
+    // score note
     [ContextMenu("Save All Score Note")]
     public void SaveScoreNoteToFile()
     {
         string json = JsonConvert.SerializeObject(scoreNoteList, Formatting.Indented);
 
-        // debug
-        if (filePath_ScoreNote == null)
-            filePath_ScoreNote = Application.persistentDataPath + "score_notes.json";
-
         File.WriteAllText(filePath_ScoreNote, json);
 
         Debug.Log("Data saved to file successfully. " + filePath_ScoreNote);
-        // LoadScoreNoteFromFile();
+        LoadScoreNoteFromFile();
     }
 
     [ContextMenu("Load Score Note from json")]
     public void LoadScoreNoteFromFile()
     {
-        // debug
-        if (filePath_ScoreNote == null)
-            filePath_ScoreNote = Application.persistentDataPath + "score_notes.json";
-
         if (File.Exists(filePath_ScoreNote))
         {
             string json = File.ReadAllText(filePath_ScoreNote);
@@ -91,5 +100,25 @@ public class DataManager : MonoBehaviour
                 }
                 scoreNoteList[^1].updateScore(i, j, score, new float[] { clickPosition.x, clickPosition.y });
             }
+    }
+
+    // posture data
+    public void SavePostureDataToFile()
+    {
+        string json = JsonConvert.SerializeObject(postureDataList, Formatting.Indented, settings);
+
+        File.WriteAllText(filePath_PostureData, json);
+
+        Debug.Log("Data saved to file successfully. " + filePath_PostureData);
+    }
+    public void LoadPostureDataFromFile()
+    {
+        if (File.Exists(filePath_PostureData))
+        {
+            string json = File.ReadAllText(filePath_PostureData);
+            postureDataList.Clear();
+            postureDataList = new();
+            postureDataList = JsonConvert.DeserializeObject<List<PostureData>>(json);
+        }
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PosetureScoring : MonoBehaviour
 {
-    struct TimedPos { public float time; public Vector3 pos; }
     struct TimedAngle { public float time; public float angle; }
 
     [SerializeField] PostureDetectionManager PDM;
@@ -31,13 +30,33 @@ public class PosetureScoring : MonoBehaviour
     // small part for scoring
     // fluctuate within 1 sec of releasing
     float timer = 0;
-    float fluctureTime = 1;
+    float fluctuateTime = 1;
+
+    // front wrist
     float frontWristFluctuate;
+    Vector3 frontWristStart;
+    Vector3 frontWristEnd;
+    // back wrist
     float backWristFluctuate;
+    Vector3 backWristStart;
+    Vector3 backWristEnd;
+    // front elbow
     float frontElbowAngleFluctuate;
+    float frontElbowAngleStart;
+    float frontElbowAngleEnd;
+    // back elbow
     float backElbowAngleFluctuate;
+    float backElbowAngleStart;
+    float backElbowAngleEnd;
+    // front shoulder
     float frontShoulderAngleFluctuate;
+    float frontShoulderAngleStart;
+    float frontShoulderAngleEnd;
+    // back shoulder
     float backShoulderAngleFluctuate;
+    float backShoulderAngleStart;
+    float backShoulderAngleEnd;
+
     List<TimedPos> frontWristPts = new();
     List<TimedPos> backWristPts = new();
     List<TimedAngle> frontElbowAngleChanges = new();
@@ -119,6 +138,19 @@ public class PosetureScoring : MonoBehaviour
         backElbowAngleChanges.Clear();
         frontShoulderAngleChanges.Clear();
         backShoulderAngleChanges.Clear();
+
+        frontWristStart = default;
+        frontWristEnd = default;
+        backWristStart = default;
+        backWristEnd = default;
+        frontElbowAngleStart = default;
+        frontElbowAngleEnd = default;
+        backElbowAngleStart = default;
+        backElbowAngleEnd = default;
+        frontShoulderAngleStart = default;
+        frontShoulderAngleEnd = default;
+        backShoulderAngleStart = default;
+        backShoulderAngleEnd = default;
     }
 
     // save joints position, angle into list
@@ -175,46 +207,80 @@ public class PosetureScoring : MonoBehaviour
     {
         Vector3 avgPt = Vector3.zero;
         int count = 0;
+        int startIdx, endIdx;
 
+        startIdx = frontWristPts.Count - 1;
+        endIdx = 0;
+
+        // filter points within fluctuate time
         for (int i = 0; i < frontWristPts.Count; i++)
         {
-            if (Mathf.Abs(frontWristPts[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(frontWristPts[i].time - releaseTime) < fluctuateTime)
             {
+                // find start and end index of point within the fluctuate time
+                if (frontWristPts[startIdx].time > frontWristPts[i].time)
+                    startIdx = i;
+                if (frontWristPts[endIdx].time < frontWristPts[i].time)
+                    endIdx = i;
+
                 avgPt += frontWristPts[i].pos;
                 count++;
             }
         }
+
+        // calculate average
         avgPt /= count;
         frontWristFluctuate = 0;
         for (int i = 0; i < frontWristPts.Count; i++)
         {
-            if (Mathf.Abs(frontWristPts[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(frontWristPts[i].time - releaseTime) < fluctuateTime)
                 frontWristFluctuate += Vector2.Distance(avgPt, frontWristPts[i].pos);
         }
         frontWristFluctuate /= count;
+
+        // get start, end points
+        frontWristStart = frontWristPts[startIdx].pos;
+        frontWristEnd = frontWristPts[endIdx].pos;
     }
     // calculate back wrist fluctuate
     void calBackWristFluct()
     {
         Vector3 avgPt = Vector3.zero;
         int count = 0;
+        int startIdx, endIdx;
 
+        startIdx = backWristPts.Count - 1;
+        endIdx = 0;
+
+        // filter points within fluctuate time
         for (int i = 0; i < backWristPts.Count; i++)
         {
-            if (Mathf.Abs(backWristPts[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(backWristPts[i].time - releaseTime) < fluctuateTime)
             {
+                // find start and end index of point within the fluctuate time
+                if (backWristPts[startIdx].time > backWristPts[i].time)
+                    startIdx = i;
+                if (backWristPts[endIdx].time < backWristPts[i].time)
+                    endIdx = i;
+
                 avgPt += backWristPts[i].pos;
                 count++;
             }
         }
+
+        // calculate average
         avgPt /= count;
         backWristFluctuate = 0;
         for (int i = 0; i < backWristPts.Count; i++)
         {
-            if (Mathf.Abs(backWristPts[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(backWristPts[i].time - releaseTime) < fluctuateTime)
                 backWristFluctuate += Vector2.Distance(avgPt, backWristPts[i].pos);
         }
         backWristFluctuate /= count;
+
+        // get start, end points
+        backWristStart = backWristPts[startIdx].pos;
+        backWristEnd = backWristPts[endIdx].pos;
     }
 
     // calulate front elbow angle fluctuate
@@ -222,92 +288,160 @@ public class PosetureScoring : MonoBehaviour
     {
         float avgAngle = 0;
         int count = 0;
+        int startIdx, endIdx;
 
+        startIdx = frontElbowAngleChanges.Count - 1;
+        endIdx = 0;
+
+        // filter points within fluctuate time
         for (int i = 0; i < frontElbowAngleChanges.Count; i++)
         {
-            if (Mathf.Abs(frontElbowAngleChanges[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(frontElbowAngleChanges[i].time - releaseTime) < fluctuateTime)
             {
+                // find start and end index of point within the fluctuate time
+                if (frontElbowAngleChanges[startIdx].time > frontElbowAngleChanges[i].time)
+                    startIdx = i;
+                if (frontElbowAngleChanges[endIdx].time < frontElbowAngleChanges[i].time)
+                    endIdx = i;
+
                 avgAngle += frontElbowAngleChanges[i].angle;
                 count++;
             }
         }
+
+        // calculate average
         avgAngle /= count;
         frontElbowAngleFluctuate = 0;
         for (int i = 0; i < frontElbowAngleChanges.Count; i++)
         {
-            if (Mathf.Abs(frontElbowAngleChanges[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(frontElbowAngleChanges[i].time - releaseTime) < fluctuateTime)
                 frontElbowAngleFluctuate += Mathf.Abs(avgAngle - frontElbowAngleChanges[i].angle);
         }
         frontElbowAngleFluctuate /= count;
+
+        // get start, end points
+        frontElbowAngleStart = frontElbowAngleChanges[startIdx].angle;
+        frontElbowAngleEnd = frontElbowAngleChanges[endIdx].angle;
     }
     // calulate back elbow angle fluctuate
     void calBackElbowAngleFluct()
     {
         float avgAngle = 0;
         int count = 0;
+        int startIdx, endIdx;
 
+        startIdx = backElbowAngleChanges.Count - 1;
+        endIdx = 0;
+
+        // filter points within fluctuate time
         for (int i = 0; i < backElbowAngleChanges.Count; i++)
         {
-            if (Mathf.Abs(backElbowAngleChanges[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(backElbowAngleChanges[i].time - releaseTime) < fluctuateTime)
             {
+                // find start and end index of point within the fluctuate time
+                if (backElbowAngleChanges[startIdx].time > backElbowAngleChanges[i].time)
+                    startIdx = i;
+                if (backElbowAngleChanges[endIdx].time < backElbowAngleChanges[i].time)
+                    endIdx = i;
+
                 avgAngle += backElbowAngleChanges[i].angle;
                 count++;
             }
         }
+
+        // calculate average
         avgAngle /= count;
         backElbowAngleFluctuate = 0;
         for (int i = 0; i < backElbowAngleChanges.Count; i++)
         {
-            if (Mathf.Abs(backElbowAngleChanges[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(backElbowAngleChanges[i].time - releaseTime) < fluctuateTime)
                 backElbowAngleFluctuate += Mathf.Abs(avgAngle - backElbowAngleChanges[i].angle);
         }
         backElbowAngleFluctuate /= count;
+
+        // get start, end points
+        backElbowAngleStart = backElbowAngleChanges[startIdx].angle;
+        backElbowAngleEnd = backElbowAngleChanges[endIdx].angle;
     }
     // calulate front shoulder angle fluctuate
     void calFrontShoulderAngleFluct()
     {
         float avgAngle = 0;
         int count = 0;
+        int startIdx, endIdx;
 
+        startIdx = frontShoulderAngleChanges.Count - 1;
+        endIdx = 0;
+
+        // filter points within fluctuate time
         for (int i = 0; i < frontShoulderAngleChanges.Count; i++)
         {
-            if (Mathf.Abs(frontShoulderAngleChanges[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(frontShoulderAngleChanges[i].time - releaseTime) < fluctuateTime)
             {
+                // find start and end index of point within the fluctuate time
+                if (frontShoulderAngleChanges[startIdx].time > frontShoulderAngleChanges[i].time)
+                    startIdx = i;
+                if (frontShoulderAngleChanges[endIdx].time < frontShoulderAngleChanges[i].time)
+                    endIdx = i;
+
                 avgAngle += frontShoulderAngleChanges[i].angle;
                 count++;
             }
         }
+
+        // calculate average
         avgAngle /= count;
         frontShoulderAngleFluctuate = 0;
         for (int i = 0; i < frontShoulderAngleChanges.Count; i++)
         {
-            if (Mathf.Abs(frontShoulderAngleChanges[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(frontShoulderAngleChanges[i].time - releaseTime) < fluctuateTime)
                 frontShoulderAngleFluctuate += Mathf.Abs(avgAngle - frontShoulderAngleChanges[i].angle);
         }
         frontShoulderAngleFluctuate /= count;
+
+        // get start, end points
+        frontShoulderAngleStart = frontShoulderAngleChanges[startIdx].angle;
+        frontShoulderAngleEnd = frontShoulderAngleChanges[endIdx].angle;
     }
     // calulate back shoulder angle fluctuate
     void calBackShoulderAngleFluct()
     {
         float avgAngle = 0;
         int count = 0;
+        int startIdx, endIdx;
 
+        startIdx = backShoulderAngleChanges.Count - 1;
+        endIdx = 0;
+
+        // filter points within fluctuate time
         for (int i = 0; i < backShoulderAngleChanges.Count; i++)
         {
-            if (Mathf.Abs(backShoulderAngleChanges[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(backShoulderAngleChanges[i].time - releaseTime) < fluctuateTime)
             {
+                // find start and end index of point within the fluctuate time
+                if (backShoulderAngleChanges[startIdx].time > backShoulderAngleChanges[i].time)
+                    startIdx = i;
+                if (backShoulderAngleChanges[endIdx].time < backShoulderAngleChanges[i].time)
+                    endIdx = i;
+
                 avgAngle += backShoulderAngleChanges[i].angle;
                 count++;
             }
         }
+
+        // calculate average
         avgAngle /= count;
         backShoulderAngleFluctuate = 0;
         for (int i = 0; i < backShoulderAngleChanges.Count; i++)
         {
-            if (Mathf.Abs(backShoulderAngleChanges[i].time - releaseTime) < fluctureTime)
+            if (Mathf.Abs(backShoulderAngleChanges[i].time - releaseTime) < fluctuateTime)
                 backShoulderAngleFluctuate += Mathf.Abs(avgAngle - backShoulderAngleChanges[i].angle);
         }
         backShoulderAngleFluctuate /= count;
+
+        // get start, end points
+        backShoulderAngleStart = backShoulderAngleChanges[startIdx].angle;
+        backShoulderAngleEnd = backShoulderAngleChanges[endIdx].angle;
     }
 
     #endregion
@@ -318,7 +452,7 @@ public class PosetureScoring : MonoBehaviour
         PDM.hideAnnotations();
         // display score
         scoreDisplayPanel.SetActive(true);
-        
+
         scoreDisplayText.text = "front Elbow Angle Fluctuate\n";
         scoreDisplayText.text += frontElbowAngleFluctuate.ToString("F2");
         scoreDisplayText.text += "\n\nback Elbow Angle Fluctuate\n";
@@ -348,8 +482,38 @@ public class PosetureScoring : MonoBehaviour
     public void saveScore()
     {
         // save score
-        // todo
-        Debug.Log("save score");
+        PostureData postureData = new PostureData
+        {
+            dateTime = Time.time,
+            postureName = "Posture_" + DataManager.instance.postureDataList.Count,
+
+            // front wrist
+            frontWristFluctuate = this.frontWristFluctuate,
+            frontWristStart = this.frontWristStart,
+            frontWristEnd = this.frontWristEnd,
+            // back wrist
+            backWristFluctuate = this.backWristFluctuate,
+            backWristStart = this.backWristStart,
+            backWristEnd = this.backWristEnd,
+            // front elbow
+            frontElbowAngleFluctuate = this.frontElbowAngleFluctuate,
+            frontElbowAngleStart = this.frontElbowAngleStart,
+            frontElbowAngleEnd = this.frontElbowAngleEnd,
+            // back elbow
+            backElbowAngleFluctuate = this.backElbowAngleFluctuate,
+            backElbowAngleStart = this.backElbowAngleStart,
+            backElbowAngleEnd = this.backElbowAngleEnd,
+            // front shoulder
+            frontShoulderAngleFluctuate = this.frontShoulderAngleFluctuate,
+            frontShoulderAngleStart = this.frontShoulderAngleStart,
+            frontShoulderAngleEnd = this.frontShoulderAngleEnd,
+            // back shoulder
+            backShoulderAngleFluctuate = this.backShoulderAngleFluctuate,
+            backShoulderAngleStart = this.backShoulderAngleStart,
+            backShoulderAngleEnd = this.backShoulderAngleEnd,
+        };
+        DataManager.instance.postureDataList.Add(postureData);
+        DataManager.instance.SavePostureDataToFile();
 
         stopScoring();
     }
@@ -381,3 +545,5 @@ public class PosetureScoring : MonoBehaviour
 
     #endregion
 }
+
+public struct TimedPos { public float time; public Vector3 pos; }
