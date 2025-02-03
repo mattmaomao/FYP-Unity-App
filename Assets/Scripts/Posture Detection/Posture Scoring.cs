@@ -461,31 +461,38 @@ public class PosetureScoring : MonoBehaviour
         scoreDisplayPanel.SetActive(true);
 
         // hardcode score range
-        float minFrontWristFluctuate = 7.470885f;
-        float maxFrontWristFluctuate = 129.0781f;
+        float minFrontWristFluctuate = 8f;
+        float maxFrontWristFluctuate = 200f;
 
-        float minBackWristFluctuate = 44.32072f;
-        float maxBackWristFluctuate = 141.2049f;
+        float minBackWristFluctuate = 60f;
+        float maxBackWristFluctuate = 150f;
 
-        float minFrontElbowAngleFluctuate = 0.3370529f;
-        float maxFrontElbowAngleFluctuate = 4.706191f;
+        float minFrontElbowAngleFluctuate = 0f;
+        float maxFrontElbowAngleFluctuate = 10f;
 
-        float minBackElbowAngleFluctuate = 0.4070209f;
-        float maxBackElbowAngleFluctuate = 14.23022f;
+        float minBackElbowAngleFluctuate = 0f;
+        float maxBackElbowAngleFluctuate = 20f;
 
-        float minFrontShoulderAngleFluctuate = 0.2263088f;
-        float maxFrontShoulderAngleFluctuate = 5.615577f;
+        float minFrontShoulderAngleFluctuate = 0f;
+        float maxFrontShoulderAngleFluctuate = 10f;
 
-        float minBackShoulderAngleFluctuate = 0.9151633f;
-        float maxBackShoulderAngleFluctuate = 10.8756f;
+        float minBackShoulderAngleFluctuate = 0f;
+        float maxBackShoulderAngleFluctuate = 10f;
 
         float frontWristRank = (frontWristFluctuate - minFrontWristFluctuate) / (maxFrontWristFluctuate - minFrontWristFluctuate) * 100;
-        float backWristRank = (frontWristFluctuate - minBackWristFluctuate) / (maxBackWristFluctuate - minBackWristFluctuate) * 100;
-        float frontElbowAngleRank = (frontWristFluctuate - minFrontElbowAngleFluctuate) / (maxFrontElbowAngleFluctuate - minFrontElbowAngleFluctuate) * 100;
-        float backElbowAngleRank = (frontWristFluctuate - minBackElbowAngleFluctuate) / (maxBackElbowAngleFluctuate - minBackElbowAngleFluctuate) * 100;
-        float frontShoulderAngleRank = (frontWristFluctuate - minFrontShoulderAngleFluctuate) / (maxFrontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) * 100;
-        float backShoulderAngleRank = (frontWristFluctuate - minBackShoulderAngleFluctuate) / (maxBackShoulderAngleFluctuate - minBackShoulderAngleFluctuate) * 100;
-        
+        float backWristRank = (backWristFluctuate - minBackWristFluctuate) / (maxBackWristFluctuate - minBackWristFluctuate) * 100;
+        float frontElbowAngleRank = (frontElbowAngleFluctuate - minFrontElbowAngleFluctuate) / (maxFrontElbowAngleFluctuate - minFrontElbowAngleFluctuate) * 100;
+        float backElbowAngleRank = (backElbowAngleFluctuate - minBackElbowAngleFluctuate) / (maxBackElbowAngleFluctuate - minBackElbowAngleFluctuate) * 100;
+        float frontShoulderAngleRank = (frontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) / (maxFrontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) * 100;
+        float backShoulderAngleRank = (backShoulderAngleFluctuate - minBackShoulderAngleFluctuate) / (maxBackShoulderAngleFluctuate - minBackShoulderAngleFluctuate) * 100;
+
+        Debug.Log($"front Wrist: {frontWristFluctuate}, ({minFrontWristFluctuate}, {maxFrontWristFluctuate}),  {frontWristRank}");
+        Debug.Log($"back Wrist: {backWristFluctuate}, ({minBackWristFluctuate}, {maxBackWristFluctuate}),  {backWristRank}");
+        Debug.Log($"front Elbow: {frontElbowAngleFluctuate}, ({minFrontElbowAngleFluctuate}, {maxFrontElbowAngleFluctuate}),  {frontElbowAngleRank}");
+        Debug.Log($"back Elbow: {backElbowAngleFluctuate}, ({minBackElbowAngleFluctuate}, {maxBackElbowAngleFluctuate}),  {backElbowAngleRank}");
+        Debug.Log($"front Shoudler: {frontShoulderAngleFluctuate}, ({minFrontShoulderAngleFluctuate}, {maxFrontShoulderAngleFluctuate}),  {frontShoulderAngleRank}");
+        Debug.Log($"back Shoulder: {backShoulderAngleFluctuate}, ({minBackShoulderAngleFluctuate}, {maxBackShoulderAngleFluctuate}),  {backShoulderAngleRank}");
+
         scoreDisplayText.text = "";
         scoreDisplayText.text += "\n\nfront Wrist Fluctuate\n";
         scoreDisplayText.text += scoreToRank(frontWristRank);
@@ -501,16 +508,16 @@ public class PosetureScoring : MonoBehaviour
         scoreDisplayText.text += scoreToRank(frontShoulderAngleRank);
         scoreDisplayText.text += "\n\nback Shoulder Angle Fluctuate\n";
         scoreDisplayText.text += scoreToRank(backShoulderAngleRank);
-        
+
     }
     string scoreToRank(float score)
     {
-        if (score < 10) return "Excellent";
-        if (score < 30) return "Very Good";
-        if (score < 50) return "Good";
-        if (score < 70) return "Fair";
-        if (score < 90) return "Poor";
-        return "Perfect";
+        if (score < 10) return "Perfect";
+        if (score < 30) return "Excellent";
+        if (score < 50) return "Very Good";
+        if (score < 70) return "Good";
+        if (score < 90) return "Fair";
+        return "Poor";
     }
     void hideDisplayScore()
     {
