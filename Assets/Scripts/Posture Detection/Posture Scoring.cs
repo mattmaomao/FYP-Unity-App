@@ -105,14 +105,18 @@ public class PosetureScoring : MonoBehaviour
     }
 
     // start btn
-    public void StartScoring()
+    public void startScoring()
     {
-        isScoring = true;
+        clearRecord();
+        hideDisplayScore();
+
         startBtn.SetActive(false);
         startText.SetActive(false);
         recordingIndicator.SetActive(true);
-        clearRecord();
-        hideDisplayScore();
+
+        poseIdentifier.resetPose();
+
+        isScoring = true;
     }
 
     void stopScoring()
@@ -199,6 +203,9 @@ public class PosetureScoring : MonoBehaviour
 
         // display
         displayScore();
+
+        // debug
+        // StartCoroutine(autoSave());
     }
 
     #region calculation
@@ -453,18 +460,57 @@ public class PosetureScoring : MonoBehaviour
         // display score
         scoreDisplayPanel.SetActive(true);
 
-        scoreDisplayText.text = "front Elbow Angle Fluctuate\n";
-        scoreDisplayText.text += frontElbowAngleFluctuate.ToString("F2");
-        scoreDisplayText.text += "\n\nback Elbow Angle Fluctuate\n";
-        scoreDisplayText.text += backElbowAngleFluctuate.ToString("F2");
-        scoreDisplayText.text += "\n\nfront Shoulder Angle Fluctuate\n";
-        scoreDisplayText.text += frontShoulderAngleFluctuate.ToString("F2");
-        scoreDisplayText.text += "\n\nback Shoulder Angle Fluctuate\n";
-        scoreDisplayText.text += backShoulderAngleFluctuate.ToString("F2");
+        // hardcode score range
+        float minFrontWristFluctuate = 7.470885f;
+        float maxFrontWristFluctuate = 129.0781f;
+
+        float minBackWristFluctuate = 44.32072f;
+        float maxBackWristFluctuate = 141.2049f;
+
+        float minFrontElbowAngleFluctuate = 0.3370529f;
+        float maxFrontElbowAngleFluctuate = 4.706191f;
+
+        float minBackElbowAngleFluctuate = 0.4070209f;
+        float maxBackElbowAngleFluctuate = 14.23022f;
+
+        float minFrontShoulderAngleFluctuate = 0.2263088f;
+        float maxFrontShoulderAngleFluctuate = 5.615577f;
+
+        float minBackShoulderAngleFluctuate = 0.9151633f;
+        float maxBackShoulderAngleFluctuate = 10.8756f;
+
+        float frontWristRank = (frontWristFluctuate - minFrontWristFluctuate) / (maxFrontWristFluctuate - minFrontWristFluctuate) * 100;
+        float backWristRank = (frontWristFluctuate - minBackWristFluctuate) / (maxBackWristFluctuate - minBackWristFluctuate) * 100;
+        float frontElbowAngleRank = (frontWristFluctuate - minFrontElbowAngleFluctuate) / (maxFrontElbowAngleFluctuate - minFrontElbowAngleFluctuate) * 100;
+        float backElbowAngleRank = (frontWristFluctuate - minBackElbowAngleFluctuate) / (maxBackElbowAngleFluctuate - minBackElbowAngleFluctuate) * 100;
+        float frontShoulderAngleRank = (frontWristFluctuate - minFrontShoulderAngleFluctuate) / (maxFrontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) * 100;
+        float backShoulderAngleRank = (frontWristFluctuate - minBackShoulderAngleFluctuate) / (maxBackShoulderAngleFluctuate - minBackShoulderAngleFluctuate) * 100;
+        
+        scoreDisplayText.text = "";
         scoreDisplayText.text += "\n\nfront Wrist Fluctuate\n";
-        scoreDisplayText.text += frontWristFluctuate.ToString("F2");
+        scoreDisplayText.text += scoreToRank(frontWristRank);
         scoreDisplayText.text += "\n\nback Wrist Fluctuate\n";
-        scoreDisplayText.text += backWristFluctuate.ToString("F2");
+
+        scoreDisplayText.text += scoreToRank(backWristRank);
+        scoreDisplayText.text += "\n\nfront Elbow Angle Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(frontElbowAngleRank);
+        scoreDisplayText.text += "\n\nback Elbow Angle Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(backElbowAngleRank);
+
+        scoreDisplayText.text += "\n\nfront Shoulder Angle Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(frontShoulderAngleRank);
+        scoreDisplayText.text += "\n\nback Shoulder Angle Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(backShoulderAngleRank);
+        
+    }
+    string scoreToRank(float score)
+    {
+        if (score < 10) return "Excellent";
+        if (score < 30) return "Very Good";
+        if (score < 50) return "Good";
+        if (score < 70) return "Fair";
+        if (score < 90) return "Poor";
+        return "Perfect";
     }
     void hideDisplayScore()
     {
@@ -484,8 +530,8 @@ public class PosetureScoring : MonoBehaviour
         // save score
         PostureData postureData = new PostureData
         {
-            dateTime = Time.time,
-            postureName = "Posture_" + DataManager.instance.postureDataList.Count,
+            dateTime = System.DateTime.Now,
+            postureName = "Posture_" + (DataManager.instance.postureDataList != null ? DataManager.instance.postureDataList.Count : 0),
 
             // front wrist
             frontWristFluctuate = this.frontWristFluctuate,
@@ -511,6 +557,9 @@ public class PosetureScoring : MonoBehaviour
             backShoulderAngleFluctuate = this.backShoulderAngleFluctuate,
             backShoulderAngleStart = this.backShoulderAngleStart,
             backShoulderAngleEnd = this.backShoulderAngleEnd,
+
+            frontWristPts = this.frontWristPts,
+            backWristPts = this.backWristPts,
         };
         DataManager.instance.postureDataList.Add(postureData);
         DataManager.instance.SavePostureDataToFile();
@@ -521,6 +570,14 @@ public class PosetureScoring : MonoBehaviour
     #endregion
 
     #region debug
+    IEnumerator autoSave()
+    {
+        yield return new WaitForSeconds(0.1f);
+        saveScore();
+        yield return new WaitForSeconds(1f);
+        startScoring();
+    }
+
     public void toggleDebug()
     {
         debugPanel.SetActive(!debugPanel.activeSelf);

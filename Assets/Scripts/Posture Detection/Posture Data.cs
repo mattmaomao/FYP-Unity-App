@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class PostureData
 {
-    public float dateTime;
+    public System.DateTime dateTime;
     public string postureName;
 
     // front wrist

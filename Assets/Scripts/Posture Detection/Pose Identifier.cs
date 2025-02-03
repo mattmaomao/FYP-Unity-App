@@ -247,4 +247,10 @@ public class PoseIdentifier : MonoBehaviour
                 break;
         }
     }
+
+    // force reset pose to idle
+    public void resetPose()
+    {
+        currentPose = Pose.Idle;
+    }
 }

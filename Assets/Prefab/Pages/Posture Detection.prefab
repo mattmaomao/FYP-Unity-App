@@ -1506,7 +1506,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: 0, y: 270}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 854.09, y: 72.22}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &5168483261467282209
 CanvasRenderer:
@@ -2471,7 +2471,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3904134912839541744
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10857,7 +10857,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 8438332092691080302}
         m_TargetAssemblyTypeName: PosetureScoring, Assembly-CSharp
-        m_MethodName: StartScoring
+        m_MethodName: startScoring
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13422,10 +13422,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5834533273640910427}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 427.045, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 427.045, y: -36.11}
+  m_SizeDelta: {x: 822.09, y: 40.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &764073676681647949
 CanvasRenderer:
