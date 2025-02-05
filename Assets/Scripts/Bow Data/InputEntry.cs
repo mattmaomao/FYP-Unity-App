@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 [Serializable]
-public class InputEntry : MonoBehaviour
+public class InputEntry
 {
+    public int index;
+    public bool RH;
     public string handleBrand;
     public string handleName;
     public string limbBrand;
@@ -20,8 +22,10 @@ public class InputEntry : MonoBehaviour
     public string sightBrand;
     public string sightName;
 
-    public InputEntry (string handleBrand, string handleName, string limbBrand, string limbName, string stringSize, string stringStrand, string stringMaterial, string servingSize, string servingBrand, string servingMaterial, string plungerBrand, string plungerName, string sightBrand, string sightName)
+    public InputEntry (int index, bool RH, string handleBrand, string handleName, string limbBrand, string limbName, string stringSize, string stringStrand, string stringMaterial, string servingSize, string servingBrand, string servingMaterial, string plungerBrand, string plungerName, string sightBrand, string sightName)
     {
+        this.index = index;
+        this.RH = RH;
         this.handleBrand = handleBrand;
         this.handleName = handleName;
         this.limbBrand = limbBrand;
