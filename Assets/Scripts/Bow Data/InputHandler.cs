@@ -46,4 +46,46 @@ public class InputHandler : MonoBehaviour
     {
         this.index = index;
     }
+
+    public void LoadNameFromList()
+    {
+        if (File.Exists(Application.persistentDataPath + "/" + filename))
+        {
+            string content = File.ReadAllText(Application.persistentDataPath + "/" + filename);
+            bow.Clear();
+            bow = new();
+            bow = JsonConvert.DeserializeObject<List<InputEntry>>(content);
+
+            InputEntry entry = bow[0];
+            index = entry.index;
+            
+            if (entry.RH == true)
+            {
+                LRH.value = 1;
+            } else LRH.value = 0;
+            handleBrand.value = handleBrand.options.FindIndex(option => option.text == entry.handleBrand);
+            handleName.text = "HI";
+            Debug.Log(entry.handleName);
+            limbBrand.value = limbBrand.options.FindIndex(option => option.text == entry.limbBrand);
+            limbName.text = entry.limbName;
+            stringSize.value = stringSize.options.FindIndex(option => option.text == entry.stringSize);
+            stringStrand.value = stringStrand.options.FindIndex(option => option.text == entry.stringStrand);
+            stringMaterial.text = entry.stringMaterial;
+            servingSize.value = servingSize.options.FindIndex(option => option.text == entry.servingSize);
+            servingBrand.value = servingBrand.options.FindIndex(option => option.text == entry.servingBrand);
+            servingMaterial.text = entry.servingMaterial;
+            plungerBrand.value = plungerBrand.options.FindIndex(option => option.text == entry.plungerBrand);
+            plungerName.text = entry.plungerName;
+            sightBrand.value = sightBrand.options.FindIndex(option => option.text == entry.sightBrand);
+            sightName.text = entry.sightName;
+
+            Debug.Log("Data loaded from file successfully. " + Application.persistentDataPath + "/" + filename);
+        }
+        else
+        {
+            bow.Clear();
+            bow = new();
+        }
+
+    }
 }
