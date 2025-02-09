@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PosetureScoring : MonoBehaviour
 {
@@ -73,10 +74,14 @@ public class PosetureScoring : MonoBehaviour
     [SerializeField] GameObject recordingIndicator;
     [SerializeField] GameObject scoreDisplayPanel;
     [SerializeField] TextMeshProUGUI scoreDisplayText;
+    // line
+    [SerializeField] GameObject showLinePanel;
+    [SerializeField] Transform lineContainer;
 
     [Header("Debug")]
     [SerializeField] GameObject debugPanel;
     [SerializeField] TextMeshProUGUI debugPanelText;
+    [SerializeField] GameObject lineDotsPrefab;
 
     void Start()
     {
@@ -457,6 +462,8 @@ public class PosetureScoring : MonoBehaviour
     void displayScore()
     {
         PDM.hideAnnotations();
+        showLinePanel.SetActive(false);
+
         // display score
         scoreDisplayPanel.SetActive(true);
 
@@ -509,6 +516,22 @@ public class PosetureScoring : MonoBehaviour
         scoreDisplayText.text += "\n\nback Shoulder Angle Fluctuate\n";
         scoreDisplayText.text += scoreToRank(backShoulderAngleRank);
 
+        // clear old line
+        foreach (Transform child in lineContainer)
+            Destroy(child.gameObject);        
+        // draw line
+        foreach (TimedPos tp in frontWristPts)
+        {
+            GameObject lineDots = Instantiate(lineDotsPrefab, lineContainer);
+            lineDots.transform.localPosition = tp.pos;
+        }
+        foreach (TimedPos tp in backWristPts)
+        {
+            GameObject lineDots = Instantiate(lineDotsPrefab, lineContainer);
+            lineDots.GetComponent<Image>().color = Color.red;
+            lineDots.transform.localPosition = tp.pos;
+        }
+        
     }
     string scoreToRank(float score)
     {
@@ -526,6 +549,10 @@ public class PosetureScoring : MonoBehaviour
         scoreDisplayPanel.SetActive(false);
     }
 
+    // show line btn
+    public void toggleLine() {
+        showLinePanel.SetActive(true);
+    }
     // back btn (cancel)
     public void cancelScore()
     {
