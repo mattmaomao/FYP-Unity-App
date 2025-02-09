@@ -12,6 +12,7 @@ public class InputHandler : MonoBehaviour
     public int index;
     public Slider LRH;
     public TMP_Dropdown handleBrand; 
+    public TMP_InputField handleNameInput;
     public TextMeshProUGUI handleName;
     public TMP_Dropdown limbBrand;
     public TextMeshProUGUI limbName;
@@ -64,6 +65,7 @@ public class InputHandler : MonoBehaviour
                 LRH.value = 1;
             } else LRH.value = 0;
             handleBrand.value = handleBrand.options.FindIndex(option => option.text == entry.handleBrand);
+            handleNameInput.text = entry.handleName;
             handleName.text = "HI";
             Debug.Log(entry.handleName);
             limbBrand.value = limbBrand.options.FindIndex(option => option.text == entry.limbBrand);
