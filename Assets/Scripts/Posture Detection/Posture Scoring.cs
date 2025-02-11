@@ -77,6 +77,7 @@ public class PosetureScoring : MonoBehaviour
     // line
     [SerializeField] GameObject showLinePanel;
     [SerializeField] Transform lineContainer;
+    [SerializeField] SmoothLine smoothLine;
 
     [Header("Debug")]
     [SerializeField] GameObject debugPanel;
@@ -516,9 +517,14 @@ public class PosetureScoring : MonoBehaviour
         scoreDisplayText.text += "\n\nback Shoulder Angle Fluctuate\n";
         scoreDisplayText.text += scoreToRank(backShoulderAngleRank);
 
+        smoothLine.drawLine(frontWristPts.ConvertAll(x => x.pos));
+        drawLine_dot();
+    }
+    void drawLine_dot()
+    {
         // clear old line
         foreach (Transform child in lineContainer)
-            Destroy(child.gameObject);        
+            Destroy(child.gameObject);
         // draw line
         foreach (TimedPos tp in frontWristPts)
         {
@@ -531,7 +537,6 @@ public class PosetureScoring : MonoBehaviour
             lineDots.GetComponent<Image>().color = Color.red;
             lineDots.transform.localPosition = tp.pos;
         }
-        
     }
     string scoreToRank(float score)
     {
@@ -550,7 +555,8 @@ public class PosetureScoring : MonoBehaviour
     }
 
     // show line btn
-    public void toggleLine() {
+    public void toggleLine()
+    {
         showLinePanel.SetActive(true);
     }
     // back btn (cancel)
