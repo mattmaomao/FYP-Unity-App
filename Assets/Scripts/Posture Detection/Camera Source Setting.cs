@@ -56,7 +56,7 @@ public class CaneraSourceSetting : MonoBehaviour
 
         // disable setting
         sourceTypeInput.interactable = false;
-        resolutionInput.gameObject.SetActive(false);
+        // resolutionInput.gameObject.SetActive(false);
         isHorizontallyFlippedInput.gameObject.SetActive(false);
     }
 
@@ -146,7 +146,7 @@ public class CaneraSourceSetting : MonoBehaviour
 
         if (resolutions == null)
         {
-            resolutionInput.enabled = false;
+            resolutionInput.interactable = false;
             return;
         }
 

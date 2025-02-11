@@ -274,7 +274,8 @@ public class PostureDetectionManager : MonoBehaviour
     #region UI
     public void showAnnotations()
     {
-        pointDisplay.SetActive(true);
+        // pointDisplay.SetActive(true);
+        pointDisplay.SetActive(false);
         connectionDisplay.SetActive(true);
     }
     public void hideAnnotations()

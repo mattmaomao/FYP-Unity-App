@@ -76,8 +76,8 @@ public class PosetureScoring : MonoBehaviour
     [SerializeField] TextMeshProUGUI scoreDisplayText;
     // line
     [SerializeField] GameObject showLinePanel;
+    [SerializeField] TextMeshProUGUI showLineText;
     [SerializeField] Transform lineContainer;
-    [SerializeField] SmoothLine smoothLine;
 
     [Header("Debug")]
     [SerializeField] GameObject debugPanel;
@@ -469,23 +469,23 @@ public class PosetureScoring : MonoBehaviour
         scoreDisplayPanel.SetActive(true);
 
         // hardcode score range
-        float minFrontWristFluctuate = 8f;
-        float maxFrontWristFluctuate = 200f;
+        float minFrontWristFluctuate = 0f;
+        float maxFrontWristFluctuate = 50f;
 
-        float minBackWristFluctuate = 60f;
+        float minBackWristFluctuate = 40f;
         float maxBackWristFluctuate = 150f;
 
         float minFrontElbowAngleFluctuate = 0f;
-        float maxFrontElbowAngleFluctuate = 10f;
+        float maxFrontElbowAngleFluctuate = 5f;
 
         float minBackElbowAngleFluctuate = 0f;
-        float maxBackElbowAngleFluctuate = 20f;
+        float maxBackElbowAngleFluctuate = 16f;
 
         float minFrontShoulderAngleFluctuate = 0f;
-        float maxFrontShoulderAngleFluctuate = 10f;
+        float maxFrontShoulderAngleFluctuate = 5f;
 
-        float minBackShoulderAngleFluctuate = 0f;
-        float maxBackShoulderAngleFluctuate = 10f;
+        float minBackShoulderAngleFluctuate = 2f;
+        float maxBackShoulderAngleFluctuate = 5f;
 
         float frontWristRank = (frontWristFluctuate - minFrontWristFluctuate) / (maxFrontWristFluctuate - minFrontWristFluctuate) * 100;
         float backWristRank = (backWristFluctuate - minBackWristFluctuate) / (maxBackWristFluctuate - minBackWristFluctuate) * 100;
@@ -502,11 +502,13 @@ public class PosetureScoring : MonoBehaviour
         Debug.Log($"back Shoulder: {backShoulderAngleFluctuate}, ({minBackShoulderAngleFluctuate}, {maxBackShoulderAngleFluctuate}),  {backShoulderAngleRank}");
 
         scoreDisplayText.text = "";
+        scoreDisplayText.text += "Overall Score\n";
+        scoreDisplayText.text += scoreToRank((frontWristRank*2 + backWristRank + frontElbowAngleRank*2 + backElbowAngleRank + frontShoulderAngleRank*2 + backShoulderAngleRank) / 9);
         scoreDisplayText.text += "\n\nfront Wrist Fluctuate\n";
         scoreDisplayText.text += scoreToRank(frontWristRank);
         scoreDisplayText.text += "\n\nback Wrist Fluctuate\n";
-
         scoreDisplayText.text += scoreToRank(backWristRank);
+        
         scoreDisplayText.text += "\n\nfront Elbow Angle Fluctuate\n";
         scoreDisplayText.text += scoreToRank(frontElbowAngleRank);
         scoreDisplayText.text += "\n\nback Elbow Angle Fluctuate\n";
@@ -517,11 +519,17 @@ public class PosetureScoring : MonoBehaviour
         scoreDisplayText.text += "\n\nback Shoulder Angle Fluctuate\n";
         scoreDisplayText.text += scoreToRank(backShoulderAngleRank);
 
-        smoothLine.drawLine(frontWristPts.ConvertAll(x => x.pos));
         drawLine_dot();
     }
     void drawLine_dot()
     {
+        if (SystemInfo.deviceType == DeviceType.Handheld) {
+            lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 90);
+        }
+        else {
+            lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
+
         // clear old line
         foreach (Transform child in lineContainer)
             Destroy(child.gameObject);
@@ -557,7 +565,8 @@ public class PosetureScoring : MonoBehaviour
     // show line btn
     public void toggleLine()
     {
-        showLinePanel.SetActive(true);
+        showLinePanel.SetActive(!showLinePanel.activeSelf);
+        showLineText.text = showLinePanel.activeSelf ? "Hide Line" : "Show Line";
     }
     // back btn (cancel)
     public void cancelScore()
