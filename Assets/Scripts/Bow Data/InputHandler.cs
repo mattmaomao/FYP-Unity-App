@@ -32,6 +32,14 @@ public class InputHandler : MonoBehaviour
     public TMP_InputField sightNameInput;
     public TextMeshProUGUI sightName;
     bool RH;
+    public TMP_InputField Info;
+    public TextMeshProUGUI button0;
+    public TextMeshProUGUI button1;
+    public TextMeshProUGUI button2;
+    public TextMeshProUGUI button3;
+    public TextMeshProUGUI button4;
+    public TextMeshProUGUI button5;
+
 
     List<InputEntry> bow = new List<InputEntry> ();
     [SerializeField] string filename;
@@ -57,11 +65,20 @@ public class InputHandler : MonoBehaviour
         {
             RH = true;
         } else RH = false;
-        bow.Add(new InputEntry(index, RH, handleBrand.options[handleBrand.value].text, handleName.text, limbBrand.options[limbBrand.value].text, limbName.text, stringSize.options[stringSize.value].text, stringStrand.options[stringStrand.value].text, stringMaterial.text, servingSize.options[servingSize.value].text, servingBrand.options[servingBrand.value].text, servingMaterial.text, plungerBrand.options[plungerBrand.value].text, plungerName.text, sightBrand.options[sightBrand.value].text, sightName.text));
+        bow.Add(new InputEntry(index, RH, handleBrand.options[handleBrand.value].text, handleName.text, limbBrand.options[limbBrand.value].text, limbName.text, stringSize.options[stringSize.value].text, stringStrand.options[stringStrand.value].text, stringMaterial.text, servingSize.options[servingSize.value].text, servingBrand.options[servingBrand.value].text, servingMaterial.text, plungerBrand.options[plungerBrand.value].text, plungerName.text, sightBrand.options[sightBrand.value].text, sightName.text, Info.text));
         string content = JsonConvert.SerializeObject(bow, Formatting.Indented);
         File.WriteAllText(Application.persistentDataPath + "/" + filename, content);
         Debug.Log(Application.persistentDataPath + "/" + filename);
-    }
+        switch(index)
+        {
+            case 0: { button0.text = handleName.text + "\n" + Info.text; break; }
+            case 1: { button1.text = handleName.text + "\n" + Info.text; break; }
+            case 2: { button2.text = handleName.text + "\n" + Info.text; break; }
+            case 3: { button3.text = handleName.text + "\n" + Info.text; break; }
+            case 4: { button4.text = handleName.text + "\n" + Info.text; break; }
+            case 5: { button5.text = handleName.text + "\n" + Info.text; break; }
+            }
+        }
 
     public void ChangeIndex(int index)
     {
@@ -89,10 +106,12 @@ public class InputHandler : MonoBehaviour
         plungerNameInput.text = entry.plungerName;
         sightBrand.value = sightBrand.options.FindIndex(option => option.text == entry.sightBrand);
         sightNameInput.text = entry.sightName;
+        Info.text = entry.Info;
     }
 
     public void ResetBowData()
     {
+        Info.text = "";
         LRH.value = 1;
         handleBrand.value = 0;
         handleNameInput.text = "";

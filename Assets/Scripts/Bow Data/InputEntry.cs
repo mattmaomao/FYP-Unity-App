@@ -21,8 +21,9 @@ public class InputEntry
     public string plungerName;
     public string sightBrand;
     public string sightName;
+    public string Info;
 
-    public InputEntry (int index, bool RH, string handleBrand, string handleName, string limbBrand, string limbName, string stringSize, string stringStrand, string stringMaterial, string servingSize, string servingBrand, string servingMaterial, string plungerBrand, string plungerName, string sightBrand, string sightName)
+    public InputEntry (int index, bool RH, string handleBrand, string handleName, string limbBrand, string limbName, string stringSize, string stringStrand, string stringMaterial, string servingSize, string servingBrand, string servingMaterial, string plungerBrand, string plungerName, string sightBrand, string sightName, string Info)
     {
         this.index = index;
         this.RH = RH;
@@ -40,6 +41,6 @@ public class InputEntry
         this.plungerName = plungerName;
         this.sightBrand = sightBrand;
         this.sightName = sightName;
-
+        this.Info = Info;
     }
 }
