@@ -38,23 +38,20 @@ public class InputHandler : MonoBehaviour
 
     public void AddNameToList()
     {
-        //string bowcontent = File.ReadAllText(Application.persistentDataPath + "/" + filename);
-        //bow.Clear();
-        //bow = new();
-        //bow = JsonConvert.DeserializeObject<List<InputEntry>>(bowcontent);
-        //int bowNum = bow.Count;
-        //for (int i = 0; i < bowNum; i++)
-        //{
-        //    Debug.Log("bowNUm: " + bowNum);
-        //    Debug.Log("i " +i);
-        //    Debug.Log("bow[i].index: " + bow[1].index);
-        //    Debug.Log("index: " + index);
-        //    if (bow[i].index == index)
-        //    {
-        //        bow.RemoveAt(i);
-        //        Debug.Log("Remove"+i);
-        //    }
-        //}
+        string bowcontent = File.ReadAllText(Application.persistentDataPath + "/" + filename);
+        bow.Clear();
+        bow = new();
+        bow = JsonConvert.DeserializeObject<List<InputEntry>>(bowcontent);
+        int bowNum = bow.Count;
+        for (int i = 0; i < bowNum; i++)
+        {
+            if (bow[i].index == index)
+            {
+                bow.RemoveAt(i);
+                Debug.Log("Remove" + i);
+                break;
+            }
+        }
 
         if (LRH.value == 1)
         {
@@ -98,19 +95,19 @@ public class InputHandler : MonoBehaviour
     {
         LRH.value = 1;
         handleBrand.value = 0;
-        handleNameInput.text = null;
+        handleNameInput.text = "";
         limbBrand.value = 0;
-        limbNameInput.text = null;
+        limbNameInput.text = "";
         stringSize.value = 0;
         stringStrand.value = 0;
-        stringMaterialInput.text = null;
+        stringMaterialInput.text = "";
         servingSize.value = 0;
         servingBrand.value = 0;
-        servingMaterialInput.text = null;
+        servingMaterialInput.text = "";
         plungerBrand.value = 0;
-        plungerNameInput.text = null;
+        plungerNameInput.text = "";
         sightBrand.value = 0;
-        sightNameInput.text = null;
+        sightNameInput.text = "";
     }
 
     public void LoadNameFromList()
