@@ -15,16 +15,21 @@ public class InputHandler : MonoBehaviour
     public TMP_InputField handleNameInput;
     public TextMeshProUGUI handleName;
     public TMP_Dropdown limbBrand;
+    public TMP_InputField limbNameInput;
     public TextMeshProUGUI limbName;
     public TMP_Dropdown stringSize;
     public TMP_Dropdown stringStrand;
+    public TMP_InputField stringMaterialInput;
     public TextMeshProUGUI stringMaterial;
     public TMP_Dropdown servingSize;
     public TMP_Dropdown servingBrand;
+    public TMP_InputField servingMaterialInput;
     public TextMeshProUGUI servingMaterial;
     public TMP_Dropdown plungerBrand;
+    public TMP_InputField plungerNameInput;
     public TextMeshProUGUI plungerName;
     public TMP_Dropdown sightBrand;
+    public TMP_InputField sightNameInput;
     public TextMeshProUGUI sightName;
     bool RH;
 
@@ -33,6 +38,24 @@ public class InputHandler : MonoBehaviour
 
     public void AddNameToList()
     {
+        //string bowcontent = File.ReadAllText(Application.persistentDataPath + "/" + filename);
+        //bow.Clear();
+        //bow = new();
+        //bow = JsonConvert.DeserializeObject<List<InputEntry>>(bowcontent);
+        //int bowNum = bow.Count;
+        //for (int i = 0; i < bowNum; i++)
+        //{
+        //    Debug.Log("bowNUm: " + bowNum);
+        //    Debug.Log("i " +i);
+        //    Debug.Log("bow[i].index: " + bow[1].index);
+        //    Debug.Log("index: " + index);
+        //    if (bow[i].index == index)
+        //    {
+        //        bow.RemoveAt(i);
+        //        Debug.Log("Remove"+i);
+        //    }
+        //}
+
         if (LRH.value == 1)
         {
             RH = true;
@@ -48,6 +71,48 @@ public class InputHandler : MonoBehaviour
         this.index = index;
     }
 
+    public void LoadBowData(InputEntry entry)
+    {
+        if (entry.RH == true)
+        {
+            LRH.value = 1;
+        }
+        else LRH.value = 0;
+        handleBrand.value = handleBrand.options.FindIndex(option => option.text == entry.handleBrand);
+        handleNameInput.text = entry.handleName;
+        limbBrand.value = limbBrand.options.FindIndex(option => option.text == entry.limbBrand);
+        limbNameInput.text = entry.limbName;
+        stringSize.value = stringSize.options.FindIndex(option => option.text == entry.stringSize);
+        stringStrand.value = stringStrand.options.FindIndex(option => option.text == entry.stringStrand);
+        stringMaterialInput.text = entry.stringMaterial;
+        servingSize.value = servingSize.options.FindIndex(option => option.text == entry.servingSize);
+        servingBrand.value = servingBrand.options.FindIndex(option => option.text == entry.servingBrand);
+        servingMaterialInput.text = entry.servingMaterial;
+        plungerBrand.value = plungerBrand.options.FindIndex(option => option.text == entry.plungerBrand);
+        plungerNameInput.text = entry.plungerName;
+        sightBrand.value = sightBrand.options.FindIndex(option => option.text == entry.sightBrand);
+        sightNameInput.text = entry.sightName;
+    }
+
+    public void ResetBowData()
+    {
+        LRH.value = 1;
+        handleBrand.value = 0;
+        handleNameInput.text = null;
+        limbBrand.value = 0;
+        limbNameInput.text = null;
+        stringSize.value = 0;
+        stringStrand.value = 0;
+        stringMaterialInput.text = null;
+        servingSize.value = 0;
+        servingBrand.value = 0;
+        servingMaterialInput.text = null;
+        plungerBrand.value = 0;
+        plungerNameInput.text = null;
+        sightBrand.value = 0;
+        sightNameInput.text = null;
+    }
+
     public void LoadNameFromList()
     {
         if (File.Exists(Application.persistentDataPath + "/" + filename))
@@ -57,29 +122,22 @@ public class InputHandler : MonoBehaviour
             bow = new();
             bow = JsonConvert.DeserializeObject<List<InputEntry>>(content);
 
-            InputEntry entry = bow[0];
-            index = entry.index;
-            
-            if (entry.RH == true)
+            int bowNum = bow.Count;
+            Debug.Log(bowNum);
+            for (int i = 0; i < bowNum; i++)
             {
-                LRH.value = 1;
-            } else LRH.value = 0;
-            handleBrand.value = handleBrand.options.FindIndex(option => option.text == entry.handleBrand);
-            handleNameInput.text = entry.handleName;
-            handleName.text = "HI";
-            Debug.Log(entry.handleName);
-            limbBrand.value = limbBrand.options.FindIndex(option => option.text == entry.limbBrand);
-            limbName.text = entry.limbName;
-            stringSize.value = stringSize.options.FindIndex(option => option.text == entry.stringSize);
-            stringStrand.value = stringStrand.options.FindIndex(option => option.text == entry.stringStrand);
-            stringMaterial.text = entry.stringMaterial;
-            servingSize.value = servingSize.options.FindIndex(option => option.text == entry.servingSize);
-            servingBrand.value = servingBrand.options.FindIndex(option => option.text == entry.servingBrand);
-            servingMaterial.text = entry.servingMaterial;
-            plungerBrand.value = plungerBrand.options.FindIndex(option => option.text == entry.plungerBrand);
-            plungerName.text = entry.plungerName;
-            sightBrand.value = sightBrand.options.FindIndex(option => option.text == entry.sightBrand);
-            sightName.text = entry.sightName;
+                if (bow[i].index == index)
+                {
+                    LoadBowData(bow[i]);
+                    break;
+                }
+                else
+                {
+                    ResetBowData();
+                }
+            }
+
+            
 
             Debug.Log("Data loaded from file successfully. " + Application.persistentDataPath + "/" + filename);
         }
