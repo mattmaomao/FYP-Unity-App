@@ -68,16 +68,39 @@ public class PosetureScoring : MonoBehaviour
     bool released = false;
     float releaseTime = 0;
 
+    // rank
+    float frontWristRank;
+    float backWristRank;
+    float frontElbowAngleRank;
+    float backElbowAngleRank;
+    float frontShoulderAngleRank;
+    float backShoulderAngleRank;
+
     [Header("UI")]
     [SerializeField] GameObject startBtn;
     [SerializeField] GameObject startText;
     [SerializeField] GameObject recordingIndicator;
+    [SerializeField] GameObject backBtn;
+    [SerializeField] GameObject nextBtn;
+
+    [Header("UI_Score")]
     [SerializeField] GameObject scoreDisplayPanel;
     [SerializeField] TextMeshProUGUI scoreDisplayText;
+    [SerializeField] GameObject showDetailBtn;
+    [SerializeField] TextMeshProUGUI showDetailBtnText;
+    bool showingDetail = false;
+    int scorePage = 0;
+    [Header("UI_Line")]
     // line
     [SerializeField] GameObject showLinePanel;
-    [SerializeField] TextMeshProUGUI showLineText;
     [SerializeField] Transform lineContainer;
+    Camera cameraToCapture;
+    [SerializeField] Image lineBackground;
+    [SerializeField] LineRenderer frontLine;
+    [SerializeField] LineRenderer backLine;
+    [SerializeField] GameObject cameraSettingBtn;
+    [Header("UI_Suggestion")]
+    [SerializeField] GameObject suggestionPanel;
 
     [Header("Debug")]
     [SerializeField] GameObject debugPanel;
@@ -88,6 +111,8 @@ public class PosetureScoring : MonoBehaviour
     {
         // reset
         stopScoring();
+
+        cameraToCapture = Camera.main;
     }
 
     void Update()
@@ -97,8 +122,7 @@ public class PosetureScoring : MonoBehaviour
 
         if (!released && poseIdentifier.currentPose == Pose.Release)
         {
-            released = true;
-            releaseTime = timer;
+            onRelease();
         }
         if (poseIdentifier.currentPose != Pose.Idle && poseIdentifier.currentPose != Pose.Draw_Ready)
             recordJointsPos();
@@ -110,6 +134,20 @@ public class PosetureScoring : MonoBehaviour
         DebugTable();
     }
 
+    void OnDisable()
+    {
+        stopScoring();
+    }
+
+    void onRelease()
+    {
+        released = true;
+        releaseTime = timer;
+
+        takeReleaseScreenShot();
+    }
+
+
     // start btn
     public void startScoring()
     {
@@ -119,6 +157,7 @@ public class PosetureScoring : MonoBehaviour
         startBtn.SetActive(false);
         startText.SetActive(false);
         recordingIndicator.SetActive(true);
+        cameraSettingBtn.SetActive(false);
 
         poseIdentifier.resetPose();
 
@@ -131,6 +170,8 @@ public class PosetureScoring : MonoBehaviour
         startBtn.SetActive(true);
         startText.SetActive(true);
         recordingIndicator.SetActive(false);
+        cameraSettingBtn.SetActive(true);
+
         clearRecord();
         hideDisplayScore();
     }
@@ -463,10 +504,9 @@ public class PosetureScoring : MonoBehaviour
     void displayScore()
     {
         PDM.hideAnnotations();
-        showLinePanel.SetActive(false);
 
         // display score
-        scoreDisplayPanel.SetActive(true);
+        changePage(0);
 
         // hardcode score range
         float minFrontWristFluctuate = 0f;
@@ -494,39 +534,32 @@ public class PosetureScoring : MonoBehaviour
         float frontShoulderAngleRank = (frontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) / (maxFrontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) * 100;
         float backShoulderAngleRank = (backShoulderAngleFluctuate - minBackShoulderAngleFluctuate) / (maxBackShoulderAngleFluctuate - minBackShoulderAngleFluctuate) * 100;
 
-        Debug.Log($"front Wrist: {frontWristFluctuate}, ({minFrontWristFluctuate}, {maxFrontWristFluctuate}),  {frontWristRank}");
-        Debug.Log($"back Wrist: {backWristFluctuate}, ({minBackWristFluctuate}, {maxBackWristFluctuate}),  {backWristRank}");
-        Debug.Log($"front Elbow: {frontElbowAngleFluctuate}, ({minFrontElbowAngleFluctuate}, {maxFrontElbowAngleFluctuate}),  {frontElbowAngleRank}");
-        Debug.Log($"back Elbow: {backElbowAngleFluctuate}, ({minBackElbowAngleFluctuate}, {maxBackElbowAngleFluctuate}),  {backElbowAngleRank}");
-        Debug.Log($"front Shoudler: {frontShoulderAngleFluctuate}, ({minFrontShoulderAngleFluctuate}, {maxFrontShoulderAngleFluctuate}),  {frontShoulderAngleRank}");
-        Debug.Log($"back Shoulder: {backShoulderAngleFluctuate}, ({minBackShoulderAngleFluctuate}, {maxBackShoulderAngleFluctuate}),  {backShoulderAngleRank}");
+        // debug text
+        // Debug.Log($"front Wrist: {frontWristFluctuate}, ({minFrontWristFluctuate}, {maxFrontWristFluctuate}),  {frontWristRank}");
+        // Debug.Log($"back Wrist: {backWristFluctuate}, ({minBackWristFluctuate}, {maxBackWristFluctuate}),  {backWristRank}");
+        // Debug.Log($"front Elbow: {frontElbowAngleFluctuate}, ({minFrontElbowAngleFluctuate}, {maxFrontElbowAngleFluctuate}),  {frontElbowAngleRank}");
+        // Debug.Log($"back Elbow: {backElbowAngleFluctuate}, ({minBackElbowAngleFluctuate}, {maxBackElbowAngleFluctuate}),  {backElbowAngleRank}");
+        // Debug.Log($"front Shoudler: {frontShoulderAngleFluctuate}, ({minFrontShoulderAngleFluctuate}, {maxFrontShoulderAngleFluctuate}),  {frontShoulderAngleRank}");
+        // Debug.Log($"back Shoulder: {backShoulderAngleFluctuate}, ({minBackShoulderAngleFluctuate}, {maxBackShoulderAngleFluctuate}),  {backShoulderAngleRank}");
 
-        scoreDisplayText.text = "";
-        scoreDisplayText.text += "Overall Score\n";
-        scoreDisplayText.text += scoreToRank((frontWristRank*2 + backWristRank + frontElbowAngleRank*2 + backElbowAngleRank + frontShoulderAngleRank*2 + backShoulderAngleRank) / 9);
-        scoreDisplayText.text += "\n\nfront Wrist Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(frontWristRank);
-        scoreDisplayText.text += "\n\nback Wrist Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(backWristRank);
-        
-        scoreDisplayText.text += "\n\nfront Elbow Angle Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(frontElbowAngleRank);
-        scoreDisplayText.text += "\n\nback Elbow Angle Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(backElbowAngleRank);
-
-        scoreDisplayText.text += "\n\nfront Shoulder Angle Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(frontShoulderAngleRank);
-        scoreDisplayText.text += "\n\nback Shoulder Angle Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(backShoulderAngleRank);
+        showSimpleScore();
 
         drawLine_dot();
+
+        // draw line of last 1 sec
+        frontLine.SetPosition(0, frontWristStart);
+        frontLine.SetPosition(1, frontWristEnd);
+        backLine.SetPosition(0, backWristStart);
+        backLine.SetPosition(1, backWristEnd);
     }
     void drawLine_dot()
     {
-        if (SystemInfo.deviceType == DeviceType.Handheld) {
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
             lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 90);
         }
-        else {
+        else
+        {
             lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
 
@@ -546,6 +579,40 @@ public class PosetureScoring : MonoBehaviour
             lineDots.transform.localPosition = tp.pos;
         }
     }
+    void showSimpleScore()
+    {
+        showingDetail = false;
+        showDetailBtnText.text = showingDetail ? "Show Detail" : "Hide Detail";
+
+        // display text
+        scoreDisplayText.text = "";
+        scoreDisplayText.text += "Overall Score\n";
+        scoreDisplayText.text += scoreToRank((frontWristRank * 2 + backWristRank + frontElbowAngleRank * 2 + backElbowAngleRank + frontShoulderAngleRank * 2 + backShoulderAngleRank) / 9);
+    }
+    void showDetailScore()
+    {
+        showingDetail = true;
+        showDetailBtnText.text = showingDetail ? "Show Detail" : "Hide Detail";
+
+        // display text
+        scoreDisplayText.text = "";
+        scoreDisplayText.text += "Overall Score\n";
+        scoreDisplayText.text += scoreToRank((frontWristRank * 2 + backWristRank + frontElbowAngleRank * 2 + backElbowAngleRank + frontShoulderAngleRank * 2 + backShoulderAngleRank) / 9);
+        scoreDisplayText.text += "\n\nfront Wrist Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(frontWristRank);
+        scoreDisplayText.text += "\n\nback Wrist Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(backWristRank);
+
+        scoreDisplayText.text += "\n\nfront Elbow Angle Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(frontElbowAngleRank);
+        scoreDisplayText.text += "\n\nback Elbow Angle Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(backElbowAngleRank);
+
+        scoreDisplayText.text += "\n\nfront Shoulder Angle Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(frontShoulderAngleRank);
+        scoreDisplayText.text += "\n\nback Shoulder Angle Fluctuate\n";
+        scoreDisplayText.text += scoreToRank(backShoulderAngleRank);
+    }
     string scoreToRank(float score)
     {
         if (score < 10) return "Perfect";
@@ -555,6 +622,34 @@ public class PosetureScoring : MonoBehaviour
         if (score < 90) return "Fair";
         return "Poor";
     }
+
+    // take screenshot of the whole screen 
+    void takeReleaseScreenShot()
+    {
+        // Create a RenderTexture to capture the camera's view
+        RenderTexture renderTexture = new RenderTexture(Screen.width, Screen.height, 24);
+        cameraToCapture.targetTexture = renderTexture;
+        cameraToCapture.Render();
+
+        // Create a new Texture2D and read the RenderTexture data into it
+        Texture2D screenTexture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        RenderTexture.active = renderTexture;
+        screenTexture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        screenTexture.Apply();
+
+        // Reset the camera's target texture
+        cameraToCapture.targetTexture = null;
+        RenderTexture.active = null;
+
+        // Create a sprite from the captured texture
+        Sprite sprite = Sprite.Create(screenTexture, new Rect(0, 0, screenTexture.width, screenTexture.height), new Vector2(0.5f, 0.5f));
+        lineBackground.sprite = sprite;
+
+        // set size
+        RectTransform canvasTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
+        lineBackground.GetComponent<RectTransform>().sizeDelta = new Vector2(canvasTransform.sizeDelta.x, canvasTransform.sizeDelta.y);
+    }
+
     void hideDisplayScore()
     {
         // hide score
@@ -562,13 +657,54 @@ public class PosetureScoring : MonoBehaviour
         scoreDisplayPanel.SetActive(false);
     }
 
-    // show line btn
-    public void toggleLine()
+    #endregion
+
+    #region UI
+    // score detail btn
+    public void toggleScoreDetail()
     {
-        showLinePanel.SetActive(!showLinePanel.activeSelf);
-        showLineText.text = showLinePanel.activeSelf ? "Hide Line" : "Show Line";
+        if (showingDetail)
+            showSimpleScore();
+        else
+            showDetailScore();
     }
-    // back btn (cancel)
+    // show line btn
+    // todo : change to next, back btn
+    void changePage(int idx)
+    {
+        scorePage = idx;
+        switch (scorePage)
+        {
+            case 0:
+                scoreDisplayPanel.SetActive(true);
+                showLinePanel.SetActive(false);
+                suggestionPanel.SetActive(false);
+                showDetailBtn.SetActive(true);
+                backBtn.SetActive(false);
+                nextBtn.SetActive(true);
+                break;
+            case 1:
+                showLinePanel.SetActive(true);
+                suggestionPanel.SetActive(false);
+                showDetailBtn.SetActive(false);
+                backBtn.SetActive(true);
+                break;
+            case 2:
+                suggestionPanel.SetActive(true);
+                showDetailBtn.SetActive(false);
+                nextBtn.SetActive(false);
+                break;
+        }
+    }
+    public void onBackBtn()
+    {
+        changePage(scorePage - 1);
+    }
+    public void onNextBtn()
+    {
+        changePage(scorePage + 1);
+    }
+    // cancel btn
     public void cancelScore()
     {
         stopScoring();
