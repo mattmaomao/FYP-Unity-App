@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum ArcherLvl {Beginner, Elementary, Intermidate, Advanced}
 public class PosetureScoring : MonoBehaviour
 {
     struct TimedAngle { public float time; public float angle; }
@@ -75,6 +76,8 @@ public class PosetureScoring : MonoBehaviour
     float backElbowAngleRank;
     float frontShoulderAngleRank;
     float backShoulderAngleRank;
+    ArcherLvl archerLvl = ArcherLvl.Beginner;
+    float[] rankMultiplier = {1.5f, 1.35f, 1.2f, 1};
 
     [Header("UI")]
     [SerializeField] GameObject startBtn;
@@ -82,6 +85,7 @@ public class PosetureScoring : MonoBehaviour
     [SerializeField] GameObject recordingIndicator;
     [SerializeField] GameObject backBtn;
     [SerializeField] GameObject nextBtn;
+    [SerializeField] GameObject lvlPanel;
 
     [Header("UI_Score")]
     [SerializeField] GameObject scoreDisplayPanel;
@@ -134,6 +138,11 @@ public class PosetureScoring : MonoBehaviour
         DebugTable();
     }
 
+    void OnEnable()
+    {
+        stopScoring();
+        lvlPanel.SetActive(true);
+    }
     void OnDisable()
     {
         stopScoring();
@@ -250,6 +259,12 @@ public class PosetureScoring : MonoBehaviour
 
         // display
         displayScore();
+
+        // draw dotted line
+        drawLine_dot();
+
+        // draw line
+        drawLine();
 
         // debug
         // StartCoroutine(autoSave());
@@ -510,29 +525,29 @@ public class PosetureScoring : MonoBehaviour
 
         // hardcode score range
         float minFrontWristFluctuate = 0f;
-        float maxFrontWristFluctuate = 50f;
+        float maxFrontWristFluctuate = 50f * rankMultiplier[(int) archerLvl];
 
         float minBackWristFluctuate = 40f;
-        float maxBackWristFluctuate = 150f;
+        float maxBackWristFluctuate = 150f * rankMultiplier[(int) archerLvl];
 
         float minFrontElbowAngleFluctuate = 0f;
-        float maxFrontElbowAngleFluctuate = 5f;
+        float maxFrontElbowAngleFluctuate = 5f * rankMultiplier[(int) archerLvl];
 
         float minBackElbowAngleFluctuate = 0f;
-        float maxBackElbowAngleFluctuate = 16f;
+        float maxBackElbowAngleFluctuate = 16f * rankMultiplier[(int) archerLvl];
 
         float minFrontShoulderAngleFluctuate = 0f;
-        float maxFrontShoulderAngleFluctuate = 5f;
+        float maxFrontShoulderAngleFluctuate = 5f * rankMultiplier[(int) archerLvl];
 
         float minBackShoulderAngleFluctuate = 2f;
-        float maxBackShoulderAngleFluctuate = 5f;
+        float maxBackShoulderAngleFluctuate = 5f * rankMultiplier[(int) archerLvl];
 
-        float frontWristRank = (frontWristFluctuate - minFrontWristFluctuate) / (maxFrontWristFluctuate - minFrontWristFluctuate) * 100;
-        float backWristRank = (backWristFluctuate - minBackWristFluctuate) / (maxBackWristFluctuate - minBackWristFluctuate) * 100;
-        float frontElbowAngleRank = (frontElbowAngleFluctuate - minFrontElbowAngleFluctuate) / (maxFrontElbowAngleFluctuate - minFrontElbowAngleFluctuate) * 100;
-        float backElbowAngleRank = (backElbowAngleFluctuate - minBackElbowAngleFluctuate) / (maxBackElbowAngleFluctuate - minBackElbowAngleFluctuate) * 100;
-        float frontShoulderAngleRank = (frontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) / (maxFrontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) * 100;
-        float backShoulderAngleRank = (backShoulderAngleFluctuate - minBackShoulderAngleFluctuate) / (maxBackShoulderAngleFluctuate - minBackShoulderAngleFluctuate) * 100;
+        frontWristRank = (frontWristFluctuate - minFrontWristFluctuate) / (maxFrontWristFluctuate - minFrontWristFluctuate) * 100;
+        backWristRank = (backWristFluctuate - minBackWristFluctuate) / (maxBackWristFluctuate - minBackWristFluctuate) * 100;
+        frontElbowAngleRank = (frontElbowAngleFluctuate - minFrontElbowAngleFluctuate) / (maxFrontElbowAngleFluctuate - minFrontElbowAngleFluctuate) * 100;
+        backElbowAngleRank = (backElbowAngleFluctuate - minBackElbowAngleFluctuate) / (maxBackElbowAngleFluctuate - minBackElbowAngleFluctuate) * 100;
+        frontShoulderAngleRank = (frontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) / (maxFrontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) * 100;
+        backShoulderAngleRank = (backShoulderAngleFluctuate - minBackShoulderAngleFluctuate) / (maxBackShoulderAngleFluctuate - minBackShoulderAngleFluctuate) * 100;
 
         // debug text
         // Debug.Log($"front Wrist: {frontWristFluctuate}, ({minFrontWristFluctuate}, {maxFrontWristFluctuate}),  {frontWristRank}");
@@ -543,9 +558,8 @@ public class PosetureScoring : MonoBehaviour
         // Debug.Log($"back Shoulder: {backShoulderAngleFluctuate}, ({minBackShoulderAngleFluctuate}, {maxBackShoulderAngleFluctuate}),  {backShoulderAngleRank}");
 
         showSimpleScore();
-
-        drawLine_dot();
-
+    }
+    void drawLine() {
         // draw line of last 1 sec
         frontLine.SetPosition(0, frontWristStart);
         frontLine.SetPosition(1, frontWristEnd);
@@ -582,7 +596,7 @@ public class PosetureScoring : MonoBehaviour
     void showSimpleScore()
     {
         showingDetail = false;
-        showDetailBtnText.text = showingDetail ? "Show Detail" : "Hide Detail";
+        showDetailBtnText.text = showingDetail ? "Hide Detail" : "Show Detail";
 
         // display text
         scoreDisplayText.text = "";
@@ -660,6 +674,11 @@ public class PosetureScoring : MonoBehaviour
     #endregion
 
     #region UI
+    public void chooseLvl(int lvl)
+    {
+        archerLvl = (ArcherLvl) lvl;
+        lvlPanel.SetActive(false);
+    }
     // score detail btn
     public void toggleScoreDetail()
     {
@@ -668,8 +687,7 @@ public class PosetureScoring : MonoBehaviour
         else
             showDetailScore();
     }
-    // show line btn
-    // todo : change to next, back btn
+    // change page
     void changePage(int idx)
     {
         scorePage = idx;
@@ -696,6 +714,7 @@ public class PosetureScoring : MonoBehaviour
                 break;
         }
     }
+    // back, next btn
     public void onBackBtn()
     {
         changePage(scorePage - 1);
