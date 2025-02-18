@@ -277,10 +277,14 @@ public class PosetureScoring : MonoBehaviour
         if (SystemInfo.deviceType == DeviceType.Handheld)
         {
             lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 90);
+            frontLine.transform.localRotation = Quaternion.Euler(0, 0, 90);
+            backLine.transform.localRotation = Quaternion.Euler(0, 0, 90);
         }
         else
         {
             lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            frontLine.transform.localRotation = Quaternion.Euler(0, 0, 0);
+            backLine.transform.localRotation = Quaternion.Euler(0, 0, 0);
         }
     }
 
@@ -589,9 +593,10 @@ public class PosetureScoring : MonoBehaviour
             c++;
         }
 
-        if (temp != "") {
+        if (temp != "")
+        {
             temp = temp.Substring(0, temp.Length - 2);
-            suggestionText.text += $"Your {temp} {(c>1 ? "fluctuate" : "fluctuates")} too much! \nTry to be steady.\n\n";
+            suggestionText.text += $"Your {temp} {(c > 1 ? "fluctuate" : "fluctuates")} too much! \nTry to be steady.\n\n";
         }
     }
     #endregion
@@ -735,6 +740,11 @@ public class PosetureScoring : MonoBehaviour
         // set size
         RectTransform canvasTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
         lineBackground.GetComponent<RectTransform>().sizeDelta = new Vector2(canvasTransform.sizeDelta.x, canvasTransform.sizeDelta.y);
+        lineBackground.GetComponent<RectTransform>().position = Vector2.zero;
+
+        lineContainer.GetComponent<RectTransform>().position = Vector2.zero;
+        frontLine.GetComponent<RectTransform>().position = Vector2.zero;
+        backLine.GetComponent<RectTransform>().position = Vector2.zero;        
     }
 
     void hideDisplayScore()
@@ -779,10 +789,12 @@ public class PosetureScoring : MonoBehaviour
                 suggestionPanel.SetActive(false);
                 showDetailBtn.SetActive(false);
                 backBtn.SetActive(true);
+                nextBtn.SetActive(true);
                 break;
             case 2:
                 suggestionPanel.SetActive(true);
                 showDetailBtn.SetActive(false);
+                backBtn.SetActive(true);
                 nextBtn.SetActive(false);
                 break;
         }
