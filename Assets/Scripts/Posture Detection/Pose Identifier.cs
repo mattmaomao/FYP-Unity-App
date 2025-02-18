@@ -23,7 +23,7 @@ public class PoseIdentifier : MonoBehaviour
     [Header("Sub Pose")]
     [SerializeField] float straightMargin = 50f;
     [SerializeField] float armUpTolerance => shoulderWidth / 2;
-    float shoulderWidth;
+    public float shoulderWidth;
     bool pushArm_Straight;
     bool pushArm_Up;
     bool pullArm_Up;

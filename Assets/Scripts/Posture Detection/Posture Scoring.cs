@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum ArcherLvl {Beginner, Elementary, Intermidate, Advanced}
+public enum ArcherLvl { Beginner, Elementary, Intermidate, Advanced }
 public class PosetureScoring : MonoBehaviour
 {
     struct TimedAngle { public float time; public float angle; }
@@ -77,7 +77,7 @@ public class PosetureScoring : MonoBehaviour
     float frontShoulderAngleRank;
     float backShoulderAngleRank;
     ArcherLvl archerLvl = ArcherLvl.Beginner;
-    float[] rankMultiplier = {1.5f, 1.35f, 1.2f, 1};
+    float[] rankMultiplier = { 1.5f, 1.35f, 1.2f, 1 };
 
     [Header("UI")]
     [SerializeField] GameObject startBtn;
@@ -105,6 +105,7 @@ public class PosetureScoring : MonoBehaviour
     [SerializeField] GameObject cameraSettingBtn;
     [Header("UI_Suggestion")]
     [SerializeField] GameObject suggestionPanel;
+    [SerializeField] TextMeshProUGUI suggestionText;
 
     [Header("Debug")]
     [SerializeField] GameObject debugPanel;
@@ -266,8 +267,21 @@ public class PosetureScoring : MonoBehaviour
         // draw line
         drawLine();
 
+        // make suggesiton 
+        makeSuggestion();
+
         // debug
         // StartCoroutine(autoSave());
+
+        // rotate for mobile device
+        if (SystemInfo.deviceType == DeviceType.Handheld)
+        {
+            lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 90);
+        }
+        else
+        {
+            lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 
     #region calculation
@@ -512,7 +526,74 @@ public class PosetureScoring : MonoBehaviour
         backShoulderAngleStart = backShoulderAngleChanges[startIdx].angle;
         backShoulderAngleEnd = backShoulderAngleChanges[endIdx].angle;
     }
+    // make suggestion
+    void makeSuggestion()
+    {
+        // float tempTolerance = (backWristEnd.x - backWristStart.x) / 3;
+        float tempTolerance = poseIdentifier.shoulderWidth / 4;
+        bool frontWristUp = frontWristEnd.y - frontWristStart.y > tempTolerance;
+        bool frontWristDown = frontWristEnd.y - frontWristStart.y < -tempTolerance;
+        bool backWristUp = backWristEnd.y - backWristStart.y > tempTolerance;
+        bool backWristDown = backWristEnd.y - backWristStart.y < -tempTolerance;
 
+        suggestionText.text = "";
+        // wrist swing
+        if (frontWristUp && backWristUp)
+            suggestionText.text += "Both of you wrists were swung upwards! \nThis may cause your arrow to go up.\n\n";
+        else if (frontWristDown && backWristDown)
+            suggestionText.text += "Both of you wrists were swung downwards! \nThis may cause your arrow to go down.\n\n";
+        else if (frontWristUp && backWristDown)
+            suggestionText.text += "Your front wrist was swung upwards and your back wrist was swung downwards! \nThis may cause your arrow to go up.\n\n";
+        else if (frontWristDown && backWristUp)
+            suggestionText.text += "Your front wrist was swung downwards and your back wrist was swung upwards! \nThis may cause your arrow to go down.\n\n";
+        else if (frontWristUp)
+            suggestionText.text += "Your front wrist was swung upwards! \nThis may cause your arrow to go up.\n\n";
+        else if (frontWristDown)
+            suggestionText.text += "Your front wrist was swung downwards! \nThis may cause your arrow to go down.\n\n";
+        else if (backWristUp)
+            suggestionText.text += "Your back wrist was swung upwards! \nThis may cause your arrow to go down.\n\n";
+        else if (backWristDown)
+            suggestionText.text += "Your back wrist was swung downwards! \nThis may cause your arrow to go up.\n\n";
+
+        // fluctuate
+        string temp = "";
+        int c = 0;
+        if (frontWristRank > 70)
+        {
+            temp += "front wrist, ";
+            c++;
+        }
+        if (backWristRank > 70)
+        {
+            temp += "back wrist, ";
+            c++;
+        }
+        if (frontElbowAngleRank > 70)
+        {
+            temp += "front elbow, ";
+            c++;
+        }
+        if (backElbowAngleRank > 70)
+        {
+            temp += "back elbow, ";
+            c++;
+        }
+        if (frontShoulderAngleRank > 70)
+        {
+            temp += "front shoulder, ";
+            c++;
+        }
+        if (backShoulderAngleRank > 70)
+        {
+            temp += "back shoulder, ";
+            c++;
+        }
+
+        if (temp != "") {
+            temp = temp.Substring(0, temp.Length - 2);
+            suggestionText.text += $"Your {temp} {(c>1 ? "fluctuate" : "fluctuates")} too much! \nTry to be steady.\n\n";
+        }
+    }
     #endregion
 
     #region display
@@ -525,22 +606,22 @@ public class PosetureScoring : MonoBehaviour
 
         // hardcode score range
         float minFrontWristFluctuate = 0f;
-        float maxFrontWristFluctuate = 50f * rankMultiplier[(int) archerLvl];
+        float maxFrontWristFluctuate = 50f * rankMultiplier[(int)archerLvl];
 
         float minBackWristFluctuate = 40f;
-        float maxBackWristFluctuate = 150f * rankMultiplier[(int) archerLvl];
+        float maxBackWristFluctuate = 150f * rankMultiplier[(int)archerLvl];
 
         float minFrontElbowAngleFluctuate = 0f;
-        float maxFrontElbowAngleFluctuate = 5f * rankMultiplier[(int) archerLvl];
+        float maxFrontElbowAngleFluctuate = 5f * rankMultiplier[(int)archerLvl];
 
         float minBackElbowAngleFluctuate = 0f;
-        float maxBackElbowAngleFluctuate = 16f * rankMultiplier[(int) archerLvl];
+        float maxBackElbowAngleFluctuate = 16f * rankMultiplier[(int)archerLvl];
 
         float minFrontShoulderAngleFluctuate = 0f;
-        float maxFrontShoulderAngleFluctuate = 5f * rankMultiplier[(int) archerLvl];
+        float maxFrontShoulderAngleFluctuate = 5f * rankMultiplier[(int)archerLvl];
 
         float minBackShoulderAngleFluctuate = 2f;
-        float maxBackShoulderAngleFluctuate = 5f * rankMultiplier[(int) archerLvl];
+        float maxBackShoulderAngleFluctuate = 5f * rankMultiplier[(int)archerLvl];
 
         frontWristRank = (frontWristFluctuate - minFrontWristFluctuate) / (maxFrontWristFluctuate - minFrontWristFluctuate) * 100;
         backWristRank = (backWristFluctuate - minBackWristFluctuate) / (maxBackWristFluctuate - minBackWristFluctuate) * 100;
@@ -559,7 +640,8 @@ public class PosetureScoring : MonoBehaviour
 
         showSimpleScore();
     }
-    void drawLine() {
+    void drawLine()
+    {
         // draw line of last 1 sec
         frontLine.SetPosition(0, frontWristStart);
         frontLine.SetPosition(1, frontWristEnd);
@@ -568,15 +650,6 @@ public class PosetureScoring : MonoBehaviour
     }
     void drawLine_dot()
     {
-        if (SystemInfo.deviceType == DeviceType.Handheld)
-        {
-            lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 90);
-        }
-        else
-        {
-            lineContainer.transform.localRotation = Quaternion.Euler(0, 0, 0);
-        }
-
         // clear old line
         foreach (Transform child in lineContainer)
             Destroy(child.gameObject);
@@ -629,12 +702,12 @@ public class PosetureScoring : MonoBehaviour
     }
     string scoreToRank(float score)
     {
-        if (score < 10) return "Perfect";
-        if (score < 30) return "Excellent";
-        if (score < 50) return "Very Good";
-        if (score < 70) return "Good";
-        if (score < 90) return "Fair";
-        return "Poor";
+        if (score < 10) return "<b><color=yellow>Perfect</color></b>";
+        if (score < 30) return "<b><color=red>Excellent</color></b>";
+        if (score < 50) return "<b><color=blue>Very Good</color></b>";
+        if (score < 70) return "<b><color=black>Good</color></b>";
+        if (score < 90) return "<b><color=white>Fair</color></b>";
+        return "<b><color=green>Poor</color></b>";
     }
 
     // take screenshot of the whole screen 
@@ -676,7 +749,7 @@ public class PosetureScoring : MonoBehaviour
     #region UI
     public void chooseLvl(int lvl)
     {
-        archerLvl = (ArcherLvl) lvl;
+        archerLvl = (ArcherLvl)lvl;
         lvlPanel.SetActive(false);
     }
     // score detail btn
