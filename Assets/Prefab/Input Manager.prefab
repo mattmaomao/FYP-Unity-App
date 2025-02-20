@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7614140673661619785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4602211307727318599}
+  - component: {fileID: 4408518815850247019}
+  m_Layer: 0
+  m_Name: Input Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4602211307727318599
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7614140673661619785}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4408518815850247019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7614140673661619785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3b2422db233bd4439da34dd189e7c08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  index: 0
+  LRH: {fileID: 0}
+  handleBrand: {fileID: 0}
+  handleNameInput: {fileID: 0}
+  handleName: {fileID: 0}
+  limbBrand: {fileID: 0}
+  limbNameInput: {fileID: 0}
+  limbName: {fileID: 0}
+  stringSize: {fileID: 0}
+  stringStrand: {fileID: 0}
+  stringMaterialInput: {fileID: 0}
+  stringMaterial: {fileID: 0}
+  servingSize: {fileID: 0}
+  servingBrand: {fileID: 0}
+  servingMaterialInput: {fileID: 0}
+  servingMaterial: {fileID: 0}
+  plungerBrand: {fileID: 0}
+  plungerNameInput: {fileID: 0}
+  plungerName: {fileID: 0}
+  sightBrand: {fileID: 0}
+  sightNameInput: {fileID: 0}
+  sightName: {fileID: 0}
+  Info: {fileID: 0}
+  button0: {fileID: 0}
+  button1: {fileID: 0}
+  button2: {fileID: 0}
+  button3: {fileID: 0}
+  button4: {fileID: 0}
+  button5: {fileID: 0}
+  filename: bow.json
