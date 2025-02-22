@@ -739,12 +739,15 @@ public class PosetureScoring : MonoBehaviour
 
         // set size
         RectTransform canvasTransform = GameObject.Find("Canvas").GetComponent<RectTransform>();
-        lineBackground.GetComponent<RectTransform>().sizeDelta = new Vector2(canvasTransform.sizeDelta.x, canvasTransform.sizeDelta.y);
-        lineBackground.GetComponent<RectTransform>().position = Vector2.zero;
 
-        lineContainer.GetComponent<RectTransform>().position = Vector2.zero;
-        frontLine.GetComponent<RectTransform>().position = Vector2.zero;
-        backLine.GetComponent<RectTransform>().position = Vector2.zero;        
+        lineBackground.GetComponent<RectTransform>().sizeDelta = canvasTransform.sizeDelta;
+        lineBackground.GetComponent<RectTransform>().position = Vector3.zero;
+        lineContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(canvasTransform.sizeDelta.x, canvasTransform.sizeDelta.y);
+        lineContainer.GetComponent<RectTransform>().position = Vector3.zero;
+        frontLine.GetComponent<RectTransform>().sizeDelta = new Vector2(canvasTransform.sizeDelta.x, canvasTransform.sizeDelta.y);
+        frontLine.GetComponent<RectTransform>().position = new Vector3(0, 0, -1);
+        backLine.GetComponent<RectTransform>().sizeDelta = new Vector2(canvasTransform.sizeDelta.x, canvasTransform.sizeDelta.y);
+        backLine.GetComponent<RectTransform>().position = new Vector3(0, 0, -1);
     }
 
     void hideDisplayScore()
@@ -783,6 +786,8 @@ public class PosetureScoring : MonoBehaviour
                 showDetailBtn.SetActive(true);
                 backBtn.SetActive(false);
                 nextBtn.SetActive(true);
+                frontLine.gameObject.SetActive(false);
+                backLine.gameObject.SetActive(false);
                 break;
             case 1:
                 showLinePanel.SetActive(true);
@@ -790,12 +795,16 @@ public class PosetureScoring : MonoBehaviour
                 showDetailBtn.SetActive(false);
                 backBtn.SetActive(true);
                 nextBtn.SetActive(true);
+                frontLine.gameObject.SetActive(true);
+                backLine.gameObject.SetActive(true);
                 break;
             case 2:
                 suggestionPanel.SetActive(true);
                 showDetailBtn.SetActive(false);
                 backBtn.SetActive(true);
                 nextBtn.SetActive(false);
+                frontLine.gameObject.SetActive(false);
+                backLine.gameObject.SetActive(false);
                 break;
         }
     }
