@@ -86,14 +86,17 @@ public class PosetureScoring : MonoBehaviour
     [SerializeField] GameObject backBtn;
     [SerializeField] GameObject nextBtn;
     [SerializeField] GameObject lvlPanel;
+    [SerializeField] GameObject resultDisplayPanel;
 
     [Header("UI_Score")]
-    [SerializeField] GameObject scoreDisplayPanel;
     [SerializeField] TextMeshProUGUI scoreDisplayText;
     [SerializeField] GameObject showDetailBtn;
+    [SerializeField] GameObject detailedScorePanel;
     [SerializeField] TextMeshProUGUI showDetailBtnText;
     bool showingDetail = false;
     int scorePage = 0;
+    [SerializeField] List<TextMeshProUGUI> detailedScoreTexts;
+
     [Header("UI_Line")]
     // line
     [SerializeField] GameObject showLinePanel;
@@ -103,6 +106,7 @@ public class PosetureScoring : MonoBehaviour
     [SerializeField] LineRenderer frontLine;
     [SerializeField] LineRenderer backLine;
     [SerializeField] GameObject cameraSettingBtn;
+
     [Header("UI_Suggestion")]
     [SerializeField] GameObject suggestionPanel;
     [SerializeField] TextMeshProUGUI suggestionText;
@@ -674,36 +678,24 @@ public class PosetureScoring : MonoBehaviour
     void showSimpleScore()
     {
         showingDetail = false;
-        showDetailBtnText.text = showingDetail ? "Hide Detail" : "Show Detail";
 
         // display text
-        scoreDisplayText.text = "";
-        scoreDisplayText.text += "Overall Score\n";
-        scoreDisplayText.text += scoreToRank((frontWristRank * 2 + backWristRank + frontElbowAngleRank * 2 + backElbowAngleRank + frontShoulderAngleRank * 2 + backShoulderAngleRank) / 9);
+        scoreDisplayText.text = scoreToRank((frontWristRank * 2 + backWristRank + frontElbowAngleRank * 2 + backElbowAngleRank + frontShoulderAngleRank * 2 + backShoulderAngleRank) / 9);
     }
     void showDetailScore()
     {
         showingDetail = true;
-        showDetailBtnText.text = showingDetail ? "Show Detail" : "Hide Detail";
 
         // display text
-        scoreDisplayText.text = "";
-        scoreDisplayText.text += "Overall Score\n";
-        scoreDisplayText.text += scoreToRank((frontWristRank * 2 + backWristRank + frontElbowAngleRank * 2 + backElbowAngleRank + frontShoulderAngleRank * 2 + backShoulderAngleRank) / 9);
-        scoreDisplayText.text += "\n\nfront Wrist Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(frontWristRank);
-        scoreDisplayText.text += "\n\nback Wrist Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(backWristRank);
+        detailedScoreTexts[0].text = scoreToRank((frontWristRank * 2 + backWristRank + frontElbowAngleRank * 2 + backElbowAngleRank + frontShoulderAngleRank * 2 + backShoulderAngleRank) / 9);
+        
+        detailedScoreTexts[1].text = scoreToRank(frontWristRank);
+        detailedScoreTexts[2].text = scoreToRank(frontElbowAngleRank);
+        detailedScoreTexts[3].text = scoreToRank(frontShoulderAngleRank);
 
-        scoreDisplayText.text += "\n\nfront Elbow Angle Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(frontElbowAngleRank);
-        scoreDisplayText.text += "\n\nback Elbow Angle Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(backElbowAngleRank);
-
-        scoreDisplayText.text += "\n\nfront Shoulder Angle Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(frontShoulderAngleRank);
-        scoreDisplayText.text += "\n\nback Shoulder Angle Fluctuate\n";
-        scoreDisplayText.text += scoreToRank(backShoulderAngleRank);
+        detailedScoreTexts[4].text = scoreToRank(backWristRank);
+        detailedScoreTexts[5].text = scoreToRank(backElbowAngleRank);
+        detailedScoreTexts[6].text = scoreToRank(backShoulderAngleRank);
     }
     string scoreToRank(float score)
     {
@@ -754,7 +746,7 @@ public class PosetureScoring : MonoBehaviour
     {
         // hide score
         PDM.showAnnotations();
-        scoreDisplayPanel.SetActive(false);
+        resultDisplayPanel.SetActive(false);
     }
 
     #endregion
@@ -772,15 +764,18 @@ public class PosetureScoring : MonoBehaviour
             showSimpleScore();
         else
             showDetailScore();
+        
+        showDetailBtnText.text = showingDetail ? "Hide Detail" : "Show Detail";
+        detailedScorePanel.SetActive(showingDetail);
     }
     // change page
     void changePage(int idx)
     {
+        resultDisplayPanel.SetActive(true);
         scorePage = idx;
         switch (scorePage)
         {
             case 0:
-                scoreDisplayPanel.SetActive(true);
                 showLinePanel.SetActive(false);
                 suggestionPanel.SetActive(false);
                 showDetailBtn.SetActive(true);
