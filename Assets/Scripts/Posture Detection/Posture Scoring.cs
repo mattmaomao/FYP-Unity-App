@@ -153,6 +153,7 @@ public class PosetureScoring : MonoBehaviour
     void OnEnable()
     {
         stopScoring();
+        archerLvl = ArcherLvl.Null;
         lvlPanel.SetActive(true);
     }
     void OnDisable()
@@ -188,7 +189,6 @@ public class PosetureScoring : MonoBehaviour
     public void stopScoring()
     {
         isScoring = false;
-        archerLvl = ArcherLvl.Null;
         startBtn.SetActive(true);
         startText.SetActive(true);
         recordingIndicator.SetActive(false);
@@ -646,10 +646,18 @@ public class PosetureScoring : MonoBehaviour
     void drawLine()
     {
         // draw line of last 1 sec
-        frontLine.SetPosition(0, new Vector2(frontWristStart.x, frontWristStart.y + lineContainer.localPosition.y));
-        frontLine.SetPosition(1, new Vector2(frontWristEnd.x, frontWristEnd.y + lineContainer.localPosition.y));
-        backLine.SetPosition(0, new Vector2(backWristStart.x, backWristStart.y + lineContainer.localPosition.y));
-        backLine.SetPosition(1, new Vector2(backWristEnd.x, backWristEnd.y + lineContainer.localPosition.y));
+        if (SystemInfo.deviceType == DeviceType.Handheld) {
+            frontLine.SetPosition(0, new Vector2(frontWristStart.x + lineContainer.localPosition.y/2, frontWristStart.y));
+            frontLine.SetPosition(1, new Vector2(frontWristEnd.x + lineContainer.localPosition.y/2, frontWristEnd.y));
+            backLine.SetPosition(0, new Vector2(backWristStart.x + lineContainer.localPosition.y/2, backWristStart.y));
+            backLine.SetPosition(1, new Vector2(backWristEnd.x + lineContainer.localPosition.y/2, backWristEnd.y));
+        }
+        else {
+            frontLine.SetPosition(0, new Vector2(frontWristStart.x, frontWristStart.y + lineContainer.localPosition.y/2));
+            frontLine.SetPosition(1, new Vector2(frontWristEnd.x, frontWristEnd.y + lineContainer.localPosition.y/2));
+            backLine.SetPosition(0, new Vector2(backWristStart.x, backWristStart.y + lineContainer.localPosition.y/2));
+            backLine.SetPosition(1, new Vector2(backWristEnd.x, backWristEnd.y + lineContainer.localPosition.y/2));
+        }
     }
     void drawLine_dot()
     {
@@ -660,13 +668,19 @@ public class PosetureScoring : MonoBehaviour
         foreach (TimedPos tp in frontWristPts)
         {
             GameObject lineDots = Instantiate(lineDotsPrefab, lineContainer);
-            lineDots.transform.localPosition = new Vector3(tp.pos.x, tp.pos.y + lineContainer.localPosition.y, 0);
+            if (SystemInfo.deviceType == DeviceType.Handheld)
+                lineDots.transform.localPosition = new Vector3(tp.pos.x + lineContainer.localPosition.y/2, tp.pos.y, 0);
+            else
+                lineDots.transform.localPosition = new Vector3(tp.pos.x, tp.pos.y + lineContainer.localPosition.y/2, 0);
         }
         foreach (TimedPos tp in backWristPts)
         {
             GameObject lineDots = Instantiate(lineDotsPrefab, lineContainer);
             lineDots.GetComponent<Image>().color = Color.red;
-            lineDots.transform.localPosition = new Vector3(tp.pos.x, tp.pos.y + lineContainer.localPosition.y, 0);
+            if (SystemInfo.deviceType == DeviceType.Handheld)
+                lineDots.transform.localPosition = new Vector3(tp.pos.x + lineContainer.localPosition.y/2, tp.pos.y, 0);
+            else
+                lineDots.transform.localPosition = new Vector3(tp.pos.x, tp.pos.y + lineContainer.localPosition.y/2, 0);
         }
     }
     void showSimpleScore()
