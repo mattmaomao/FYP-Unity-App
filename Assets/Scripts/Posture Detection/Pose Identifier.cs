@@ -42,30 +42,19 @@ public class PoseIdentifier : MonoBehaviour
         checkPose();
 
         // record wrist position
-        positionHistory.Add(new PositionData { position = PDM.pointAnnotations[(int)PosePtIdx.RightWrist], timestamp = Time.time });
-        positionHistory.RemoveAll(pos => Time.time - pos.timestamp > 1.0f);
-        // calculate average position
-        Vector2 avg = Vector2.zero;
-        foreach (PositionData data in positionHistory)
-            avg += data.position;
-        avg /= positionHistory.Count;
-        aimfluctuate = Vector2.Distance(PDM.pointAnnotations[(int)PosePtIdx.RightWrist], avg);
-
+        if (PDM.pointAnnotations.Count > 0) {
+            positionHistory.Add(new PositionData { position = PDM.pointAnnotations[(int)PosePtIdx.RightWrist], timestamp = Time.time });
+            positionHistory.RemoveAll(pos => Time.time - pos.timestamp > 1.0f);
+            // calculate average position
+            Vector2 avg = Vector2.zero;
+            foreach (PositionData data in positionHistory)
+                avg += data.position;
+            avg /= positionHistory.Count;
+            aimfluctuate = Vector2.Distance(PDM.pointAnnotations[(int)PosePtIdx.RightWrist], avg);
+        }
+        
         // debug texts
         poseText.text = currentPose.ToString();
-        // subPoseText.text = "sub pose:" +
-        //     $"shoulder width: {shoulderWidth.ToString("F2")}\n" +
-        //     $"pushArm_Straight: {pushArm_Straight}\n" +
-        //     $"pushArm_Up: {pushArm_Up}\n" +
-        //     $"pullArm_Up: {pullArm_Up}\n" +
-        //     $"{PDM.pointAnnotations[(int)PosePtIdx.RightElbow].y.ToString("F2")}, {(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].y - armUpTolerance).ToString("F2")}\n" +
-        //     $"{PDM.pointAnnotations[(int)PosePtIdx.RightWrist].y.ToString("F2")}, {(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].y - armUpTolerance).ToString("F2")}\n" +
-        //     $"{Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightShoulder].y - PDM.pointAnnotations[(int)PosePtIdx.RightElbow].y).ToString("F2")}\n" +
-        //     $"{Mathf.Abs(PDM.pointAnnotations[(int)PosePtIdx.RightElbow].y - PDM.pointAnnotations[(int)PosePtIdx.RightWrist].y).ToString("F2")}\n" +
-        //     $"pullArm_Bend: {pullArm_Bend}\n" +
-        //     $"pullArm_BetweenShoulder: {pullArm_BetweenShoulder}\n";
-        // subPoseText.text += aimfluctuate.ToString("F2");
-
     }
 
     void checkSubPose()

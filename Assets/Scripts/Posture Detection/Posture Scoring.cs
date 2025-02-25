@@ -80,7 +80,7 @@ public class PosetureScoring : MonoBehaviour
     float backElbowAngleRank;
     float frontShoulderAngleRank;
     float backShoulderAngleRank;
-    ArcherLvl archerLvl = ArcherLvl.Beginner;
+    ArcherLvl archerLvl;
 
     #endregion
 
@@ -131,6 +131,8 @@ public class PosetureScoring : MonoBehaviour
 
     void Update()
     {
+        if (archerLvl == ArcherLvl.Null) PDM.hideAnnotations();
+
         // check if scoring
         if (!isScoring) return;
 
@@ -183,9 +185,10 @@ public class PosetureScoring : MonoBehaviour
         isScoring = true;
     }
 
-    void stopScoring()
+    public void stopScoring()
     {
         isScoring = false;
+        archerLvl = ArcherLvl.Null;
         startBtn.SetActive(true);
         startText.SetActive(true);
         recordingIndicator.SetActive(false);
@@ -643,10 +646,10 @@ public class PosetureScoring : MonoBehaviour
     void drawLine()
     {
         // draw line of last 1 sec
-        frontLine.SetPosition(0, frontWristStart);
-        frontLine.SetPosition(1, frontWristEnd);
-        backLine.SetPosition(0, backWristStart);
-        backLine.SetPosition(1, backWristEnd);
+        frontLine.SetPosition(0, new Vector2(frontWristStart.x, frontWristStart.y + lineContainer.localPosition.y));
+        frontLine.SetPosition(1, new Vector2(frontWristEnd.x, frontWristEnd.y + lineContainer.localPosition.y));
+        backLine.SetPosition(0, new Vector2(backWristStart.x, backWristStart.y + lineContainer.localPosition.y));
+        backLine.SetPosition(1, new Vector2(backWristEnd.x, backWristEnd.y + lineContainer.localPosition.y));
     }
     void drawLine_dot()
     {
@@ -657,13 +660,13 @@ public class PosetureScoring : MonoBehaviour
         foreach (TimedPos tp in frontWristPts)
         {
             GameObject lineDots = Instantiate(lineDotsPrefab, lineContainer);
-            lineDots.transform.localPosition = tp.pos;
+            lineDots.transform.localPosition = new Vector3(tp.pos.x, tp.pos.y + lineContainer.localPosition.y, 0);
         }
         foreach (TimedPos tp in backWristPts)
         {
             GameObject lineDots = Instantiate(lineDotsPrefab, lineContainer);
             lineDots.GetComponent<Image>().color = Color.red;
-            lineDots.transform.localPosition = tp.pos;
+            lineDots.transform.localPosition = new Vector3(tp.pos.x, tp.pos.y + lineContainer.localPosition.y, 0);
         }
     }
     void showSimpleScore()
@@ -747,6 +750,7 @@ public class PosetureScoring : MonoBehaviour
     {
         archerLvl = (ArcherLvl)lvl;
         lvlPanel.SetActive(false);
+        PDM.showAnnotations();
     }
     // score detail btn
     public void toggleScoreDetail()

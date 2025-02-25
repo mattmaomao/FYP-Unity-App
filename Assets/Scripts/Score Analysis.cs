@@ -210,7 +210,6 @@ public class ScoreAnalysis : MonoBehaviour
                 if (d.score > postureScoreRange[i][1])
                     postureScoreRange[i][1] = d.score;
             }
-            // Debug.Log(key + ": " + postureScoreRange[i][0] + " - " + postureScoreRange[i][1]);
             i++;
         }
     }
@@ -324,9 +323,8 @@ public class ScoreAnalysis : MonoBehaviour
                 targetScore = PostureScoreUtils.instance.absoulteScore_Advanced;
                 break;
         }
-        lvlIndicatorLines_Overall[(int)minLvl].GetComponent<RectTransform>().localPosition =
-                new Vector2(0, (targetScore - postureScoreRange[0][0]) /
-                (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight + maxHeight * 0.05f);
+        float tempY = (targetScore - postureScoreRange[0][0]) / (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight + maxHeight * 0.05f - maxHeight/2;
+        lvlIndicatorLines_Overall[(int)minLvl].GetComponent<RectTransform>().localPosition = new Vector3(0, tempY, -2);
         switch (maxLvl)
         {
             case ArcherLvl.Beginner:
@@ -342,9 +340,12 @@ public class ScoreAnalysis : MonoBehaviour
                 targetScore = PostureScoreUtils.instance.absoulteScore_Advanced;
                 break;
         }
-        lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().localPosition =
-            new Vector2(0, (targetScore - postureScoreRange[0][0]) /
-            (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight + maxHeight * 0.05f);
+        tempY = (targetScore - postureScoreRange[0][0]) / (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight + maxHeight * 0.05f - maxHeight/2;
+        lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().localPosition = new Vector3(0, tempY, -2);
+
+        // Debug.Log("position: " + lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().position);
+        // Debug.Log("local Position: " + lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().localPosition);
+        // Debug.Log("rect .position: " + lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().rect.position);
 
         lvlIndicatorLines_Overall[(int)minLvl].SetActive(true);
         lvlIndicatorLines_Overall[(int)maxLvl].SetActive(true);

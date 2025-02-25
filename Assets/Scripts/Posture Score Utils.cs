@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ArcherLvl { Beginner, Elementary, Intermidate, Advanced }
+public enum ArcherLvl { Beginner, Elementary, Intermidate, Advanced, Null }
 
 public class PostureScoreUtils : MonoBehaviour
 {
@@ -37,7 +37,7 @@ public class PostureScoreUtils : MonoBehaviour
     float minBackShoulderAngleFluctuate = 2f;
     float maxBackShoulderAngleFluctuate = 5f;
 
-    float[] rankMultiplier = { 2f, 1.5f, 1f, 0.75f };
+    float[] rankMultiplier = { 1.5f, 1f, 0.75f, 0.5f };
     public float absoulteScore_Beginner => (rankMultiplier[0] - rankMultiplier[0]) / rankMultiplier[0] * 100;
     public float absoulteScore_Elementary => (rankMultiplier[0] - rankMultiplier[1]) / rankMultiplier[0] * 100;
     public float absoulteScore_Intermidate => (rankMultiplier[0] - rankMultiplier[2]) / rankMultiplier[0] * 100;
