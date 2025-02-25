@@ -7,6 +7,7 @@ public class PostureData
 {
     public System.DateTime dateTime;
     public string postureName;
+    public int archerLvl;
 
     // front wrist
     public float frontWristFluctuate;

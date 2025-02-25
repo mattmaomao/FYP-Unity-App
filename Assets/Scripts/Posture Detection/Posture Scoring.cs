@@ -4,7 +4,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum ArcherLvl { Beginner, Elementary, Intermidate, Advanced }
 public class PosetureScoring : MonoBehaviour
 {
     struct TimedAngle { public float time; public float angle; }
@@ -13,6 +12,7 @@ public class PosetureScoring : MonoBehaviour
     [SerializeField] PoseIdentifier poseIdentifier;
     bool isScoring = false;
 
+    #region data collection
     //parts
     // wrist, elbow, shoulder
     float frontElbowAngle => Vector2.Angle(
@@ -69,7 +69,11 @@ public class PosetureScoring : MonoBehaviour
     bool released = false;
     float releaseTime = 0;
 
+    #endregion
+
+    #region rank calculation
     // rank
+    float overallRank;
     float frontWristRank;
     float backWristRank;
     float frontElbowAngleRank;
@@ -77,7 +81,8 @@ public class PosetureScoring : MonoBehaviour
     float frontShoulderAngleRank;
     float backShoulderAngleRank;
     ArcherLvl archerLvl = ArcherLvl.Beginner;
-    float[] rankMultiplier = { 1.5f, 1.35f, 1.2f, 1 };
+
+    #endregion
 
     [Header("UI")]
     [SerializeField] GameObject startBtn;
@@ -613,39 +618,25 @@ public class PosetureScoring : MonoBehaviour
         // display score
         changePage(0);
 
-        // hardcode score range
-        float minFrontWristFluctuate = 0f;
-        float maxFrontWristFluctuate = 50f * rankMultiplier[(int)archerLvl];
+        // calculate rank
+        List<float> newScore = PostureScoreUtils.instance.adjustedScore(
+                new List<float> { 
+                    frontWristFluctuate, 
+                    backWristFluctuate, 
+                    frontElbowAngleFluctuate, 
+                    backElbowAngleFluctuate, 
+                    frontShoulderAngleFluctuate, 
+                    backShoulderAngleFluctuate, 
+                    0 }, 
+                (int) archerLvl);
 
-        float minBackWristFluctuate = 40f;
-        float maxBackWristFluctuate = 150f * rankMultiplier[(int)archerLvl];
-
-        float minFrontElbowAngleFluctuate = 0f;
-        float maxFrontElbowAngleFluctuate = 5f * rankMultiplier[(int)archerLvl];
-
-        float minBackElbowAngleFluctuate = 0f;
-        float maxBackElbowAngleFluctuate = 16f * rankMultiplier[(int)archerLvl];
-
-        float minFrontShoulderAngleFluctuate = 0f;
-        float maxFrontShoulderAngleFluctuate = 5f * rankMultiplier[(int)archerLvl];
-
-        float minBackShoulderAngleFluctuate = 2f;
-        float maxBackShoulderAngleFluctuate = 5f * rankMultiplier[(int)archerLvl];
-
-        frontWristRank = (frontWristFluctuate - minFrontWristFluctuate) / (maxFrontWristFluctuate - minFrontWristFluctuate) * 100;
-        backWristRank = (backWristFluctuate - minBackWristFluctuate) / (maxBackWristFluctuate - minBackWristFluctuate) * 100;
-        frontElbowAngleRank = (frontElbowAngleFluctuate - minFrontElbowAngleFluctuate) / (maxFrontElbowAngleFluctuate - minFrontElbowAngleFluctuate) * 100;
-        backElbowAngleRank = (backElbowAngleFluctuate - minBackElbowAngleFluctuate) / (maxBackElbowAngleFluctuate - minBackElbowAngleFluctuate) * 100;
-        frontShoulderAngleRank = (frontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) / (maxFrontShoulderAngleFluctuate - minFrontShoulderAngleFluctuate) * 100;
-        backShoulderAngleRank = (backShoulderAngleFluctuate - minBackShoulderAngleFluctuate) / (maxBackShoulderAngleFluctuate - minBackShoulderAngleFluctuate) * 100;
-
-        // debug text
-        // Debug.Log($"front Wrist: {frontWristFluctuate}, ({minFrontWristFluctuate}, {maxFrontWristFluctuate}),  {frontWristRank}");
-        // Debug.Log($"back Wrist: {backWristFluctuate}, ({minBackWristFluctuate}, {maxBackWristFluctuate}),  {backWristRank}");
-        // Debug.Log($"front Elbow: {frontElbowAngleFluctuate}, ({minFrontElbowAngleFluctuate}, {maxFrontElbowAngleFluctuate}),  {frontElbowAngleRank}");
-        // Debug.Log($"back Elbow: {backElbowAngleFluctuate}, ({minBackElbowAngleFluctuate}, {maxBackElbowAngleFluctuate}),  {backElbowAngleRank}");
-        // Debug.Log($"front Shoudler: {frontShoulderAngleFluctuate}, ({minFrontShoulderAngleFluctuate}, {maxFrontShoulderAngleFluctuate}),  {frontShoulderAngleRank}");
-        // Debug.Log($"back Shoulder: {backShoulderAngleFluctuate}, ({minBackShoulderAngleFluctuate}, {maxBackShoulderAngleFluctuate}),  {backShoulderAngleRank}");
+        frontWristRank = newScore[0];
+        backWristRank = newScore[1];
+        frontElbowAngleRank = newScore[2];
+        backElbowAngleRank = newScore[3];
+        frontShoulderAngleRank = newScore[4];
+        backShoulderAngleRank = newScore[5];
+        overallRank = newScore[6];
 
         showSimpleScore();
     }
@@ -680,15 +671,15 @@ public class PosetureScoring : MonoBehaviour
         showingDetail = false;
 
         // display text
-        scoreDisplayText.text = scoreToRank((frontWristRank * 2 + backWristRank + frontElbowAngleRank * 2 + backElbowAngleRank + frontShoulderAngleRank * 2 + backShoulderAngleRank) / 9);
+        scoreDisplayText.text = scoreToRank(overallRank);
     }
     void showDetailScore()
     {
         showingDetail = true;
 
         // display text
-        detailedScoreTexts[0].text = scoreToRank((frontWristRank * 2 + backWristRank + frontElbowAngleRank * 2 + backElbowAngleRank + frontShoulderAngleRank * 2 + backShoulderAngleRank) / 9);
-        
+        detailedScoreTexts[0].text = scoreToRank(overallRank);
+
         detailedScoreTexts[1].text = scoreToRank(frontWristRank);
         detailedScoreTexts[2].text = scoreToRank(frontElbowAngleRank);
         detailedScoreTexts[3].text = scoreToRank(frontShoulderAngleRank);
@@ -764,7 +755,7 @@ public class PosetureScoring : MonoBehaviour
             showSimpleScore();
         else
             showDetailScore();
-        
+
         showDetailBtnText.text = showingDetail ? "Hide Detail" : "Show Detail";
         detailedScorePanel.SetActive(showingDetail);
     }
@@ -825,6 +816,7 @@ public class PosetureScoring : MonoBehaviour
         {
             dateTime = System.DateTime.Now,
             postureName = "Posture_" + (DataManager.instance.postureDataList != null ? DataManager.instance.postureDataList.Count : 0),
+            archerLvl = (int)archerLvl,
 
             // front wrist
             frontWristFluctuate = this.frontWristFluctuate,
