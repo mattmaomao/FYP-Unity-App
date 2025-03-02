@@ -1,8 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,13 +25,15 @@ public class ScoreAnalysis : MonoBehaviour
 
     [Header("Posture Line")]
     [SerializeField] RectTransform postureContainer_Overall;
-    [SerializeField] RectTransform postureContainer_Front;
-    [SerializeField] RectTransform postureContainer_Back;
-    [SerializeField] List<LineRenderer> posutreLines;
+    // [SerializeField] RectTransform postureContainer_Front;
+    // [SerializeField] RectTransform postureContainer_Back;
+    [SerializeField] GameObject LineScrollContainer;
+    [SerializeField] UILineRenderer overallUILine;
+    [SerializeField] GameObject dateTextPrefab;
+    [SerializeField] List<GameObject> dateObjList = new();
     [SerializeField] List<GameObject> lvlIndicatorLines_Overall;
 
-    const int LINE_MAX_POINT = 50;
-    const int MAX_TIME_SKIP = 5;
+    const int LINE_MAX_POINT = 36;
     Dictionary<string, List<lineChart_PostureData>> postureDataDict = new() {
         { "Overall", new() },
         { "FrontWrist", new() },
@@ -172,7 +173,7 @@ public class ScoreAnalysis : MonoBehaviour
     {
         Debug.Log("postureDataList.Count: " + postureDataList.Count);
         // turn raw data into percentage
-        foreach (PostureData d in postureDataList.Take(LINE_MAX_POINT))
+        foreach (PostureData d in postureDataList)
         {
             List<float> scorePercent = PostureScoreUtils.instance.adjustedScore(
                 new List<float> {
@@ -250,36 +251,44 @@ public class ScoreAnalysis : MonoBehaviour
     IEnumerator updateLineChart()
     {
         // overall line chart
-        posutreLines[0].positionCount = postureDataDict["Overall"].Count;
-        float maxHeight = postureContainer_Overall.rect.height * 0.9f;
+        float horizontalSpacing = 16;
+        float bottomOffset = 48;
+        float maxHeight = postureContainer_Overall.rect.height - bottomOffset;
         float maxWidth = postureContainer_Overall.rect.width;
-        DateTime minTime = postureDataDict["Overall"][0].time;
-        DateTime maxTime = postureDataDict["Overall"][^1].time;
 
         // draw main line
-        float prevX = 10;
+        float prevX = 0;
+        DateTime prevTime = postureDataDict["Overall"][0].time;
+        DateTime day = default;
+        List<Vector2> points = new();
+        dateObjList.ForEach(obj => Destroy(obj));
+        dateObjList.Clear();
         for (int i = 0; i < postureDataDict["Overall"].Count; i++)
         {
-            if (i != 0)
+            if (postureDataDict["Overall"][i].time.Date != day)
             {
-                float tempX = (float)(postureDataDict["Overall"][i].time - postureDataDict["Overall"][i - 1].time).TotalSeconds /
-                                (float)(maxTime - minTime).TotalSeconds * maxWidth;
-                float clampedX = Mathf.Clamp(tempX, maxWidth / LINE_MAX_POINT, maxWidth / LINE_MAX_POINT * MAX_TIME_SKIP);
-                prevX += clampedX;
+                day = postureDataDict["Overall"][i].time.Date;
+                GameObject dateObj = Instantiate(dateTextPrefab, LineScrollContainer.transform);
+                dateObj.GetComponent<TextMeshProUGUI>().text = day.ToString("dd/MM");
+                dateObj.GetComponent<RectTransform>().localPosition = new Vector3(prevX, LineScrollContainer.GetComponent<RectTransform>().rect.min.y, -1);
+                dateObjList.Add(dateObj);
             }
 
-            // if prevX > max display, break
-            if (prevX > maxWidth)
-                yield return null;
-
-            posutreLines[0].SetPosition(i, new Vector3(
+            prevX = i * maxWidth / LINE_MAX_POINT + (i == 0 ? horizontalSpacing : 0);
+            points.Add(new Vector2(
                 prevX,
                 (postureDataDict["Overall"][i].score - postureScoreRange[0][0]) /
                     (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight +
-                    maxHeight * 0.05f,
-                0
+                    bottomOffset
             ));
         }
+        overallUILine.gameObject.SetActive(false);
+        overallUILine.points = points.ToArray();
+        yield return new WaitForEndOfFrame();
+        overallUILine.gameObject.SetActive(true);
+        LineScrollContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(prevX + horizontalSpacing, 
+                                                                            LineScrollContainer.GetComponent<RectTransform>().sizeDelta.y);
+
 
         // draw lvl indicator lines
         foreach (GameObject obj in lvlIndicatorLines_Overall)
@@ -343,10 +352,6 @@ public class ScoreAnalysis : MonoBehaviour
         tempY = (targetScore - postureScoreRange[0][0]) / (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight + maxHeight * 0.05f - maxHeight/2;
         lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().localPosition = new Vector3(0, tempY, -2);
 
-        // Debug.Log("position: " + lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().position);
-        // Debug.Log("local Position: " + lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().localPosition);
-        // Debug.Log("rect .position: " + lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().rect.position);
-
         lvlIndicatorLines_Overall[(int)minLvl].SetActive(true);
         lvlIndicatorLines_Overall[(int)maxLvl].SetActive(true);
 
@@ -357,7 +362,7 @@ public class ScoreAnalysis : MonoBehaviour
         // front elbow line chart
         // todo
 
-        yield return null;
+        yield return new WaitForEndOfFrame();
     }
 
     #endregion
