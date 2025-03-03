@@ -86,12 +86,16 @@ public class PosetureScoring : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] GameObject startBtn;
+    [SerializeField] GameObject stopBtn;
     [SerializeField] GameObject startText;
     [SerializeField] GameObject recordingIndicator;
     [SerializeField] GameObject backBtn;
     [SerializeField] GameObject nextBtn;
     [SerializeField] GameObject lvlPanel;
     [SerializeField] GameObject resultDisplayPanel;
+    // auto save
+    [SerializeField] Toggle autoSaveToggle;
+    bool autoSaving => autoSaveToggle.isOn;
 
     [Header("UI_Score")]
     [SerializeField] TextMeshProUGUI scoreDisplayText;
@@ -177,6 +181,7 @@ public class PosetureScoring : MonoBehaviour
         hideDisplayScore();
 
         startBtn.SetActive(false);
+        stopBtn.SetActive(true);
         startText.SetActive(false);
         recordingIndicator.SetActive(true);
         cameraSettingBtn.SetActive(false);
@@ -186,10 +191,12 @@ public class PosetureScoring : MonoBehaviour
         isScoring = true;
     }
 
+    // stop btn
     public void stopScoring()
     {
         isScoring = false;
         startBtn.SetActive(true);
+        stopBtn.SetActive(false);
         startText.SetActive(true);
         recordingIndicator.SetActive(false);
         cameraSettingBtn.SetActive(true);
@@ -282,8 +289,9 @@ public class PosetureScoring : MonoBehaviour
         // make suggesiton 
         makeSuggestion();
 
-        // debug
-        // StartCoroutine(autoSave());
+        // auto save action
+        if (autoSaving)
+            StartCoroutine(autoSave());
 
         // rotate for mobile device
         if (SystemInfo.deviceType == DeviceType.Handheld)
@@ -875,9 +883,8 @@ public class PosetureScoring : MonoBehaviour
     #region debug
     IEnumerator autoSave()
     {
-        yield return new WaitForSeconds(0.1f);
-        saveScore();
         yield return new WaitForSeconds(1f);
+        saveScore();
         startScoring();
     }
 
