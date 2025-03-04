@@ -366,6 +366,15 @@ public class ScoreAnalysis : MonoBehaviour
     }
 
     #endregion
+
+    public void loadDateRange(DateTime dateFrom, DateTime dateTo) {
+        // filter data
+        postureDataList = DataManager.instance.postureDataList.FindAll(d => d.dateTime >= dateFrom && d.dateTime <= dateTo);
+        if (postureDataList.Count <= 0)
+            return;
+
+        makePostureAnalysis();
+    }
 }
 
 struct lineChart_PostureData
