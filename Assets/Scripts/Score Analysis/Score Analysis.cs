@@ -15,6 +15,9 @@ public class ScoreAnalysis : MonoBehaviour
     [Header("data")]
     [SerializeField] List<int> scoreRawList = new();
     [SerializeField] List<float> scorePercentageList = new();
+    [Header("UI")]
+    [SerializeField] GameObject popUpPanel;
+    [SerializeField] TextMeshProUGUI popUpText;
 
     [Header("bar chart")]
     [SerializeField] RectTransform barContainer;
@@ -64,6 +67,8 @@ public class ScoreAnalysis : MonoBehaviour
 
         postureDataList = DataManager.instance.postureDataList;
         makePostureAnalysis();
+
+        closePopUp();
     }
 
     #region score analysis
@@ -375,19 +380,35 @@ public class ScoreAnalysis : MonoBehaviour
 
         // filter data
         targetScoreNotes = DataManager.instance.scoreNoteList.FindAll(d => d.timestamp >= dateFrom && d.timestamp <= dateTo);
-        Debug.Log(targetScoreNotes.Count);
         if (recordType != -1 && targetScoreNotes.Count > 0)
             targetScoreNotes = targetScoreNotes.FindAll(d => d.recordType == (RecordType)recordType);
-        Debug.Log(targetScoreNotes.Count);
         if (distance != -1 && targetScoreNotes.Count > 0)
             targetScoreNotes = targetScoreNotes.FindAll(d => d.distance == distanceChoice[distance]);
-        Debug.Log(targetScoreNotes.Count);
         if (targetScoreNotes.Count > 0)
             makeScoreAnalysis();
+        else {
+            popUpText.text += "No score note found!\n";
+        }
 
         postureDataList = DataManager.instance.postureDataList.FindAll(d => d.dateTime >= dateFrom && d.dateTime <= dateTo);
         if (postureDataList.Count > 0)
             makePostureAnalysis();
+        else {
+            popUpText.text += "No posture record found!\n";
+        }
+
+        // show pop up
+        if (popUpText.text != "")
+        {
+            popUpText.text += "Please adjust the filters!";
+            popUpPanel.SetActive(true);
+        }
+    }
+
+    public void closePopUp()
+    {
+        popUpPanel.SetActive(false);
+        popUpText.text = "";
     }
 }
 
