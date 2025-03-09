@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -171,7 +172,7 @@ public class ScoreAnalysis : MonoBehaviour
     // get useful data from posture data
     void processPostureData()
     {
-        Debug.Log("postureDataList.Count: " + postureDataList.Count);
+        // Debug.Log("postureDataList.Count: " + postureDataList.Count);
         // turn raw data into percentage
         foreach (PostureData d in postureDataList)
         {
@@ -286,7 +287,7 @@ public class ScoreAnalysis : MonoBehaviour
         overallUILine.points = points.ToArray();
         yield return new WaitForEndOfFrame();
         overallUILine.gameObject.SetActive(true);
-        LineScrollContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(prevX + horizontalSpacing, 
+        LineScrollContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(prevX + horizontalSpacing,
                                                                             LineScrollContainer.GetComponent<RectTransform>().sizeDelta.y);
 
 
@@ -332,7 +333,7 @@ public class ScoreAnalysis : MonoBehaviour
                 targetScore = PostureScoreUtils.instance.absoulteScore_Advanced;
                 break;
         }
-        float tempY = (targetScore - postureScoreRange[0][0]) / (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight + maxHeight * 0.05f - maxHeight/2;
+        float tempY = (targetScore - postureScoreRange[0][0]) / (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight + maxHeight * 0.05f - maxHeight / 2;
         lvlIndicatorLines_Overall[(int)minLvl].GetComponent<RectTransform>().localPosition = new Vector3(0, tempY, -2);
         switch (maxLvl)
         {
@@ -349,7 +350,7 @@ public class ScoreAnalysis : MonoBehaviour
                 targetScore = PostureScoreUtils.instance.absoulteScore_Advanced;
                 break;
         }
-        tempY = (targetScore - postureScoreRange[0][0]) / (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight + maxHeight * 0.05f - maxHeight/2;
+        tempY = (targetScore - postureScoreRange[0][0]) / (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight + maxHeight * 0.05f - maxHeight / 2;
         lvlIndicatorLines_Overall[(int)maxLvl].GetComponent<RectTransform>().localPosition = new Vector3(0, tempY, -2);
 
         lvlIndicatorLines_Overall[(int)minLvl].SetActive(true);
@@ -367,10 +368,20 @@ public class ScoreAnalysis : MonoBehaviour
 
     #endregion
 
-    public void loadDateRange(DateTime dateFrom, DateTime dateTo) {
+    public void loadDataFilter(DateTime dateFrom, DateTime dateTo, int recordType, int distance)
+    {
+        int[] distanceChoice = { 18, 30, 50, 70, 90 };
+        Debug.Log($"dateFrom: {dateFrom}, dateTo: {dateTo}, recordType: {recordType}, distance: {distance}");
 
         // filter data
         targetScoreNotes = DataManager.instance.scoreNoteList.FindAll(d => d.timestamp >= dateFrom && d.timestamp <= dateTo);
+        Debug.Log(targetScoreNotes.Count);
+        if (recordType != -1 && targetScoreNotes.Count > 0)
+            targetScoreNotes = targetScoreNotes.FindAll(d => d.recordType == (RecordType)recordType);
+        Debug.Log(targetScoreNotes.Count);
+        if (distance != -1 && targetScoreNotes.Count > 0)
+            targetScoreNotes = targetScoreNotes.FindAll(d => d.distance == distanceChoice[distance]);
+        Debug.Log(targetScoreNotes.Count);
         if (targetScoreNotes.Count > 0)
             makeScoreAnalysis();
 
