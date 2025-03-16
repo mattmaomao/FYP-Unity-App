@@ -136,85 +136,20 @@ public class DataManager : MonoBehaviour
         }
     }
 
-    [ContextMenu("get text")]
-    public void turnDataTxt()
+    // debug
+    public void DeletePostureData()
     {
-        string json = File.ReadAllText(Application.persistentDataPath + filePath_PostureData);
-        List<PostureData> temp = JsonConvert.DeserializeObject<List<PostureData>>(json);
-        // only fetch certain fields
+        List<PostureData> emptyList = new();
+        string json = JsonConvert.SerializeObject(emptyList, Formatting.Indented, settings);
+        File.WriteAllText(filePath_PostureData, json);
 
-        float minFrontWristFluctuate = 99999;
-        float minbackWristFluctuate = 99999;
-        float minfrontElbowAngleFluctuate = 99999;
-        float minbackElbowAngleFluctuate = 99999;
-        float minfrontShoulderAngleFluctuate = 99999;
-        float minbackShoulderAngleFluctuate = 99999;
-
-        float maxFrontWristFluctuate = 0;
-        float maxbackWristFluctuate = 0;
-        float maxfrontElbowAngleFluctuate = 0;
-        float maxbackElbowAngleFluctuate = 0;
-        float maxfrontShoulderAngleFluctuate = 0;
-        float maxbackShoulderAngleFluctuate = 0;
-        foreach (var item in temp)
-        {
-            // find min
-            if (item.frontWristFluctuate < minFrontWristFluctuate)
-                minFrontWristFluctuate = item.frontWristFluctuate;
-            if (item.backWristFluctuate < minbackWristFluctuate)
-                minbackWristFluctuate = item.backWristFluctuate;
-            if (item.frontElbowAngleFluctuate < minfrontElbowAngleFluctuate)
-                minfrontElbowAngleFluctuate = item.frontElbowAngleFluctuate;
-            if (item.backElbowAngleFluctuate < minbackElbowAngleFluctuate)
-                minbackElbowAngleFluctuate = item.backElbowAngleFluctuate;
-            if (item.frontShoulderAngleFluctuate < minfrontShoulderAngleFluctuate)
-                minfrontShoulderAngleFluctuate = item.frontShoulderAngleFluctuate;
-            if (item.backShoulderAngleFluctuate < minbackShoulderAngleFluctuate)
-                minbackShoulderAngleFluctuate = item.backShoulderAngleFluctuate;
-
-            // find max
-            if (item.frontWristFluctuate > maxFrontWristFluctuate)
-                maxFrontWristFluctuate = item.frontWristFluctuate;
-            if (item.backWristFluctuate > maxbackWristFluctuate)
-                maxbackWristFluctuate = item.backWristFluctuate;
-            if (item.frontElbowAngleFluctuate > maxfrontElbowAngleFluctuate)
-                maxfrontElbowAngleFluctuate = item.frontElbowAngleFluctuate;
-            if (item.backElbowAngleFluctuate > maxbackElbowAngleFluctuate)
-                maxbackElbowAngleFluctuate = item.backElbowAngleFluctuate;
-            if (item.frontShoulderAngleFluctuate > maxfrontShoulderAngleFluctuate)
-                maxfrontShoulderAngleFluctuate = item.frontShoulderAngleFluctuate;
-            if (item.backShoulderAngleFluctuate > maxbackShoulderAngleFluctuate)
-                maxbackShoulderAngleFluctuate = item.backShoulderAngleFluctuate;
-        }
-
-        Debug.Log($"minFrontWristFluctuate: {minFrontWristFluctuate}");
-        Debug.Log($"minbackWristFluctuate: {minbackWristFluctuate}");
-        Debug.Log($"minfrontElbowAngleFluctuate: {minfrontElbowAngleFluctuate}");
-        Debug.Log($"minbackElbowAngleFluctuate: {minbackElbowAngleFluctuate}");
-        Debug.Log($"minfrontShoulderAngleFluctuate: {minfrontShoulderAngleFluctuate}");
-        Debug.Log($"minbackShoulderAngleFluctuate: {minbackShoulderAngleFluctuate}");
-        
-        Debug.Log($"maxFrontWristFluctuate: {maxFrontWristFluctuate}");
-        Debug.Log($"maxbackWristFluctuate: {maxbackWristFluctuate}");
-        Debug.Log($"maxfrontElbowAngleFluctuate: {maxfrontElbowAngleFluctuate}");
-        Debug.Log($"maxbackElbowAngleFluctuate: {maxbackElbowAngleFluctuate}");
-        Debug.Log($"maxfrontShoulderAngleFluctuate: {maxfrontShoulderAngleFluctuate}");
-        Debug.Log($"maxbackShoulderAngleFluctuate: {maxbackShoulderAngleFluctuate}");
+        LoadPostureDataFromFile();
+    }
+    public void LoadTemplatePostureData()
+    {
+        string json = Resources.Load<TextAsset>("posture_data_template").text;
+        postureDataList.Clear();
+        postureDataList = new();
+        postureDataList = JsonConvert.DeserializeObject<List<PostureData>>(json);
     }
 }
-
-
-
-// minFrontWristFluctuate: 7.470885
-// minbackWristFluctuate: 44.32072
-// minfrontElbowAngleFluctuate: 0.3370529
-// minbackElbowAngleFluctuate: 0.4070209
-// minfrontShoulderAngleFluctuate: 0.2263088
-// minbackShoulderAngleFluctuate: 0.9151633
-
-// maxFrontWristFluctuate: 129.0781
-// maxbackWristFluctuate: 141.2049
-// maxfrontElbowAngleFluctuate: 4.706191
-// maxbackElbowAngleFluctuate: 14.23022
-// maxfrontShoulderAngleFluctuate: 5.615577
-// maxbackShoulderAngleFluctuate: 10.8756

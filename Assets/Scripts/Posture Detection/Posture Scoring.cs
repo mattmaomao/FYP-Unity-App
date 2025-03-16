@@ -869,8 +869,9 @@ public class PosetureScoring : MonoBehaviour
             backShoulderAngleStart = this.backShoulderAngleStart,
             backShoulderAngleEnd = this.backShoulderAngleEnd,
 
-            frontWristPts = this.frontWristPts,
-            backWristPts = this.backWristPts,
+            // stop record continuous data
+            // frontWristPts = this.frontWristPts,
+            // backWristPts = this.backWristPts,
         };
         DataManager.instance.postureDataList.Add(postureData);
         DataManager.instance.SavePostureDataToFile();

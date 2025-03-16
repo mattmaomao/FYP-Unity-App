@@ -264,14 +264,36 @@ public class ScoreAnalysis : MonoBehaviour
 
         // draw main line
         float prevX = 0;
-        DateTime prevTime = postureDataDict["Overall"][0].time;
+        DateTime prevTime = postureDataDict["Overall"].Count == 0 ? default : postureDataDict["Overall"][0].time;
         DateTime day = default;
         List<Vector2> points = new();
         dateObjList.ForEach(obj => Destroy(obj));
         dateObjList.Clear();
+
+        // offset for less data in the same day
+        float offset = 0;
+        int dataCount = 0;
+        int minimumDataCount = 5;
+
         for (int i = 0; i < postureDataDict["Overall"].Count; i++)
         {
             if (postureDataDict["Overall"][i].time.Date != day)
+            {
+                if (i != 0 && dataCount < minimumDataCount)
+                    offset += minimumDataCount - dataCount;
+                dataCount = 0;
+            }
+            dataCount++;
+
+            prevX = (i + offset) * maxWidth / LINE_MAX_POINT + (i == 0 ? horizontalSpacing : 0);
+            points.Add(new Vector2(
+                prevX,
+                (postureDataDict["Overall"][i].score - postureScoreRange[0][0]) /
+                    (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight +
+                    bottomOffset
+            ));
+            // draw date text
+            if (dataCount == 1)
             {
                 day = postureDataDict["Overall"][i].time.Date;
                 GameObject dateObj = Instantiate(dateTextPrefab, LineScrollContainer.transform);
@@ -279,26 +301,21 @@ public class ScoreAnalysis : MonoBehaviour
                 dateObj.GetComponent<RectTransform>().localPosition = new Vector3(prevX, LineScrollContainer.GetComponent<RectTransform>().rect.min.y, -1);
                 dateObjList.Add(dateObj);
             }
-
-            prevX = i * maxWidth / LINE_MAX_POINT + (i == 0 ? horizontalSpacing : 0);
-            points.Add(new Vector2(
-                prevX,
-                (postureDataDict["Overall"][i].score - postureScoreRange[0][0]) /
-                    (postureScoreRange[0][1] - postureScoreRange[0][0]) * maxHeight +
-                    bottomOffset
-            ));
         }
+
         overallUILine.gameObject.SetActive(false);
         overallUILine.points = points.ToArray();
         yield return new WaitForEndOfFrame();
         overallUILine.gameObject.SetActive(true);
-        LineScrollContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(prevX + horizontalSpacing,
+        LineScrollContainer.GetComponent<RectTransform>().sizeDelta = new Vector2(prevX + 4 * maxWidth / LINE_MAX_POINT,
                                                                             LineScrollContainer.GetComponent<RectTransform>().sizeDelta.y);
-
 
         // draw lvl indicator lines
         foreach (GameObject obj in lvlIndicatorLines_Overall)
             obj.SetActive(false);
+
+        if (postureDataDict["Overall"].Count == 0)
+            yield break;
 
         ArcherLvl minLvl = ArcherLvl.Beginner;
         ArcherLvl maxLvl = ArcherLvl.Beginner;
@@ -386,14 +403,16 @@ public class ScoreAnalysis : MonoBehaviour
             targetScoreNotes = targetScoreNotes.FindAll(d => d.distance == distanceChoice[distance]);
         if (targetScoreNotes.Count > 0)
             makeScoreAnalysis();
-        else {
+        else
+        {
             popUpText.text += "No score note found!\n";
         }
 
         postureDataList = DataManager.instance.postureDataList.FindAll(d => d.dateTime >= dateFrom && d.dateTime <= dateTo);
         if (postureDataList.Count > 0)
             makePostureAnalysis();
-        else {
+        else
+        {
             popUpText.text += "No posture record found!\n";
         }
 
@@ -409,6 +428,16 @@ public class ScoreAnalysis : MonoBehaviour
     {
         popUpPanel.SetActive(false);
         popUpText.text = "";
+    }
+
+    // debug
+    public void clearPostureDateBtn()
+    {
+        DataManager.instance.DeletePostureData();
+    }
+    public void loadTemplateDataBtn()
+    {
+        DataManager.instance.LoadTemplatePostureData();
     }
 }
 

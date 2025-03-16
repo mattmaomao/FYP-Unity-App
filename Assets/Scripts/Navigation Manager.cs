@@ -55,6 +55,12 @@ public class NavigationManager : MonoBehaviour
         changeFps();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            previousPage();
+    }
+
     // change fps
     [System.Obsolete]
     void changeFps()
@@ -105,7 +111,7 @@ public class NavigationManager : MonoBehaviour
             viewRecords.closeNote();
             return;
         }
-        
+
         if (pagesStack.Count <= 1)
         {
             ChangePage(0, true);

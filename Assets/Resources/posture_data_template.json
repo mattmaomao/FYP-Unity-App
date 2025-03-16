@@ -1,0 +1,494 @@
+[
+  {
+    "dateTime": "2025-02-06T09:14:40.3423361+08:00",
+    "postureName": "Posture_0",
+    "archerLvl": 1,
+    "frontWristFluctuate": 17.86182,
+    "frontWristStart": {
+      "x": -951.050232,
+      "y": 12.9793844,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -990.5755,
+      "y": 11.8053455,
+      "z": 0.0
+    },
+    "backWristFluctuate": 139.380646,
+    "backWristStart": {
+      "x": 554.6357,
+      "y": 1.06422293,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 882.413,
+      "y": -66.2503,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 0.342814147,
+    "frontElbowAngleStart": 1.37757182,
+    "frontElbowAngleEnd": 0.854321063,
+    "backElbowAngleFluctuate": 7.84718752,
+    "backElbowAngleStart": 171.735458,
+    "backElbowAngleEnd": 150.867966,
+    "frontShoulderAngleFluctuate": 0.2410432,
+    "frontShoulderAngleStart": 5.36465263,
+    "frontShoulderAngleEnd": 5.68596172,
+    "backShoulderAngleFluctuate": 2.738153,
+    "backShoulderAngleStart": 11.8949251,
+    "backShoulderAngleEnd": 19.8044052,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-02-06T09:14:46.571463+08:00",
+    "postureName": "Posture_1",
+    "archerLvl": 1,
+    "frontWristFluctuate": 63.84412,
+    "frontWristStart": {
+      "x": -951.5661,
+      "y": -10.2781172,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -965.495667,
+      "y": 180.024643,
+      "z": 0.0
+    },
+    "backWristFluctuate": 124.670563,
+    "backWristStart": {
+      "x": 529.668762,
+      "y": 65.7668,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 833.6656,
+      "y": -21.4966736,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 0.66934526,
+    "frontElbowAngleStart": 1.49226546,
+    "frontElbowAngleEnd": 0.131221235,
+    "backElbowAngleFluctuate": 10.17928,
+    "backElbowAngleStart": 165.89296,
+    "backElbowAngleEnd": 133.51886,
+    "frontShoulderAngleFluctuate": 1.19875264,
+    "frontShoulderAngleStart": 6.588445,
+    "frontShoulderAngleEnd": 6.591659,
+    "backShoulderAngleFluctuate": 5.58951473,
+    "backShoulderAngleStart": 16.9818211,
+    "backShoulderAngleEnd": 3.244979,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-02-06T09:14:52.9733115+08:00",
+    "postureName": "Posture_2",
+    "archerLvl": 1,
+    "frontWristFluctuate": 3.61671758,
+    "frontWristStart": {
+      "x": -912.863831,
+      "y": -31.15966,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -912.17926,
+      "y": -27.8363724,
+      "z": 0.0
+    },
+    "backWristFluctuate": 92.1904144,
+    "backWristStart": {
+      "x": 504.579285,
+      "y": 18.3534184,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 795.9721,
+      "y": 48.076313,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 0.345082134,
+    "frontElbowAngleStart": 2.856156,
+    "frontElbowAngleEnd": 3.98251081,
+    "backElbowAngleFluctuate": 1.21396637,
+    "backElbowAngleStart": 166.0511,
+    "backElbowAngleEnd": 163.123474,
+    "frontShoulderAngleFluctuate": 0.2890053,
+    "frontShoulderAngleStart": 3.292653,
+    "frontShoulderAngleEnd": 2.85094261,
+    "backShoulderAngleFluctuate": 3.34152651,
+    "backShoulderAngleStart": 19.9231339,
+    "backShoulderAngleEnd": 5.472174,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-02-08T09:14:59.5870525+08:00",
+    "postureName": "Posture_3",
+    "archerLvl": 1,
+    "frontWristFluctuate": 7.539073,
+    "frontWristStart": {
+      "x": -915.608643,
+      "y": -38.268734,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -935.7462,
+      "y": -33.00563,
+      "z": 0.0
+    },
+    "backWristFluctuate": 122.140884,
+    "backWristStart": {
+      "x": 505.527466,
+      "y": 26.29214,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 837.5741,
+      "y": 18.14226,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 0.458276182,
+    "frontElbowAngleStart": 2.55818462,
+    "frontElbowAngleEnd": 1.07246673,
+    "backElbowAngleFluctuate": 8.505014,
+    "backElbowAngleStart": 165.5396,
+    "backElbowAngleEnd": 138.857819,
+    "frontShoulderAngleFluctuate": 0.494589478,
+    "frontShoulderAngleStart": 3.07402515,
+    "frontShoulderAngleEnd": 1.53836966,
+    "backShoulderAngleFluctuate": 4.439838,
+    "backShoulderAngleStart": 19.3555183,
+    "backShoulderAngleEnd": 8.342214,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-03-03T09:15:05.0668182+08:00",
+    "postureName": "Posture_4",
+    "archerLvl": 1,
+    "frontWristFluctuate": 36.31173,
+    "frontWristStart": {
+      "x": -905.7631,
+      "y": -39.8215523,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -993.2275,
+      "y": -196.816727,
+      "z": 0.0
+    },
+    "backWristFluctuate": 97.67153,
+    "backWristStart": {
+      "x": 510.002472,
+      "y": 0.271671832,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 695.336,
+      "y": 87.19768,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 1.5720439,
+    "frontElbowAngleStart": 2.62383318,
+    "frontElbowAngleEnd": 5.38445044,
+    "backElbowAngleFluctuate": 11.3688726,
+    "backElbowAngleStart": 167.925156,
+    "backElbowAngleEnd": 136.406754,
+    "frontShoulderAngleFluctuate": 0.3737264,
+    "frontShoulderAngleStart": 1.07210171,
+    "frontShoulderAngleEnd": 0.8055148,
+    "backShoulderAngleFluctuate": 5.57320642,
+    "backShoulderAngleStart": 16.7456,
+    "backShoulderAngleEnd": 0.326259166,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-03-03T09:15:10.9626911+08:00",
+    "postureName": "Posture_5",
+    "archerLvl": 1,
+    "frontWristFluctuate": 40.01257,
+    "frontWristStart": {
+      "x": -986.0625,
+      "y": -34.5935478,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -997.3226,
+      "y": 73.91335,
+      "z": 0.0
+    },
+    "backWristFluctuate": 117.091057,
+    "backWristStart": {
+      "x": 501.869446,
+      "y": 10.6258135,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 791.975037,
+      "y": 29.0241375,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 3.73199821,
+    "frontElbowAngleStart": 1.34333777,
+    "frontElbowAngleEnd": 10.116024,
+    "backElbowAngleFluctuate": 4.911076,
+    "backElbowAngleStart": 167.974564,
+    "backElbowAngleEnd": 153.089844,
+    "frontShoulderAngleFluctuate": 0.7455404,
+    "frontShoulderAngleStart": 4.84719038,
+    "frontShoulderAngleEnd": 2.92897415,
+    "backShoulderAngleFluctuate": 6.686202,
+    "backShoulderAngleStart": 18.1683884,
+    "backShoulderAngleEnd": 0.55426085,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-03-03T09:15:17.3225806+08:00",
+    "postureName": "Posture_6",
+    "archerLvl": 1,
+    "frontWristFluctuate": 21.2207661,
+    "frontWristStart": {
+      "x": -960.5732,
+      "y": 15.3725271,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -1047.75037,
+      "y": 22.6469612,
+      "z": 0.0
+    },
+    "backWristFluctuate": 100.4213,
+    "backWristStart": {
+      "x": 568.921753,
+      "y": 23.5887661,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 753.255554,
+      "y": 14.9854374,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 1.19809818,
+    "frontElbowAngleStart": 0.849497557,
+    "frontElbowAngleEnd": 5.473571,
+    "backElbowAngleFluctuate": 9.177093,
+    "backElbowAngleStart": 166.4587,
+    "backElbowAngleEnd": 142.908722,
+    "frontShoulderAngleFluctuate": 1.3006767,
+    "frontShoulderAngleStart": 5.7407465,
+    "frontShoulderAngleEnd": 8.63165,
+    "backShoulderAngleFluctuate": 6.828993,
+    "backShoulderAngleStart": 21.0965,
+    "backShoulderAngleEnd": 4.52484846,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-03-03T09:15:28.1281002+08:00",
+    "postureName": "Posture_7",
+    "archerLvl": 1,
+    "frontWristFluctuate": 17.7493229,
+    "frontWristStart": {
+      "x": -961.8887,
+      "y": 17.1533947,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -972.406555,
+      "y": -27.66813,
+      "z": 0.0
+    },
+    "backWristFluctuate": 173.116241,
+    "backWristStart": {
+      "x": 559.123535,
+      "y": 28.5713577,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 887.83374,
+      "y": 354.901337,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 0.441565275,
+    "frontElbowAngleStart": 2.23449564,
+    "frontElbowAngleEnd": 3.28944063,
+    "backElbowAngleFluctuate": 16.6546345,
+    "backElbowAngleStart": 168.3528,
+    "backElbowAngleEnd": 120.3669,
+    "frontShoulderAngleFluctuate": 0.5046227,
+    "frontShoulderAngleStart": 4.475184,
+    "frontShoulderAngleEnd": 3.08794022,
+    "backShoulderAngleFluctuate": 5.924735,
+    "backShoulderAngleStart": 15.1742954,
+    "backShoulderAngleEnd": 0.7008132,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-03-09T09:15:34.1481088+08:00",
+    "postureName": "Posture_8",
+    "archerLvl": 1,
+    "frontWristFluctuate": 144.651489,
+    "frontWristStart": {
+      "x": -893.8012,
+      "y": -19.8898983,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -1254.64185,
+      "y": -100.945244,
+      "z": 0.0
+    },
+    "backWristFluctuate": 40.7239571,
+    "backWristStart": {
+      "x": 550.210449,
+      "y": -11.8694105,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 475.624084,
+      "y": -18.6229935,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 2.202039,
+    "frontElbowAngleStart": 2.100682,
+    "frontElbowAngleEnd": 4.89336824,
+    "backElbowAngleFluctuate": 1.76872361,
+    "backElbowAngleStart": 168.45668,
+    "backElbowAngleEnd": 168.333939,
+    "frontShoulderAngleFluctuate": 2.31160235,
+    "frontShoulderAngleStart": 4.69477558,
+    "frontShoulderAngleEnd": 9.876911,
+    "backShoulderAngleFluctuate": 6.41792727,
+    "backShoulderAngleStart": 17.0451164,
+    "backShoulderAngleEnd": 2.947761,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-03-16T09:15:43.8815072+08:00",
+    "postureName": "Posture_9",
+    "archerLvl": 1,
+    "frontWristFluctuate": 5.5200634,
+    "frontWristStart": {
+      "x": -983.957642,
+      "y": -61.4372749,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -984.069458,
+      "y": -54.1980133,
+      "z": 0.0
+    },
+    "backWristFluctuate": 120.080643,
+    "backWristStart": {
+      "x": 502.2981,
+      "y": -15.0973129,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 869.6519,
+      "y": -45.83033,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 0.338499844,
+    "frontElbowAngleStart": 2.0160594,
+    "frontElbowAngleEnd": 2.53110862,
+    "backElbowAngleFluctuate": 5.71243572,
+    "backElbowAngleStart": 169.984009,
+    "backElbowAngleEnd": 149.518539,
+    "frontShoulderAngleFluctuate": 0.737480462,
+    "frontShoulderAngleStart": 1.06514335,
+    "frontShoulderAngleEnd": 2.26641321,
+    "backShoulderAngleFluctuate": 3.40868068,
+    "backShoulderAngleStart": 15.7419128,
+    "backShoulderAngleEnd": 1.63182843,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-03-16T09:15:50.4156505+08:00",
+    "postureName": "Posture_10",
+    "archerLvl": 1,
+    "frontWristFluctuate": 24.0034485,
+    "frontWristStart": {
+      "x": -985.0562,
+      "y": -6.018157,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -991.7415,
+      "y": -83.19079,
+      "z": 0.0
+    },
+    "backWristFluctuate": 111.237259,
+    "backWristStart": {
+      "x": 519.7373,
+      "y": 17.8261242,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 811.453552,
+      "y": -2.58261847,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 0.7743469,
+    "frontElbowAngleStart": 4.776268,
+    "frontElbowAngleEnd": 1.90669942,
+    "backElbowAngleFluctuate": 15.8651829,
+    "backElbowAngleStart": 164.481216,
+    "backElbowAngleEnd": 117.656372,
+    "frontShoulderAngleFluctuate": 0.59151876,
+    "frontShoulderAngleStart": 0.04423466,
+    "frontShoulderAngleEnd": 2.22651052,
+    "backShoulderAngleFluctuate": 6.48448563,
+    "backShoulderAngleStart": 25.0357456,
+    "backShoulderAngleEnd": 6.662855,
+    "frontWristPts": [],
+    "backWristPts": []
+  },
+  {
+    "dateTime": "2025-03-16T09:15:59.4523448+08:00",
+    "postureName": "Posture_11",
+    "archerLvl": 1,
+    "frontWristFluctuate": 9.798634,
+    "frontWristStart": {
+      "x": -1003.87555,
+      "y": -72.95733,
+      "z": 0.0
+    },
+    "frontWristEnd": {
+      "x": -1018.07806,
+      "y": -73.9956741,
+      "z": 0.0
+    },
+    "backWristFluctuate": 94.3254,
+    "backWristStart": {
+      "x": 491.0021,
+      "y": 84.88689,
+      "z": 0.0
+    },
+    "backWristEnd": {
+      "x": 718.1824,
+      "y": 96.3331146,
+      "z": 0.0
+    },
+    "frontElbowAngleFluctuate": 0.61599654,
+    "frontElbowAngleStart": 0.408303767,
+    "frontElbowAngleEnd": 0.826378763,
+    "backElbowAngleFluctuate": 6.85974836,
+    "backElbowAngleStart": 159.8479,
+    "backElbowAngleEnd": 143.7742,
+    "frontShoulderAngleFluctuate": 0.761465549,
+    "frontShoulderAngleStart": 2.045645,
+    "frontShoulderAngleEnd": 2.05118632,
+    "backShoulderAngleFluctuate": 6.842724,
+    "backShoulderAngleStart": 30.7375736,
+    "backShoulderAngleEnd": 14.3982544,
+    "frontWristPts": [],
+    "backWristPts": []
+  }
+]
