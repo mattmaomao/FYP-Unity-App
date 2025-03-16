@@ -24,6 +24,11 @@ public class ScoreAnalysisFilterManager : MonoBehaviour
 
     void OnEnable()
     {
+        StartCoroutine(loadFilterLayout());
+    }
+
+    IEnumerator loadFilterLayout() {
+        yield return new WaitForEndOfFrame();
         LayoutRebuilder.ForceRebuildLayoutImmediate(filterContainer);
     }
 
