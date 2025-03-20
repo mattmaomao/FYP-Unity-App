@@ -26,6 +26,7 @@ public class SettingManager : MonoBehaviour
         volumeSlider.onValueChanged.AddListener((float value) => AudioManager.instance.SetSEVolume(value));
 
         // set theme
+        int idx = PlayerPrefs.GetInt("Theme", 0);
         selectedThemeIndicators.ForEach((Image img) => img.enabled = false);
         selectedThemeIndicators[ThemeManager.getThemeIndex()].enabled = true;
 
@@ -42,6 +43,8 @@ public class SettingManager : MonoBehaviour
         selectedThemeIndicators[ThemeManager.getThemeIndex()].enabled = false;
         ThemeManager.ChangeTheme(idx);
         selectedThemeIndicators[ThemeManager.getThemeIndex()].enabled = true;
+
+        PlayerPrefs.SetInt("Theme", ThemeManager.getThemeIndex());
     }
 
     #endregion

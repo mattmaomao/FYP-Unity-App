@@ -9,8 +9,6 @@ public static class ThemeManager
     {
         if (idx >= 0 && idx < Theme.Instance.Themes.Count)
             Theme.Instance.CurrentThemeIndex = idx;
-
-        Debug.Log("change theme to " + Theme.Instance.CurrentThemeIndex);
     }
 
     public static void ChangeTheme(string themeName)
