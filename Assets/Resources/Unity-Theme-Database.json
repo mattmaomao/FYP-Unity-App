@@ -1,6 +1,6 @@
 {
     "debugLevel": 4,
-    "currentThemeIndex": 0,
+    "currentThemeIndex": 2,
     "colors": [
         {
             "guid": "5724eb04-f3f3-4ee0-8731-3d24fe27d70a",
@@ -94,7 +94,7 @@
         {
             "guid": "934e5db9-9bd6-4ea3-b407-80abf14d5b1f",
             "expanded": true,
-            "themeName": "Test",
+            "themeName": "Red",
             "colors": [
                 {
                     "guid": "5724eb04-f3f3-4ee0-8731-3d24fe27d70a",
@@ -135,6 +135,53 @@
                 {
                     "guid": "bf780c05-76fe-4bfd-a331-5a6c5c8be729",
                     "colorHex": "#FFFFFFFF"
+                }
+            ]
+        },
+        {
+            "guid": "d2555d41-3e3b-4121-91f8-be59471b1cc8",
+            "expanded": true,
+            "themeName": "Blue",
+            "colors": [
+                {
+                    "guid": "5724eb04-f3f3-4ee0-8731-3d24fe27d70a",
+                    "colorHex": "#41BFFBFF"
+                },
+                {
+                    "guid": "b9fffdae-2d06-4766-8e72-1c11b80f4a02",
+                    "colorHex": "#EEEEEEFF"
+                },
+                {
+                    "guid": "321780db-7eba-40cd-89f9-d6081eb79ecb",
+                    "colorHex": "#28B32FFF"
+                },
+                {
+                    "guid": "6c1bc38a-66bc-4e13-879d-fe9763c608b2",
+                    "colorHex": "#FFFFFFFF"
+                },
+                {
+                    "guid": "7b22fb16-872c-4d9e-add2-cd00614cd8f2",
+                    "colorHex": "#B3261EFF"
+                },
+                {
+                    "guid": "aa5c6791-2388-43ab-8428-5a767a940e28",
+                    "colorHex": "#FFFFFFFF"
+                },
+                {
+                    "guid": "58cde380-072b-4670-88f5-5d6c1706bf21",
+                    "colorHex": "#FFFBFEFF"
+                },
+                {
+                    "guid": "e75d2a06-952c-4ae8-b402-d80e535eb746",
+                    "colorHex": "#1C1B1FFF"
+                },
+                {
+                    "guid": "46be30e0-0f2f-436c-a6c9-f08b48106403",
+                    "colorHex": "#AAAAAAFF"
+                },
+                {
+                    "guid": "bf780c05-76fe-4bfd-a331-5a6c5c8be729",
+                    "colorHex": "#FFE596FF"
                 }
             ]
         }

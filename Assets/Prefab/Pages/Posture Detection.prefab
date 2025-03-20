@@ -2887,6 +2887,7 @@ GameObject:
   - component: {fileID: 6911170049762871308}
   - component: {fileID: 1969687468215668855}
   - component: {fileID: 1238786205130295423}
+  - component: {fileID: 2666653306676795376}
   m_Layer: 5
   m_Name: Button (1)
   m_TagString: Untagged
@@ -2935,7 +2936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.25490198, g: 0.7490196, b: 0.9843137, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3008,6 +3009,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2666653306676795376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314066646325466270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5162ee87061045ba821e0dfb969d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    colorGuid: 5724eb04-f3f3-4ee0-8731-3d24fe27d70a
+    overrideAlpha: 0
+    alpha: 1
+  image: {fileID: 1969687468215668855}
 --- !u!1 &1373043755928941067
 GameObject:
   m_ObjectHideFlags: 0
@@ -7367,7 +7385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8235294, b: 0.29411766, a: 1}
+  m_Color: {r: 0.25490198, g: 0.7490196, b: 0.9843137, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7469,6 +7487,7 @@ GameObject:
   - component: {fileID: 6512282848307368606}
   - component: {fileID: 7986469840815069088}
   - component: {fileID: 6317122311101639436}
+  - component: {fileID: 8052881805342866166}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -7517,7 +7536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.25490198, g: 0.7490196, b: 0.9843137, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7590,6 +7609,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8052881805342866166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3705341276662592856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5162ee87061045ba821e0dfb969d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    colorGuid: 5724eb04-f3f3-4ee0-8731-3d24fe27d70a
+    overrideAlpha: 0
+    alpha: 1
+  image: {fileID: 7986469840815069088}
 --- !u!1 &3720513241096262361
 GameObject:
   m_ObjectHideFlags: 0
@@ -12010,6 +12046,7 @@ GameObject:
   - component: {fileID: 2020444493402685789}
   - component: {fileID: 4014674467212310531}
   - component: {fileID: 1098651378442254984}
+  - component: {fileID: 4223176815839167620}
   m_Layer: 5
   m_Name: Button (3)
   m_TagString: Untagged
@@ -12058,7 +12095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.25490198, g: 0.7490196, b: 0.9843137, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12131,6 +12168,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4223176815839167620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5621927210770878332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5162ee87061045ba821e0dfb969d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    colorGuid: 5724eb04-f3f3-4ee0-8731-3d24fe27d70a
+    overrideAlpha: 0
+    alpha: 1
+  image: {fileID: 4014674467212310531}
 --- !u!1 &5669967193218110781
 GameObject:
   m_ObjectHideFlags: 0
@@ -15031,7 +15085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8235294, b: 0.29411766, a: 1}
+  m_Color: {r: 0.25490198, g: 0.7490196, b: 0.9843137, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -19944,7 +19998,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.8235294, b: 0.29411766, a: 1}
+  m_Color: {r: 0.25490198, g: 0.7490196, b: 0.9843137, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -20472,6 +20526,7 @@ GameObject:
   - component: {fileID: 3873837373637801481}
   - component: {fileID: 144273782946963993}
   - component: {fileID: 2162371568057894091}
+  - component: {fileID: 772461230822114419}
   m_Layer: 5
   m_Name: Button (2)
   m_TagString: Untagged
@@ -20520,7 +20575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.25490198, g: 0.7490196, b: 0.9843137, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -20593,6 +20648,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &772461230822114419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9157595115160233992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5162ee87061045ba821e0dfb969d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    colorGuid: 5724eb04-f3f3-4ee0-8731-3d24fe27d70a
+    overrideAlpha: 0
+    alpha: 1
+  image: {fileID: 144273782946963993}
 --- !u!1 &9209914417289845611
 GameObject:
   m_ObjectHideFlags: 0

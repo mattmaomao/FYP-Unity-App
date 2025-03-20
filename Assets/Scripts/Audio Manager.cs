@@ -29,6 +29,12 @@ public class AudioManager : MonoBehaviour
         return clip.length;
     }
 
+    // set voluma of se
+    public void SetSEVolume(float volume)
+    {
+        AudioSource_SE.volume = volume;
+    }
+
     // // Play music with a specified clip
     // public void PlayMusic(AudioClip clip)
     // {
