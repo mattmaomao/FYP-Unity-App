@@ -151,5 +151,7 @@ public class DataManager : MonoBehaviour
         postureDataList.Clear();
         postureDataList = new();
         postureDataList = JsonConvert.DeserializeObject<List<PostureData>>(json);
+        // save to file
+        SavePostureDataToFile();
     }
 }
