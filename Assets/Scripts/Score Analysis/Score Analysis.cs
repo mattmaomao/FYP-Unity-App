@@ -58,8 +58,6 @@ public class ScoreAnalysis : MonoBehaviour
     };
 
 
-    // todo add filter
-
     void OnEnable()
     {
         targetScoreNotes = DataManager.instance.scoreNoteList;
