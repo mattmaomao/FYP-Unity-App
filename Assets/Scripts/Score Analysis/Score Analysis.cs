@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class ScoreAnalysis : MonoBehaviour
 {
+    [SerializeField] ScoreAnalysisFilterManager filterManager;
+
     [Header("setting")]
     [SerializeField] List<ScoreNote> targetScoreNotes = new();
     [SerializeField] List<PostureData> postureDataList = new();
@@ -15,7 +17,12 @@ public class ScoreAnalysis : MonoBehaviour
     [Header("data")]
     [SerializeField] List<int> scoreRawList = new();
     [SerializeField] List<float> scorePercentageList = new();
+
     [Header("UI")]
+    [SerializeField] RectTransform filterMask;
+    [SerializeField] TextMeshProUGUI filterBtnText;
+    [SerializeField] float targetMaskHeight = 0;
+    bool isFilterOpen = false;
     [SerializeField] GameObject popUpPanel;
     [SerializeField] TextMeshProUGUI popUpText;
 
@@ -57,6 +64,10 @@ public class ScoreAnalysis : MonoBehaviour
         new() { 100, 0 }
     };
 
+    void Start()
+    {
+        forceHideFilter();
+    }
 
     void OnEnable()
     {
@@ -388,6 +399,7 @@ public class ScoreAnalysis : MonoBehaviour
 
     #endregion
 
+    #region filter
     public void loadDataFilter(DateTime dateFrom, DateTime dateTo, int recordType, int distance)
     {
         int[] distanceChoice = { 18, 30, 50, 70, 90 };
@@ -427,6 +439,35 @@ public class ScoreAnalysis : MonoBehaviour
         popUpPanel.SetActive(false);
         popUpText.text = "";
     }
+
+    // ui
+    public void toggleFilter() {
+        isFilterOpen = !isFilterOpen;
+        StartCoroutine(scrollFilter());
+    }
+    IEnumerator scrollFilter() {
+        float target = isFilterOpen ? targetMaskHeight : 0;
+        float animationSpeed = 5f;
+        float speed = (target - filterMask.sizeDelta.y) / animationSpeed;
+
+        while (Mathf.Abs(filterMask.sizeDelta.y - target) > 0.1f) {
+            filterMask.sizeDelta = new Vector2(filterMask.sizeDelta.x, filterMask.sizeDelta.y + speed);
+            yield return 0;
+        }
+
+        yield return filterManager.loadFilterLayout();
+        yield return new WaitForEndOfFrame();
+        yield return filterManager.loadFilterLayout();
+        
+        filterBtnText.text = isFilterOpen ? "Close Filter" : "Open Filter";
+        yield return 0;
+    }
+    void forceHideFilter() {
+        filterMask.sizeDelta = new Vector2(filterMask.sizeDelta.x, 0);
+        filterBtnText.text = "Open Filter";
+        isFilterOpen = false;
+    }
+    #endregion
 
     // debug
     public void clearPostureDateBtn()

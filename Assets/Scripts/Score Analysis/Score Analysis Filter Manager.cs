@@ -24,10 +24,16 @@ public class ScoreAnalysisFilterManager : MonoBehaviour
 
     void OnEnable()
     {
+        reloadFilterLayout();
+    }
+
+    public void reloadFilterLayout()
+    {
         StartCoroutine(loadFilterLayout());
     }
 
-    IEnumerator loadFilterLayout() {
+    public IEnumerator loadFilterLayout()
+    {
         yield return new WaitForEndOfFrame();
         LayoutRebuilder.ForceRebuildLayoutImmediate(filterContainer);
     }
@@ -45,7 +51,8 @@ public class ScoreAnalysisFilterManager : MonoBehaviour
         filterPanel.SetActive(false);
     }
 
-    public void clearFilterBtn() {
+    public void clearFilterBtn()
+    {
         // clear selection
         datePicker_From.SelectedDate = new();
         datePicker_To.SelectedDate = new();
