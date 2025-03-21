@@ -1,12 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using Unity.Theme;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ViewRecords : MonoBehaviour
 {
+    [SerializeField] ScoreAnalysisFilterManager filterManager;
+    [Header("UI")]
+    [SerializeField] GameObject popUpPanel;
+    [SerializeField] TextMeshProUGUI popUpText;
+    [SerializeField] RectTransform pageRect;
+    [SerializeField] RectTransform sortRect;
+    [SerializeField] RectTransform filterRect;
+    [SerializeField] RectTransform scrollRect;
+    
     [Header("sub pages")]
     [SerializeField] GameObject createScoreNote;
     [SerializeField] GameObject scoreNote;
@@ -17,9 +28,6 @@ public class ViewRecords : MonoBehaviour
     [SerializeField] List<GameObject> recordList = new();
     [SerializeField] Transform recordContainer;
     [SerializeField] GameObject recordPrefab;
-
-    [Header("filter display")]
-    [SerializeField] Button filterExtendBtn;
 
     [Header("sort display")]
     [SerializeField] Button sortBtn_byName;
@@ -34,6 +42,11 @@ public class ViewRecords : MonoBehaviour
     bool isNameAsc = true;
     bool isScoreAsc = false;
     bool isTimeAsc = false;
+
+    void Update()
+    {
+        scrollRect.sizeDelta = new Vector2(scrollRect.sizeDelta.x, pageRect.rect.height - 160 - sortRect.rect.height - filterRect.rect.height - 64);
+    }
 
     void OnEnable()
     {
@@ -159,6 +172,50 @@ public class ViewRecords : MonoBehaviour
 
         sortArrow_byScore.GetComponent<Image>().sprite = isScoreAsc ? sprite_asc : sprite_dec;
     }
+    
+    #endregion
+
+    #region filter
+
+    // filter btn
+    public void loadDataFilter() {
+        FilterData filterData = filterManager.loadDataFilter();
+        DateTime dateFrom = filterData.dateFrom;
+        DateTime dateTo = filterData.dateTo;
+        int recordType = filterData.recordType;
+        int distance = filterData.distance;
+
+        int[] distanceChoice = { 18, 30, 50, 70, 90 };
+        Debug.Log($"dateFrom: {dateFrom}, dateTo: {dateTo}, recordType: {recordType}, distance: {distance}");
+
+        // filter data
+        currentScoreNoteList = DataManager.instance.scoreNoteList.FindAll(d => d.timestamp >= dateFrom && d.timestamp <= dateTo);
+        if (recordType != -1 && currentScoreNoteList.Count > 0)
+            currentScoreNoteList = currentScoreNoteList.FindAll(d => d.recordType == (RecordType)recordType);
+        if (distance != -1 && currentScoreNoteList.Count > 0)
+            currentScoreNoteList = currentScoreNoteList.FindAll(d => d.distance == distanceChoice[distance]);
+        if (currentScoreNoteList.Count > 0)
+            showRecords(currentScoreNoteList);
+        else
+        {
+            popUpText.text += "No score note found!\n";
+        }
+
+        // show pop up
+        if (popUpText.text != "")
+        {
+            popUpText.text += "Please adjust the filters!";
+            popUpPanel.SetActive(true);
+        }
+    }
+    
+    public void closePopUp()
+    {
+        popUpPanel.SetActive(false);
+        popUpText.text = "";
+    }
+
+
     #endregion
 
     // called when create new note
