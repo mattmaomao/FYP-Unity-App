@@ -64,7 +64,7 @@ public class ViewRecords : MonoBehaviour
         scoreNote.SetActive(false);
     }
 
-    void readRecords()
+    void reloadRecords()
     {
         currentScoreNoteList = DataManager.instance.scoreNoteList;
         showRecords();
@@ -241,6 +241,6 @@ public class ViewRecords : MonoBehaviour
         NavigationManager.instance.inScoreNote = false;
 
         // check if notes updated
-        readRecords();
+        reloadRecords();
     }
 }

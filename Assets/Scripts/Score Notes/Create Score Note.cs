@@ -27,20 +27,52 @@ public class CreateScoreNote : MonoBehaviour
     readonly List<int> numOfEnds = new() { 6, 12 };
     readonly List<int> arrowPerEnds = new() { 3, 6 };
 
-    public void init() {
+    [Header("edit note")]
+    int noteIndex = -1;
+
+    public void init()
+    {
         radio_recordType.init();
         radio_distance.init();
         radio_targetType.init();
         radio_numOfRound.init();
         radio_numOfEnd.init();
-        radio_arrowPerEnd.init();        
+        radio_arrowPerEnd.init();
     }
 
     void Update()
     {
         // auto generate name
-        // todo
         titleName.placeholder.GetComponent<TextMeshProUGUI>().text = "Record " + DataManager.instance.scoreNoteList.Count;
+    }
+
+    public void loadOldNote(ScoreNote oldNote)
+    {
+        titleName.text = oldNote.title;
+        radio_recordType.initSelection((int)oldNote.recordType);
+        radio_distance.initSelection((int)oldNote.distance);
+        radio_targetType.initSelection((int)oldNote.targetType);
+        radio_numOfRound.initSelection((int)oldNote.numOfRound);
+        radio_numOfEnd.initSelection((int)oldNote.numOfEnd);
+        radio_arrowPerEnd.initSelection((int)oldNote.arrowPerEnd);
+    }
+
+    public void saveNote(ScoreNote oldNote)
+    {
+        ScoreNote note = new(
+            timestamp: oldNote.timestamp,
+            title: titleName.text == "" ? titleName.placeholder.GetComponent<TextMeshProUGUI>().text : titleName.text,
+            recordType: recordTypes[radio_recordType.selection],
+            distance: distances[radio_distance.selection],
+            targetType: targetTypes[radio_targetType.selection],
+            numOfRound: numOfRounds[radio_numOfRound.selection],
+            numOfEnd: numOfEnds[radio_numOfEnd.selection],
+            arrowPerEnd: arrowPerEnds[radio_arrowPerEnd.selection]
+        );
+
+        DataManager.instance.scoreNoteList[noteIndex] = note;
+        DataManager.instance.SaveScoreNoteToFile();
+        viewRecords.openNote(note);
     }
 
     public void createNote()

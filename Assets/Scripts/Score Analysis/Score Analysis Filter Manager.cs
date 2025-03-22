@@ -11,7 +11,7 @@ public class ScoreAnalysisFilterManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] RectTransform filterContainer;
     [SerializeField] RectTransform filterMask;
-    [SerializeField] float targetMaskHeight = 0;
+    float targetMaskHeight;
     [SerializeField] TextMeshProUGUI filterToggleBtnText;
     bool isFilterOpen = false;
 
@@ -38,6 +38,8 @@ public class ScoreAnalysisFilterManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         LayoutRebuilder.ForceRebuildLayoutImmediate(filterContainer);
+        
+        targetMaskHeight = filterMask.GetChild(0).GetComponent<RectTransform>().sizeDelta.y;
     }
 
     #region UI btns
