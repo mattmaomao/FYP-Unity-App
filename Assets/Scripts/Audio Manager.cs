@@ -20,6 +20,7 @@ public class AudioManager : MonoBehaviour
 
     [Tooltip("SE clips")]
     public AudioClip beepbeep;
+    public AudioClip SE_demo;
 
     public float PlaySE(AudioClip clip)
     {

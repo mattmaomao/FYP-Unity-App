@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +10,7 @@ public class SettingManager : MonoBehaviour
 
     [Header("Setting")]
     [SerializeField] Slider volumeSlider;
+    [SerializeField] TextMeshProUGUI volumeText;
     [SerializeField] List<Image> selectedThemeIndicators;
 
     [Header("FAQ")]
@@ -23,7 +23,7 @@ public class SettingManager : MonoBehaviour
     {
         // set volume
         volumeSlider.value = AudioManager.instance.AudioSource_SE.volume;
-        volumeSlider.onValueChanged.AddListener((float value) => AudioManager.instance.SetSEVolume(value));
+        volumeSlider.onValueChanged.AddListener(onVolumeChanged);
 
         // set theme
         int idx = PlayerPrefs.GetInt("Theme", 0);
@@ -37,6 +37,17 @@ public class SettingManager : MonoBehaviour
     }
 
     #region Setting
+    // volume change
+    void onVolumeChanged(float value)
+    {
+        AudioManager.instance.SetSEVolume(value);
+        volumeText.text = (value * 100).ToString("0") + "%";
+    }
+    public void playVolumeChangeSound()
+    {
+        AudioManager.instance.PlaySE(AudioManager.instance.SE_demo);
+    }
+
     // change theme color
     public void changeThemeColor(int idx)
     {

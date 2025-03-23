@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2740884227937893399
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1544036390798923056}
+  - component: {fileID: 6568205690335166193}
+  m_Layer: 0
+  m_Name: Navigation Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1544036390798923056
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740884227937893399}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6568205690335166193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2740884227937893399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50d00cb762e1274439af0ce404cc8333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  headerText: {fileID: 0}
+  headerBackBtn: {fileID: 0}
+  footer: {fileID: 0}
+  homeIcon: {fileID: 0}
+  userIcon: {fileID: 0}
+  settingIcon: {fileID: 0}
+  homeIconSprite: {fileID: 21300000, guid: aac64f9a8d6d98f41bcd2ba29e516063, type: 3}
+  userIconSprite: {fileID: 21300000, guid: d363a4749f6570748ad8ab85e5c12955, type: 3}
+  settingIconSprite: {fileID: 21300000, guid: 3c0845b823887284e958b457816da3be, type: 3}
+  homeIconSprite_filled: {fileID: 21300000, guid: 6638bc5b17eafb34ea2bd998bd5488d1, type: 3}
+  userIconSprite_filled: {fileID: 21300000, guid: 8fb9c414603e2744c9ac8e6410299e2a, type: 3}
+  settingIconSprite_filled: {fileID: 21300000, guid: 883175bfecdd2014883bb0efbb52eb28, type: 3}
+  inScoreNote: 0
+  viewRecords: {fileID: 0}
