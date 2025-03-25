@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class SettingManager : MonoBehaviour
 {
     [SerializeField] RectTransform pageLayout;
+    [SerializeField] RectTransform settingLayout;
 
     [Header("Setting")]
     [SerializeField] Slider volumeSlider;
@@ -23,6 +24,7 @@ public class SettingManager : MonoBehaviour
     {
         // set volume
         volumeSlider.value = AudioManager.instance.AudioSource_SE.volume;
+        volumeText.text = (volumeSlider.value * 100).ToString("0") + "%";
         volumeSlider.onValueChanged.AddListener(onVolumeChanged);
 
         // set theme
@@ -36,11 +38,25 @@ public class SettingManager : MonoBehaviour
             faqIsOpen.Add(false);
     }
 
+    void OnEnable()
+    {
+        StartCoroutine(rebuildLayout());
+    }
+
+    IEnumerator rebuildLayout()
+    {
+        yield return new WaitForEndOfFrame();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(settingLayout);
+        yield return new WaitForEndOfFrame();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(pageLayout);
+    }
+
     #region Setting
     // volume change
     void onVolumeChanged(float value)
     {
         AudioManager.instance.SetSEVolume(value);
+        PlayerPrefs.SetFloat("Volume", value);
         volumeText.text = (value * 100).ToString("0") + "%";
     }
     public void playVolumeChangeSound()

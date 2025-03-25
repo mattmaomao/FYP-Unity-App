@@ -22,6 +22,12 @@ public class AudioManager : MonoBehaviour
     public AudioClip beepbeep;
     public AudioClip SE_demo;
 
+    void Start()
+    {
+        float vol = PlayerPrefs.GetFloat("Volume", 1);
+        AudioSource_SE.volume = vol;
+    }
+
     public float PlaySE(AudioClip clip)
     {
         if (AudioSource_SE.isPlaying)

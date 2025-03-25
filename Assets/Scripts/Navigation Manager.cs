@@ -78,6 +78,10 @@ public class NavigationManager : MonoBehaviour
     {
         // todo
         // make animation
+
+        // sound effect
+        AudioManager.instance.PlaySE(AudioManager.instance.SE_demo);
+
         foreach (GameObject page in pages)
             page.SetActive(false);
 
