@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class ScoreNotesManager : MonoBehaviour
 {
+    [SerializeField] ViewRecords viewRecords;
     [Header("Regions")]
     [SerializeField] GameObject targetRegion;
     [SerializeField] GameObject gridRegion;
@@ -211,6 +212,11 @@ public class ScoreNotesManager : MonoBehaviour
     }
 
     #region UI btns
+    // edit score note
+    public void editNote() {
+        viewRecords.editNote();
+    }
+
     // remove previous input
     public void removelastInput()
     {

@@ -17,7 +17,7 @@ public class ViewRecords : MonoBehaviour
     [SerializeField] RectTransform sortRect;
     [SerializeField] RectTransform filterRect;
     [SerializeField] RectTransform scrollRect;
-    
+
     [Header("sub pages")]
     [SerializeField] GameObject createScoreNote;
     [SerializeField] GameObject scoreNote;
@@ -43,6 +43,8 @@ public class ViewRecords : MonoBehaviour
     bool isScoreAsc = false;
     bool isTimeAsc = false;
 
+    int currentNoteIdx = -1;
+
     void Update()
     {
         scrollRect.sizeDelta = new Vector2(scrollRect.sizeDelta.x, pageRect.rect.height - 160 - sortRect.rect.height - filterRect.rect.height - 64);
@@ -57,6 +59,11 @@ public class ViewRecords : MonoBehaviour
             sortByTime();
         if (isTimeAsc)
             sortByTime();
+
+        foreach (var i in currentScoreNoteList) {
+            Debug.Log($"{i.title}, {i.timestamp}, {i.recordType}, {i.distance}");
+        }
+
 
         // display all saved records
         recordsDisplay.SetActive(true);
@@ -104,12 +111,15 @@ public class ViewRecords : MonoBehaviour
         // spawn object for each record
         for (int i = 0; i < scoreNoteList.Count; i++)
         {
-            int bruh = i;
+            int temp = i;
             GameObject record = Instantiate(recordPrefab, recordContainer);
             recordList.Add(record);
             record.GetComponent<RecordDisplay>().init(scoreNoteList[i]);
             // add button to open corresponding record
-            record.GetComponent<Button>().onClick.AddListener(() => openNote(scoreNoteList[bruh]));
+            record.GetComponent<Button>().onClick.AddListener(() => { 
+                openNote(scoreNoteList[temp]); 
+                currentNoteIdx = temp;
+            });
         }
     }
 
@@ -172,13 +182,14 @@ public class ViewRecords : MonoBehaviour
 
         sortArrow_byScore.GetComponent<Image>().sprite = isScoreAsc ? sprite_asc : sprite_dec;
     }
-    
+
     #endregion
 
     #region filter
 
     // filter btn
-    public void loadDataFilter() {
+    public void loadDataFilter()
+    {
         FilterData filterData = filterManager.loadDataFilter();
         DateTime dateFrom = filterData.dateFrom;
         DateTime dateTo = filterData.dateTo;
@@ -208,7 +219,7 @@ public class ViewRecords : MonoBehaviour
             popUpPanel.SetActive(true);
         }
     }
-    
+
     public void closePopUp()
     {
         popUpPanel.SetActive(false);
@@ -217,6 +228,15 @@ public class ViewRecords : MonoBehaviour
 
 
     #endregion
+
+    // called when edit old note
+    public void editNote()
+    {
+        ScoreNote i = currentScoreNoteList[currentNoteIdx];
+        Debug.Log($"{i.title}, {i.timestamp}, {i.recordType}, {i.distance}");
+        createScoreNote.GetComponent<CreateScoreNote>().loadOldNote(currentScoreNoteList[currentNoteIdx]);
+        createScoreNote.SetActive(true);
+    }
 
     // called when create new note
     public void createNote()

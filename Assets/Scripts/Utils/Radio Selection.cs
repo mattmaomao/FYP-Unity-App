@@ -10,32 +10,12 @@ public class RadioSelection : MonoBehaviour
     [SerializeField] int defaultSelection;
     public int selection;
 
-    void Start()
-    {
-        init();
-    }
-
     public void init()
     {
         for (int i = 0; i < radioContainer.childCount; i++)
             radioBtns.Add(radioContainer.GetChild(i).gameObject);
 
-        // // add listeners to btns
-        // for (int i = 0; i < radioBtns.Count; i++)
-        // {
-        //     Button btn = radioBtns[i].GetComponent<Button>();
-        //     // btn.onClick.AddListener(() => { selectRadio(bruh); });
-        // }
-
         selectRadio(defaultSelection);
-    }
-
-    public void initSelection(int idx = -1)
-    {
-        if (idx == -1)
-            selectRadio(defaultSelection);
-        else
-            selectRadio(idx);
     }
 
     public void selectRadio(int idx)

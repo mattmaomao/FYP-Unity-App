@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum RecordType { Competition, Practice, Other }
+public enum RecordType { Practice, Competition, Other }
 public enum TargetType { Ring6, Ring10 }
 
 public struct ArrowRecord
