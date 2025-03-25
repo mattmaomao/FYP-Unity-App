@@ -145,6 +145,6 @@ public class CreateScoreNote : MonoBehaviour
 
     public void cancel()
     {
-        gameObject.SetActive(false);
+        viewRecords.closeNote();
     }
 }

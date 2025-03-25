@@ -236,6 +236,7 @@ public class ViewRecords : MonoBehaviour
         Debug.Log($"{i.title}, {i.timestamp}, {i.recordType}, {i.distance}");
         createScoreNote.GetComponent<CreateScoreNote>().loadOldNote(currentScoreNoteList[currentNoteIdx]);
         createScoreNote.SetActive(true);
+        NavigationManager.instance.inScoreNote = true;
     }
 
     // called when create new note
@@ -243,6 +244,7 @@ public class ViewRecords : MonoBehaviour
     {
         createScoreNote.GetComponent<CreateScoreNote>().init();
         createScoreNote.SetActive(true);
+        NavigationManager.instance.inScoreNote = true;
     }
 
     public void openNote(ScoreNote note)
@@ -257,6 +259,7 @@ public class ViewRecords : MonoBehaviour
     public void closeNote()
     {
         scoreNote.SetActive(false);
+        createScoreNote.SetActive(false);
         recordsDisplay.SetActive(true);
         NavigationManager.instance.inScoreNote = false;
 
