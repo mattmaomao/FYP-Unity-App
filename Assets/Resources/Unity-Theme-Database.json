@@ -98,7 +98,7 @@
             "colors": [
                 {
                     "guid": "5724eb04-f3f3-4ee0-8731-3d24fe27d70a",
-                    "colorHex": "#FF0000FF"
+                    "colorHex": "#FF6745FF"
                 },
                 {
                     "guid": "b9fffdae-2d06-4766-8e72-1c11b80f4a02",
@@ -134,7 +134,7 @@
                 },
                 {
                     "guid": "bf780c05-76fe-4bfd-a331-5a6c5c8be729",
-                    "colorHex": "#FFFFFFFF"
+                    "colorHex": "#FFB4A3FF"
                 }
             ]
         },
@@ -181,7 +181,7 @@
                 },
                 {
                     "guid": "bf780c05-76fe-4bfd-a331-5a6c5c8be729",
-                    "colorHex": "#FFE596FF"
+                    "colorHex": "#A3E1FFFF"
                 }
             ]
         }
