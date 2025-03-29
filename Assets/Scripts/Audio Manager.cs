@@ -18,9 +18,22 @@ public class AudioManager : MonoBehaviour
 
     public AudioSource AudioSource_SE;
 
-    [Tooltip("SE clips")]
+    [Header("SE clips")]
     public AudioClip beepbeep;
     public AudioClip SE_demo;
+
+    [Header("Status clips")]
+    public AudioClip Idle_voice;
+    public AudioClip Draw_voice;
+    public AudioClip Aim_voice;
+    public AudioClip Release_voice;
+    
+    public AudioClip Perfect_voice;
+    public AudioClip Excellent_voice;
+    public AudioClip VeryGood_voice;
+    public AudioClip Good_voice;
+    public AudioClip Fair_voice;
+    public AudioClip Poor_voice;
 
     void Start()
     {

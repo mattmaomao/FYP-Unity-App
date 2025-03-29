@@ -193,8 +193,10 @@ public class PoseIdentifier : MonoBehaviour
                 }
                 break;
             case Pose.Draw_Ready:
-                if (pushArm_Up && pushArm_Straight && pullArm_Up)
+                if (pushArm_Up && pushArm_Straight && pullArm_Up) {
                     currentPose = Pose.Draw;
+                    AudioManager.instance.PlaySE(AudioManager.instance.Draw_voice);
+                }
                 break;
             case Pose.Draw:
                 if (pushArm_Up && pushArm_Straight && pullArm_Up && pullArm_BetweenShoulder && pullArm_Bend)
@@ -203,6 +205,7 @@ public class PoseIdentifier : MonoBehaviour
                     if (aimfluctuate < aimTolerance)
                     {
                         currentPose = Pose.Aim;
+                        AudioManager.instance.PlaySE(AudioManager.instance.Aim_voice);
                         positionHistory?.Clear();
                     }
                 }
@@ -210,19 +213,23 @@ public class PoseIdentifier : MonoBehaviour
                 {
                     Debug.Log("break from aim: " + !pushArm_Up + ", " + !pushArm_Straight + ", " + !pullArm_Up);
                     currentPose = Pose.Idle;
+                    AudioManager.instance.PlaySE(AudioManager.instance.Idle_voice);
                 }
                 break;
             case Pose.Aim:
                 if (pushArm_Up && pushArm_Straight && pullArm_Up && pullArm_Bend)
                 {
                     // check if wrist is stable
-                    if (aimfluctuate > aimTolerance)
+                    if (aimfluctuate > aimTolerance) {
                         currentPose = Pose.Release;
+                        AudioManager.instance.PlaySE(AudioManager.instance.Release_voice);
+                    }
                 }
                 else
                 {
                     Debug.Log("break from aim: " + pushArm_Up + ", " + pushArm_Straight + ", " + pullArm_Up + ", " + pullArm_Bend);
                     currentPose = Pose.Idle;
+                    AudioManager.instance.PlaySE(AudioManager.instance.Idle_voice);
                 }
                 break;
             case Pose.Release:
@@ -230,6 +237,7 @@ public class PoseIdentifier : MonoBehaviour
                 {
                     Debug.Log("break from release: " + !pushArm_Up + ", " + !pushArm_Straight + ", " + !pullArm_Up + ", " + !pullArm_Bend);
                     currentPose = Pose.Idle;
+                    AudioManager.instance.PlaySE(AudioManager.instance.Idle_voice);
                 }
                 break;
             default:

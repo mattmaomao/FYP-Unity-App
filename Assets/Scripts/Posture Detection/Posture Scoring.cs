@@ -105,6 +105,7 @@ public class PosetureScoring : MonoBehaviour
     bool showingDetail = false;
     int scorePage = 0;
     [SerializeField] List<TextMeshProUGUI> detailedScoreTexts;
+    string currentGrade = "";
 
     [Header("UI_Line")]
     // line
@@ -650,6 +651,30 @@ public class PosetureScoring : MonoBehaviour
         overallRank = newScore[6];
 
         showSimpleScore();
+        // play se
+        currentGrade = scoreToRank(overallRank);
+        switch (currentGrade) {
+            case "<b><color=yellow>Perfect</color></b>":
+                AudioManager.instance.PlaySE(AudioManager.instance.Perfect_voice);
+                break;
+            case "<b><color=red>Excellent</color></b>":
+                AudioManager.instance.PlaySE(AudioManager.instance.Excellent_voice);
+                break;
+            case "<b><color=blue>Very Good</color></b>":
+                AudioManager.instance.PlaySE(AudioManager.instance.VeryGood_voice);
+                break;
+            case "<b><color=black>Good</color></b>":
+                AudioManager.instance.PlaySE(AudioManager.instance.Good_voice);
+                break;
+            case "<b><color=white>Fair</color></b>":
+                AudioManager.instance.PlaySE(AudioManager.instance.Fair_voice);
+                break;
+            case "<b><color=green>Poor</color></b>":
+                AudioManager.instance.PlaySE(AudioManager.instance.Poor_voice);
+                break;
+            default:
+                break;
+        }
     }
     void drawLine()
     {

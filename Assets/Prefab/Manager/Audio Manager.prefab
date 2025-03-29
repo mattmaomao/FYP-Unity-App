@@ -47,3 +47,13 @@ MonoBehaviour:
   AudioSource_SE: {fileID: 0}
   beepbeep: {fileID: 8300000, guid: 5f20be73b77a07b488be5ed0c394416d, type: 3}
   SE_demo: {fileID: 8300000, guid: d25e36ae381980c4693c95593a38ae20, type: 3}
+  Idle_voice: {fileID: 8300000, guid: 4fafc3a3dc4e2304aac21c041fa7e8cb, type: 3}
+  Draw_voice: {fileID: 8300000, guid: 2045717bb73441f43b70d5c93c2bfa82, type: 3}
+  Aim_voice: {fileID: 8300000, guid: d8cb0be2b19664141a231cf74bb528b1, type: 3}
+  Release_voice: {fileID: 8300000, guid: 3214f179d72a97349ad987e4c87eb99c, type: 3}
+  Perfect_voice: {fileID: 8300000, guid: 43b13f1bbf4e40243a68201ef4084fd6, type: 3}
+  Excellent_voice: {fileID: 8300000, guid: e6666488a46c3b84690750c34520e2e9, type: 3}
+  VeryGood_voice: {fileID: 8300000, guid: 9812e539051032841a79775e8b2b4659, type: 3}
+  Good_voice: {fileID: 8300000, guid: c7026b6b576d4bd42b6db67a417ce0cc, type: 3}
+  Fair_voice: {fileID: 8300000, guid: 0d71d59d69dbac74ba6707bee84af6e7, type: 3}
+  Poor_voice: {fileID: 8300000, guid: a245353c42bc9af42a522275e7c2c951, type: 3}
