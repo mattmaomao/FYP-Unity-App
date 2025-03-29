@@ -30,7 +30,7 @@ public class LegButton : MonoBehaviour
         headButton.gameObject.SetActive(false);
         legImage.gameObject.SetActive(true);
         guide.gameObject.SetActive(false);
-        explainGuide.text = "Feet parallel to the shooting line, positioned at approximately shoulder width apart, with a little more weight on the front of the feet";
+        explainGuide.text = "Feet parallel to the shooting line, positioned at approximately shoulder width apart, with a little more weight on the front of the feet.";
         explainGuide.gameObject.SetActive(true);
         
     }

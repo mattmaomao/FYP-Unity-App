@@ -8,6 +8,7 @@ using UnityEngine.Video;
 public class NextButton : MonoBehaviour
 {
     public Button next;
+    public TextMeshProUGUI nextBtnText;
     public TextMeshProUGUI welcomePrompt;
     public TextMeshProUGUI guide;
     public TextMeshProUGUI explainGuide;
@@ -40,6 +41,7 @@ public class NextButton : MonoBehaviour
             legButton.gameObject.SetActive(true);
             handButton.gameObject.SetActive(true);
             headButton.gameObject.SetActive(true);
+            nextBtnText.text = "Next";
         }
         else if (guide.IsActive())
         {
@@ -49,8 +51,9 @@ public class NextButton : MonoBehaviour
             legButton.gameObject.SetActive(false);
             handButton.gameObject.SetActive(false);
             headButton.gameObject.SetActive(false);
-            explainGuide.text = "Pre-draw: Raise both hands towards eye-level.\n Draw: Draw the bow until right hand reaches the chin while keep the left hand straight.\n Aim: Move the sight until it aligns with the target.\n Release: Gently relax right hand fingers to let the string slide through";
+            explainGuide.text = "Pre-draw: Raise both hands towards eye-level.\n\nDraw: Draw the bow until right hand reaches the chin while keep the left hand straight.\n\nAim: Move the sight until it aligns with the target.\n\nRelease: Gently relax right hand fingers to let the string slide through.";
             explainGuide.gameObject.SetActive(true);
+            nextBtnText.text = "Next";
         } else if (fullBodyPlayer.isActiveAndEnabled)
         {
             fullBodyPlayer.gameObject.SetActive(false);
@@ -60,6 +63,7 @@ public class NextButton : MonoBehaviour
             headButton.gameObject.SetActive(true);
             explainGuide.gameObject.SetActive(false);
             guide.gameObject.SetActive(true);
+            nextBtnText.text = "Back";
         } else if (explainGuide.IsActive())
         {
             explainGuide.gameObject.SetActive(false);
@@ -74,7 +78,7 @@ public class NextButton : MonoBehaviour
             handButton.gameObject.SetActive(true);
             headButton.gameObject.SetActive(true);
             guide.gameObject.SetActive(true);
-
+            nextBtnText.text = "Back";
         }
     }
 
