@@ -73,13 +73,14 @@ public class PosetureScoring : MonoBehaviour
 
     #region rank calculation
     // rank
-    float overallRank;
-    float frontWristRank;
-    float backWristRank;
-    float frontElbowAngleRank;
-    float backElbowAngleRank;
-    float frontShoulderAngleRank;
-    float backShoulderAngleRank;
+    List<float> newScore = new();
+    float overallScore;
+    float frontWristScore;
+    float backWristScore;
+    float frontElbowAngleScore;
+    float backElbowAngleScore;
+    float frontShoulderAngleScore;
+    float backShoulderAngleScore;
     ArcherLvl archerLvl;
 
     #endregion
@@ -583,32 +584,32 @@ public class PosetureScoring : MonoBehaviour
         // fluctuate
         string temp = "";
         int c = 0;
-        if (frontWristRank > 70)
+        if (frontWristScore > 70)
         {
             temp += "front wrist, ";
             c++;
         }
-        if (backWristRank > 70)
+        if (backWristScore > 70)
         {
             temp += "back wrist, ";
             c++;
         }
-        if (frontElbowAngleRank > 70)
+        if (frontElbowAngleScore > 70)
         {
             temp += "front elbow, ";
             c++;
         }
-        if (backElbowAngleRank > 70)
+        if (backElbowAngleScore > 70)
         {
             temp += "back elbow, ";
             c++;
         }
-        if (frontShoulderAngleRank > 70)
+        if (frontShoulderAngleScore > 70)
         {
             temp += "front shoulder, ";
             c++;
         }
-        if (backShoulderAngleRank > 70)
+        if (backShoulderAngleScore > 70)
         {
             temp += "back shoulder, ";
             c++;
@@ -631,28 +632,29 @@ public class PosetureScoring : MonoBehaviour
         changePage(0);
 
         // calculate rank
-        List<float> newScore = PostureScoreUtils.instance.adjustedScore(
-                new List<float> { 
+        newScore.Clear();
+        newScore = PostureScoreUtils.instance.adjustedScore(
+                new List<float> {
+                    0,
                     frontWristFluctuate, 
                     backWristFluctuate, 
                     frontElbowAngleFluctuate, 
                     backElbowAngleFluctuate, 
                     frontShoulderAngleFluctuate, 
-                    backShoulderAngleFluctuate, 
-                    0 }, 
+                    backShoulderAngleFluctuate}, 
                 (int) archerLvl);
 
-        frontWristRank = newScore[0];
-        backWristRank = newScore[1];
-        frontElbowAngleRank = newScore[2];
-        backElbowAngleRank = newScore[3];
-        frontShoulderAngleRank = newScore[4];
-        backShoulderAngleRank = newScore[5];
-        overallRank = newScore[6];
+        frontWristScore = newScore[0];
+        backWristScore = newScore[1];
+        frontElbowAngleScore = newScore[2];
+        backElbowAngleScore = newScore[3];
+        frontShoulderAngleScore = newScore[4];
+        backShoulderAngleScore = newScore[5];
+        overallScore = newScore[6];
 
         showSimpleScore();
         // play se
-        currentGrade = scoreToRank(overallRank);
+        currentGrade = scoreToRank(overallScore);
         switch (currentGrade) {
             case "<b><color=yellow>Perfect</color></b>":
                 AudioManager.instance.PlaySE(AudioManager.instance.Perfect_voice);
@@ -721,22 +723,22 @@ public class PosetureScoring : MonoBehaviour
         showingDetail = false;
 
         // display text
-        scoreDisplayText.text = scoreToRank(overallRank);
+        scoreDisplayText.text = scoreToRank(overallScore);
     }
     void showDetailScore()
     {
         showingDetail = true;
 
         // display text
-        detailedScoreTexts[0].text = scoreToRank(overallRank);
+        detailedScoreTexts[0].text = scoreToRank(overallScore);
 
-        detailedScoreTexts[1].text = scoreToRank(frontWristRank);
-        detailedScoreTexts[2].text = scoreToRank(frontElbowAngleRank);
-        detailedScoreTexts[3].text = scoreToRank(frontShoulderAngleRank);
+        detailedScoreTexts[1].text = scoreToRank(frontWristScore);
+        detailedScoreTexts[2].text = scoreToRank(frontElbowAngleScore);
+        detailedScoreTexts[3].text = scoreToRank(frontShoulderAngleScore);
 
-        detailedScoreTexts[4].text = scoreToRank(backWristRank);
-        detailedScoreTexts[5].text = scoreToRank(backElbowAngleRank);
-        detailedScoreTexts[6].text = scoreToRank(backShoulderAngleRank);
+        detailedScoreTexts[4].text = scoreToRank(backWristScore);
+        detailedScoreTexts[5].text = scoreToRank(backElbowAngleScore);
+        detailedScoreTexts[6].text = scoreToRank(backShoulderAngleScore);
     }
     string scoreToRank(float score)
     {
@@ -893,6 +895,9 @@ public class PosetureScoring : MonoBehaviour
             backShoulderAngleFluctuate = this.backShoulderAngleFluctuate,
             backShoulderAngleStart = this.backShoulderAngleStart,
             backShoulderAngleEnd = this.backShoulderAngleEnd,
+
+            // calculated score
+            scores = newScore,
 
             // stop record continuous data
             // frontWristPts = this.frontWristPts,

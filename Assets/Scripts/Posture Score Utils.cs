@@ -38,10 +38,10 @@ public class PostureScoreUtils : MonoBehaviour
     float maxBackShoulderAngleFluctuate = 5f;
 
     float[] rankMultiplier = { 1.5f, 1f, 0.75f, 0.5f };
-    public float absoulteScore_Beginner => (rankMultiplier[0] - rankMultiplier[0]) / rankMultiplier[0] * 100;
-    public float absoulteScore_Elementary => (rankMultiplier[0] - rankMultiplier[1]) / rankMultiplier[0] * 100;
-    public float absoulteScore_Intermidate => (rankMultiplier[0] - rankMultiplier[2]) / rankMultiplier[0] * 100;
-    public float absoulteScore_Advanced => (rankMultiplier[0] - rankMultiplier[3]) / rankMultiplier[0] * 100;
+    public float absoulteScore_Beginner => (rankMultiplier[0] - rankMultiplier[0]) / rankMultiplier[0] * 100;   // 0
+    public float absoulteScore_Elementary => (rankMultiplier[0] - rankMultiplier[1]) / rankMultiplier[0] * 100; // 33.3
+    public float absoulteScore_Intermidate => (rankMultiplier[0] - rankMultiplier[2]) / rankMultiplier[0] * 100;// 50
+    public float absoulteScore_Advanced => (rankMultiplier[0] - rankMultiplier[3]) / rankMultiplier[0] * 100;   // 66.7
 
     // cal score with level adjustment
     /* no adjust => get the score from the max range (lowest level)
@@ -50,30 +50,30 @@ public class PostureScoreUtils : MonoBehaviour
     {
         float offset = rankMultiplier[archerLvl];
 
-        scores[0] = (scores[0] - minFrontWristFluctuate) /
+        scores[1] = (scores[1] - minFrontWristFluctuate) /
                         (maxFrontWristFluctuate * offset - minFrontWristFluctuate) * 100;
 
-        scores[1] = (scores[1] - minBackWristFluctuate) /
+        scores[2] = (scores[2] - minBackWristFluctuate) /
                         (maxBackWristFluctuate * offset - minBackWristFluctuate) * 100;
 
-        scores[2] = (scores[2] - minFrontElbowAngleFluctuate) /
+        scores[3] = (scores[3] - minFrontElbowAngleFluctuate) /
                         (maxFrontElbowAngleFluctuate * offset - minFrontElbowAngleFluctuate) * 100;
 
-        scores[3] = (scores[3] - minBackElbowAngleFluctuate) /
+        scores[4] = (scores[4] - minBackElbowAngleFluctuate) /
                         (maxBackElbowAngleFluctuate * offset - minBackElbowAngleFluctuate) * 100;
 
-        scores[4] = (scores[4] - minFrontShoulderAngleFluctuate) /
+        scores[5] = (scores[5] - minFrontShoulderAngleFluctuate) /
                         (maxFrontShoulderAngleFluctuate * offset - minFrontShoulderAngleFluctuate) * 100;
 
-        scores[5] = (scores[5] - minBackShoulderAngleFluctuate) /
+        scores[6] = (scores[6] - minBackShoulderAngleFluctuate) /
                         (maxBackShoulderAngleFluctuate * offset - minBackShoulderAngleFluctuate) * 100;
 
-        scores[6] = (scores[0] * 2 +
-                     scores[1] +
-                     scores[2] * 2 +
-                     scores[3] +
-                     scores[4] * 2 +
-                     scores[5]) / 9;
+        scores[0] = (scores[1] * 2 +
+                     scores[2] +
+                     scores[3] * 2 +
+                     scores[4] +
+                     scores[5] * 2 +
+                     scores[6]) / 9;
 
         return scores;
     }

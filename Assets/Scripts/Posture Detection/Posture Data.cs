@@ -34,6 +34,9 @@ public class PostureData
     public float backShoulderAngleStart;
     public float backShoulderAngleEnd;
 
+    // calculated score
+    public List<float> scores = new();
+
     public List<TimedPos> frontWristPts = new();
     public List<TimedPos> backWristPts = new();
 }

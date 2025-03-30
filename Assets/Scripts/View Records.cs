@@ -60,11 +60,6 @@ public class ViewRecords : MonoBehaviour
         if (isTimeAsc)
             sortByTime();
 
-        foreach (var i in currentScoreNoteList) {
-            Debug.Log($"{i.title}, {i.timestamp}, {i.recordType}, {i.distance}");
-        }
-
-
         // display all saved records
         recordsDisplay.SetActive(true);
         createScoreNote.SetActive(false);
@@ -84,11 +79,11 @@ public class ViewRecords : MonoBehaviour
                 break;
             case 1:
                 currentSort = -1;
-                sortByTime();
+                sortByScore();
                 break;
             case 2:
                 currentSort = -1;
-                sortByScore();
+                sortByTime();
                 break;
             default:
                 break;
@@ -116,8 +111,9 @@ public class ViewRecords : MonoBehaviour
             recordList.Add(record);
             record.GetComponent<RecordDisplay>().init(scoreNoteList[i]);
             // add button to open corresponding record
-            record.GetComponent<Button>().onClick.AddListener(() => { 
-                openNote(scoreNoteList[temp]); 
+            record.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                openNote(scoreNoteList[temp]);
                 currentNoteIdx = temp;
             });
         }
@@ -142,37 +138,16 @@ public class ViewRecords : MonoBehaviour
         showRecords(currentScoreNoteList);
         sortArrow_byName.GetComponent<Image>().sprite = isNameAsc ? sprite_asc : sprite_dec;
     }
-
-    public void sortByTime()
-    {
-        sortBtn_byName.GetComponent<Image>().color = Color.white;
-        sortBtn_byTime.GetComponent<Image>().color = Theme.Instance.GetColorByName("Primary Pale").Color;
-        sortBtn_byScore.GetComponent<Image>().color = Color.white;
-
-        if (currentSort == 1)
-            isTimeAsc = !isTimeAsc;
-        else
-            currentSort = 1;
-
-        currentScoreNoteList = currentScoreNoteList.OrderBy(note => note.timestamp).ToList();
-        if (!isTimeAsc)
-            currentScoreNoteList.Reverse();
-
-        showRecords(currentScoreNoteList);
-
-        sortArrow_byTime.GetComponent<Image>().sprite = isTimeAsc ? sprite_asc : sprite_dec;
-    }
-
     public void sortByScore()
     {
         sortBtn_byName.GetComponent<Image>().color = Color.white;
         sortBtn_byTime.GetComponent<Image>().color = Color.white;
         sortBtn_byScore.GetComponent<Image>().color = Theme.Instance.GetColorByName("Primary Pale").Color;
 
-        if (currentSort == 2)
+        if (currentSort == 1)
             isScoreAsc = !isScoreAsc;
         else
-            currentSort = 2;
+            currentSort = 1;
 
         currentScoreNoteList = currentScoreNoteList.OrderBy(note => note.getScore()).ToList();
         if (!isScoreAsc)
@@ -181,6 +156,32 @@ public class ViewRecords : MonoBehaviour
         showRecords(currentScoreNoteList);
 
         sortArrow_byScore.GetComponent<Image>().sprite = isScoreAsc ? sprite_asc : sprite_dec;
+    }
+
+    public void sortByTime()
+    {
+        sortBtn_byName.GetComponent<Image>().color = Color.white;
+        sortBtn_byTime.GetComponent<Image>().color = Theme.Instance.GetColorByName("Primary Pale").Color;
+        sortBtn_byScore.GetComponent<Image>().color = Color.white;
+
+        if (currentSort == 2)
+            isTimeAsc = !isTimeAsc;
+        else
+            currentSort = 2;
+
+        currentScoreNoteList = currentScoreNoteList.OrderBy(note => note.timestamp).ToList();
+        string s = "";
+        foreach (ScoreNote note in currentScoreNoteList)
+            s += note.timestamp.ToString("MM-dd HH") + ", ";
+        Debug.Log(s);
+        if (!isTimeAsc) {
+            currentScoreNoteList.Reverse();
+            Debug.Log("reversed");
+        }
+
+        showRecords(currentScoreNoteList);
+
+        sortArrow_byTime.GetComponent<Image>().sprite = isTimeAsc ? sprite_asc : sprite_dec;
     }
 
     #endregion
@@ -197,7 +198,6 @@ public class ViewRecords : MonoBehaviour
         int distance = filterData.distance;
 
         int[] distanceChoice = { 18, 30, 50, 70, 90 };
-        Debug.Log($"dateFrom: {dateFrom}, dateTo: {dateTo}, recordType: {recordType}, distance: {distance}");
 
         // filter data
         currentScoreNoteList = DataManager.instance.scoreNoteList.FindAll(d => d.timestamp >= dateFrom && d.timestamp <= dateTo);
@@ -233,7 +233,6 @@ public class ViewRecords : MonoBehaviour
     public void editNote()
     {
         ScoreNote i = currentScoreNoteList[currentNoteIdx];
-        Debug.Log($"{i.title}, {i.timestamp}, {i.recordType}, {i.distance}");
         createScoreNote.GetComponent<CreateScoreNote>().loadOldNote(currentScoreNoteList[currentNoteIdx]);
         createScoreNote.SetActive(true);
         NavigationManager.instance.inScoreNote = true;
