@@ -84,6 +84,32 @@ public class InputHandler : MonoBehaviour
             case 4: { button4.text = handleName.text + "\n" + Info.text; break; }
             case 5: { button5.text = handleName.text + "\n" + Info.text; break; }
         }
+
+        LoadAllButtonName();
+    }
+
+    // delete data
+    public void DeleteBowData() 
+    {
+        string bowcontent = File.ReadAllText(Application.persistentDataPath + "/" + filename);
+        bow.Clear();
+        bow = new();
+        bow = JsonConvert.DeserializeObject<List<InputEntry>>(bowcontent);
+        int bowNum = bow.Count;
+        for (int i = 0; i < bowNum; i++)
+        {
+            if (bow[i].index == index)
+            {
+                bow.RemoveAt(i);
+                Debug.Log("Remove" + i);
+                break;
+            }
+        }
+        string content = JsonConvert.SerializeObject(bow, Formatting.Indented);
+        File.WriteAllText(Application.persistentDataPath + "/" + filename, content);
+        Debug.Log(Application.persistentDataPath + "/" + filename);
+
+        LoadAllButtonName();
     }
 
     public void ChangeIndex(int index)
@@ -174,6 +200,15 @@ public class InputHandler : MonoBehaviour
     // load all name to show all option when start
     void LoadAllButtonName()
     {
+        // disable all btn at start
+        button0.transform.parent.gameObject.SetActive(false);
+        button1.transform.parent.gameObject.SetActive(false);
+        button2.transform.parent.gameObject.SetActive(false);
+        button3.transform.parent.gameObject.SetActive(false);
+        button4.transform.parent.gameObject.SetActive(false);
+        button5.transform.parent.gameObject.SetActive(false);
+
+        // load all name from file
         if (File.Exists(Application.persistentDataPath + "/" + filename))
         {
             string content = File.ReadAllText(Application.persistentDataPath + "/" + filename);
@@ -230,11 +265,36 @@ public class InputHandler : MonoBehaviour
             // show add btn
             switch (bowNum)
             {
-                case 1: { button1.transform.parent.gameObject.SetActive(true); break; }
-                case 2: { button2.transform.parent.gameObject.SetActive(true); break; }
-                case 3: { button3.transform.parent.gameObject.SetActive(true); break; }
-                case 4: { button4.transform.parent.gameObject.SetActive(true); break; }
-                case 5: { button5.transform.parent.gameObject.SetActive(true); break; }
+                case 0: { 
+                    button0.transform.parent.gameObject.SetActive(true);
+                    button0.text = "+";
+                    break;
+                }
+                case 1: { 
+                    button1.transform.parent.gameObject.SetActive(true); 
+                    button1.text = "+";
+                break; 
+                }
+                case 2: { 
+                    button2.transform.parent.gameObject.SetActive(true); 
+                    button2.text = "+";
+                break; 
+                }
+                case 3: { 
+                    button3.transform.parent.gameObject.SetActive(true); 
+                    button3.text = "+";
+                break; 
+                }
+                case 4: { 
+                    button4.transform.parent.gameObject.SetActive(true); 
+                    button4.text = "+";
+                break; 
+                }
+                case 5: { 
+                    button5.transform.parent.gameObject.SetActive(true); 
+                    button5.text = "+";
+                break; 
+                }
                 default: { break; }
             }
             Debug.Log("Data loaded from file successfully. " + Application.persistentDataPath + "/" + filename);
