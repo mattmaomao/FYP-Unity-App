@@ -305,15 +305,4 @@ public class InputHandler : MonoBehaviour
             bow = new();
         }
     }
-
-    // debug
-    public void LoadTemplateBowData() {
-        string json = Resources.Load<TextAsset>("bow_data_template").text;
-        bow.Clear();
-        bow = new();
-        bow = JsonConvert.DeserializeObject<List<InputEntry>>(json);
-        // save date to file
-        string content = JsonConvert.SerializeObject(bow, Formatting.Indented);
-        File.WriteAllText(Application.persistentDataPath + "/" + filename, content);
-    }
 }
