@@ -171,7 +171,7 @@ public class InputHandler : MonoBehaviour
             bow = JsonConvert.DeserializeObject<List<InputEntry>>(content);
 
             int bowNum = bow.Count;
-            Debug.Log(bowNum);
+            // Debug.Log(bowNum);
             for (int i = 0; i < bowNum; i++)
             {
                 if (bow[i].index == index)
@@ -225,37 +225,37 @@ public class InputHandler : MonoBehaviour
                 {
                     case 0:
                         {
-                            button0.text = bow[i].handleName + "\n" + bow[i].Info;
+                            button0.text = $"<size=64><b><u>{bow[i].Info}</u></b></size>\n\n{bow[i].handleName}";
                             button0.transform.parent.gameObject.SetActive(true);
                             break;
                         }
                     case 1:
                         {
-                            button1.text = bow[i].handleName + "\n" + bow[i].Info;
+                            button1.text = $"<size=64><b><u>{bow[i].Info}</u></b></size>\n\n{bow[i].handleName}";
                             button1.transform.parent.gameObject.SetActive(true);
                             break;
                         }
                     case 2:
                         {
-                            button2.text = bow[i].handleName + "\n" + bow[i].Info;
+                            button2.text = $"<size=64><b><u>{bow[i].Info}</u></b></size>\n\n{bow[i].handleName}";
                             button2.transform.parent.gameObject.SetActive(true);
                             break;
                         }
                     case 3:
                         {
-                            button3.text = bow[i].handleName + "\n" + bow[i].Info;
+                            button3.text = $"<size=64><b><u>{bow[i].Info}</u></b></size>\n\n{bow[i].handleName}";
                             button3.transform.parent.gameObject.SetActive(true);
                             break;
                         }
                     case 4:
                         {
-                            button4.text = bow[i].handleName + "\n" + bow[i].Info;
+                            button4.text = $"<size=64><b><u>{bow[i].Info}</u></b></size>\n\n{bow[i].handleName}";
                             button4.transform.parent.gameObject.SetActive(true);
                             break;
                         }
                     case 5:
                         {
-                            button5.text = bow[i].handleName + "\n" + bow[i].Info;
+                            button5.text = $"<size=64><b><u>{bow[i].Info}</u></b></size>\n\n{bow[i].handleName}";
                             button5.transform.parent.gameObject.SetActive(true);
                             break;
                         }

@@ -578,6 +578,7 @@ GameObject:
   - component: {fileID: 785137403009405177}
   - component: {fileID: 5570457266565186002}
   - component: {fileID: 8226848304194477077}
+  - component: {fileID: 1005171149775937243}
   m_Layer: 5
   m_Name: User Icon
   m_TagString: Untagged
@@ -642,6 +643,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1005171149775937243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4197973928814022749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5162ee87061045ba821e0dfb969d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    colorGuid: 321780db-7eba-40cd-89f9-d6081eb79ecb
+    overrideAlpha: 0
+    alpha: 1
+  image: {fileID: 8226848304194477077}
 --- !u!1 &5070640079059233800
 GameObject:
   m_ObjectHideFlags: 0
@@ -959,6 +977,7 @@ GameObject:
   - component: {fileID: 8117523836616326081}
   - component: {fileID: 3968616050829986546}
   - component: {fileID: 5668834052916708014}
+  - component: {fileID: 9177558008700884666}
   m_Layer: 5
   m_Name: Setting Icon
   m_TagString: Untagged
@@ -1023,6 +1042,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &9177558008700884666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7098400858268884499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5162ee87061045ba821e0dfb969d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    colorGuid: 321780db-7eba-40cd-89f9-d6081eb79ecb
+    overrideAlpha: 0
+    alpha: 1
+  image: {fileID: 5668834052916708014}
 --- !u!1 &7158948039573328588
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,6 +1204,7 @@ GameObject:
   - component: {fileID: 4139682918901017301}
   - component: {fileID: 871221287131845726}
   - component: {fileID: 3300945096249284925}
+  - component: {fileID: 60512921831368970}
   m_Layer: 5
   m_Name: Home Icon
   m_TagString: Untagged
@@ -1232,6 +1269,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &60512921831368970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7650556964549403032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5162ee87061045ba821e0dfb969d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    colorGuid: 321780db-7eba-40cd-89f9-d6081eb79ecb
+    overrideAlpha: 0
+    alpha: 1
+  image: {fileID: 3300945096249284925}
 --- !u!1 &8594878897905862882
 GameObject:
   m_ObjectHideFlags: 0
