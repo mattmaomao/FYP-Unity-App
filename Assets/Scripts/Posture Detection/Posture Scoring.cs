@@ -644,13 +644,13 @@ public class PosetureScoring : MonoBehaviour
                     backShoulderAngleFluctuate}, 
                 (int) archerLvl);
 
-        frontWristScore = newScore[0];
-        backWristScore = newScore[1];
-        frontElbowAngleScore = newScore[2];
-        backElbowAngleScore = newScore[3];
-        frontShoulderAngleScore = newScore[4];
-        backShoulderAngleScore = newScore[5];
-        overallScore = newScore[6];
+        overallScore = newScore[0];
+        frontWristScore = newScore[1];
+        backWristScore = newScore[2];
+        frontElbowAngleScore = newScore[3];
+        backElbowAngleScore = newScore[4];
+        frontShoulderAngleScore = newScore[5];
+        backShoulderAngleScore = newScore[6];
 
         showSimpleScore();
         // play se

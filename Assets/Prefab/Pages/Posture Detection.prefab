@@ -622,10 +622,7 @@ MonoBehaviour:
   MLPC: {fileID: 192833725550155907}
   pointDisplay: {fileID: 2043195712923338288}
   connectionDisplay: {fileID: 5981045066530969666}
-  anslystWindow: {fileID: 3224549309558910259}
-  table: {fileID: 5518354648997084380}
-  rowList: []
-  rowPrefab: {fileID: 4678363645158769962, guid: 260c19320991e2a43b09297ce5721f3d, type: 3}
+  mode: -1
 --- !u!1 &244846939861098243
 GameObject:
   m_ObjectHideFlags: 0
@@ -3070,6 +3067,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31339935d5aeff145b019a935919e358, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PDM: {fileID: 9153465237834337059}
   postureDetection: {fileID: 209260547624895812}
   modes:
   - {fileID: 6354232907416386588}
@@ -13015,6 +13013,7 @@ GameObject:
   - component: {fileID: 5316771798057273739}
   - component: {fileID: 7649190647763156074}
   - component: {fileID: 9030028445754121655}
+  - component: {fileID: 8855094062835394640}
   m_Layer: 5
   m_Name: Setting btn
   m_TagString: Untagged
@@ -13063,7 +13062,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.8235294, b: 0.29411766, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -13136,6 +13135,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8855094062835394640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5991652181446186272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5162ee87061045ba821e0dfb969d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data:
+    colorGuid: 5724eb04-f3f3-4ee0-8731-3d24fe27d70a
+    overrideAlpha: 0
+    alpha: 1
+  image: {fileID: 7649190647763156074}
 --- !u!1 &6025103983680678134
 GameObject:
   m_ObjectHideFlags: 0
@@ -17367,7 +17383,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -16, y: -16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5973637165786670546
 CanvasRenderer:
@@ -17426,12 +17442,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
+  m_fontSize: 40.05
   m_fontSizeBase: 32
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 48
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
