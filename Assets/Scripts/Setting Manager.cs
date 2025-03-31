@@ -35,7 +35,7 @@ public class SettingManager : MonoBehaviour
 
 
         // init faq
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < faqMasks.Count; i++)
             faqIsOpen.Add(false);
     }
 
@@ -104,7 +104,7 @@ public class SettingManager : MonoBehaviour
     #endregion
 
     public void ToGame() {
-        SceneManager.LoadScene("Nmuber Board");
+        SceneManager.LoadScene("Number Board");
     }
 
 }
