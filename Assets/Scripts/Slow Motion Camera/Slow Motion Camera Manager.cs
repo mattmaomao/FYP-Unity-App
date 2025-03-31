@@ -79,6 +79,8 @@ public class SlowMotionCameraManager : MonoBehaviour
                 load.gameObject.SetActive(false);
                 resetLoadingTime();
                 recording = true;
+                capturedFrames.Clear();
+                timer = 0;
             }
         }
 
@@ -100,6 +102,7 @@ public class SlowMotionCameraManager : MonoBehaviour
                 recording = false;
                 remainSlider.gameObject.SetActive(false);
                 totalFrameCount = capturedFrames.Count;
+                waiter = 0;
             }
         }
 
@@ -184,6 +187,15 @@ public class SlowMotionCameraManager : MonoBehaviour
 
     public void resetLoadingTime() {
         readyTime = 4f;
+    }
+
+    public void resetStateValue() {
+        wait = false;
+        recording = false;
+        timer = 0;
+        totalFrameCount = 0;
+        capturedFrames.Clear();
+        waiter = 0;
     }
 
     public void playWebCam()

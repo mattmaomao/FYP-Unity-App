@@ -31,6 +31,7 @@ public class SlowMotionReset : MonoBehaviour
         slowMotionCameraManager.remainSlider.gameObject.SetActive(false);
         slowMotionCameraManager.delayDisplay.gameObject.SetActive(false);
         slowMotionCameraManager.resetLoadingTime();
+        slowMotionCameraManager.resetStateValue();
 
         Debug.Log("Slow Motion reset");
 
