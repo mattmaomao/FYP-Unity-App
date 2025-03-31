@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PostureModeSelector : MonoBehaviour
 {
+    [SerializeField] PostureDetectionManager PDM;
     [SerializeField] GameObject postureDetection;
     [SerializeField] GameObject[] modes;
 
@@ -19,6 +20,8 @@ public class PostureModeSelector : MonoBehaviour
     // disable all mode on enable
     void resetMode()
     {
+        PDM.mode = -1;
+
         postureDetection.SetActive(false);
         for (int i = 0; i < modes.Length; i++)
             modes[i].SetActive(false);
@@ -27,6 +30,7 @@ public class PostureModeSelector : MonoBehaviour
     // select btn
     public void SelectMode(int mode)
     {
+        PDM.mode = mode;
         postureDetection.SetActive(true);
         for (int i = 0; i < modes.Length; i++)
             if (i == mode)

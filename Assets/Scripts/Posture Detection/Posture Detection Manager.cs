@@ -86,20 +86,13 @@ public class PostureDetectionManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] GameObject pointDisplay;
     [SerializeField] GameObject connectionDisplay;
-
-    [Header("Debug")]
-    [SerializeField] GameObject anslystWindow;
-    [SerializeField] GameObject table;
-    [SerializeField] List<GameObject> rowList = new();
-    [SerializeField] GameObject rowPrefab;
-
+    public int mode = -1;
 
     void Start()
     {
-        generateTable();
-
         pointAnnotationsBuffer?.Clear();
         pointAnnotationsBuffer = new();
+        mode = -1;
     }
 
     // Update is called once per frame
@@ -118,7 +111,6 @@ public class PostureDetectionManager : MonoBehaviour
         else
         {
             updatePointList();
-            updateTable();
         }
     }
 
@@ -284,75 +276,4 @@ public class PostureDetectionManager : MonoBehaviour
         connectionDisplay.SetActive(false);
     }
     #endregion
-
-    #region debug
-    string[] detectValue = new string[] {
-        "L shoulder", "L Elbow", "L Wrist",
-        "R shoulder", "R Elbow", "R Wrist",
-        "L Hip", "L Knee", "L Ankle",
-        "R Hip", "R Knee", "R Ankle",
-    };
-    int[] detectIdx = new int[] {
-        (int)PosePtIdx.LeftShoulder,
-        (int)PosePtIdx.LeftElbow,
-        (int)PosePtIdx.LeftWrist,
-        (int)PosePtIdx.RightShoulder,
-        (int)PosePtIdx.RightElbow,
-        (int)PosePtIdx.RightWrist,
-        (int)PosePtIdx.LeftHip,
-        (int)PosePtIdx.LeftKnee,
-        (int)PosePtIdx.LeftAnkle,
-        (int)PosePtIdx.RightHip,
-        (int)PosePtIdx.RightKnee,
-        (int)PosePtIdx.RightAnkle
-    };
-
-    void updateTable()
-    {
-        // calculate detect value
-        for (int i = 0; i < detectIdx.Length; i++)
-            rowList[i].GetComponent<TableData>().readData(pointAnnotations[detectIdx[i]]);
-    }
-
-    void generateTable()
-    {
-        // clear table
-        foreach (GameObject row in rowList)
-            Destroy(row);
-        rowList?.Clear();
-
-        // generate table
-        for (int i = 0; i < detectValue.Length; i++)
-        {
-            GameObject row = Instantiate(rowPrefab, table.transform);
-            rowList.Add(row);
-            rowList[i].GetComponent<TableData>().nameText.text = detectValue[i];
-        }
-    }
-
-    public void toggleAnalyst()
-    {
-        anslystWindow.SetActive(!anslystWindow.activeSelf);
-    }
-    #endregion
-
-    // change input mode
-    // later
-    // [SerializeField] int setting = 3;
-    // [ContextMenu("Change Mode")]
-    // // public void changeMode(int idx) {
-    // public void changeMode() {
-    //     StartCoroutine(changeModeCoroutine());
-
-    // }
-
-    // IEnumerator changeModeCoroutine()
-    // {
-    //     myLandmarkerRunner.Stop();
-    //     yield return new WaitForSeconds(0.1f);
-    //     // myLandmarkerRunner.changeOptions(idx);
-    //     myLandmarkerRunner.changeOptions(setting);
-    //     yield return new WaitForSeconds(0.1f);
-    //     myLandmarkerRunner.Play();
-    // }
 }
