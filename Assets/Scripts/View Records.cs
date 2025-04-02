@@ -173,10 +173,8 @@ public class ViewRecords : MonoBehaviour
         string s = "";
         foreach (ScoreNote note in currentScoreNoteList)
             s += note.timestamp.ToString("MM-dd HH") + ", ";
-        Debug.Log(s);
         if (!isTimeAsc) {
             currentScoreNoteList.Reverse();
-            Debug.Log("reversed");
         }
 
         showRecords(currentScoreNoteList);
@@ -196,6 +194,7 @@ public class ViewRecords : MonoBehaviour
         DateTime dateTo = filterData.dateTo;
         int recordType = filterData.recordType;
         int distance = filterData.distance;
+        popUpText.text = "";
 
         int[] distanceChoice = { 18, 30, 50, 70, 90 };
 
@@ -208,9 +207,7 @@ public class ViewRecords : MonoBehaviour
         if (currentScoreNoteList.Count > 0)
             showRecords(currentScoreNoteList);
         else
-        {
             popUpText.text += "No score note found!\n";
-        }
 
         // show pop up
         if (popUpText.text != "")

@@ -9,6 +9,7 @@ using System.IO;
 
 public class InputHandler : MonoBehaviour
 {
+    [SerializeField] GameObject inputArea;
     public int index;
     public Slider LRH;
     public TMP_Dropdown handleBrand;
@@ -49,41 +50,32 @@ public class InputHandler : MonoBehaviour
         LoadAllButtonName();
     }
 
+    void OnDisable()
+    {
+        inputArea.SetActive(false);
+    }
+
     public void AddNameToList()
     {
         string bowcontent = File.ReadAllText(Application.persistentDataPath + "/" + filename);
         bow.Clear();
         bow = new();
         bow = JsonConvert.DeserializeObject<List<InputEntry>>(bowcontent);
-        int bowNum = bow.Count;
-        for (int i = 0; i < bowNum; i++)
-        {
-            if (bow[i].index == index)
-            {
-                bow.RemoveAt(i);
-                Debug.Log("Remove" + i);
-                break;
-            }
-        }
 
         if (LRH.value == 1)
         {
             RH = true;
         }
         else RH = false;
-        bow.Add(new InputEntry(index, RH, handleBrand.options[handleBrand.value].text, handleName.text, limbBrand.options[limbBrand.value].text, limbName.text, stringSize.options[stringSize.value].text, stringStrand.options[stringStrand.value].text, stringMaterial.text, servingSize.options[servingSize.value].text, servingBrand.options[servingBrand.value].text, servingMaterial.text, plungerBrand.options[plungerBrand.value].text, plungerName.text, sightBrand.options[sightBrand.value].text, sightName.text, Info.text));
+
+        if (index >= bow.Count)
+            bow.Add(new InputEntry(RH, handleBrand.options[handleBrand.value].text, handleName.text, limbBrand.options[limbBrand.value].text, limbName.text, stringSize.options[stringSize.value].text, stringStrand.options[stringStrand.value].text, stringMaterial.text, servingSize.options[servingSize.value].text, servingBrand.options[servingBrand.value].text, servingMaterial.text, plungerBrand.options[plungerBrand.value].text, plungerName.text, sightBrand.options[sightBrand.value].text, sightName.text, Info.text));
+        else
+            bow[index] = new InputEntry(RH, handleBrand.options[handleBrand.value].text, handleName.text, limbBrand.options[limbBrand.value].text, limbName.text, stringSize.options[stringSize.value].text, stringStrand.options[stringStrand.value].text, stringMaterial.text, servingSize.options[servingSize.value].text, servingBrand.options[servingBrand.value].text, servingMaterial.text, plungerBrand.options[plungerBrand.value].text, plungerName.text, sightBrand.options[sightBrand.value].text, sightName.text, Info.text);
+
         string content = JsonConvert.SerializeObject(bow, Formatting.Indented);
         File.WriteAllText(Application.persistentDataPath + "/" + filename, content);
         Debug.Log(Application.persistentDataPath + "/" + filename);
-        switch (index)
-        {
-            case 0: { button0.text = handleName.text + "\n" + Info.text; break; }
-            case 1: { button1.text = handleName.text + "\n" + Info.text; break; }
-            case 2: { button2.text = handleName.text + "\n" + Info.text; break; }
-            case 3: { button3.text = handleName.text + "\n" + Info.text; break; }
-            case 4: { button4.text = handleName.text + "\n" + Info.text; break; }
-            case 5: { button5.text = handleName.text + "\n" + Info.text; break; }
-        }
 
         LoadAllButtonName();
     }
@@ -95,16 +87,8 @@ public class InputHandler : MonoBehaviour
         bow.Clear();
         bow = new();
         bow = JsonConvert.DeserializeObject<List<InputEntry>>(bowcontent);
-        int bowNum = bow.Count;
-        for (int i = 0; i < bowNum; i++)
-        {
-            if (bow[i].index == index)
-            {
-                bow.RemoveAt(i);
-                Debug.Log("Remove" + i);
-                break;
-            }
-        }
+        bow.RemoveAt(index);
+
         string content = JsonConvert.SerializeObject(bow, Formatting.Indented);
         File.WriteAllText(Application.persistentDataPath + "/" + filename, content);
         Debug.Log(Application.persistentDataPath + "/" + filename);
@@ -170,22 +154,10 @@ public class InputHandler : MonoBehaviour
             bow = new();
             bow = JsonConvert.DeserializeObject<List<InputEntry>>(content);
 
-            int bowNum = bow.Count;
-            // Debug.Log(bowNum);
-            for (int i = 0; i < bowNum; i++)
-            {
-                if (bow[i].index == index)
-                {
-                    LoadBowData(bow[i]);
-                    break;
-                }
-                else
-                {
-                    ResetBowData();
-                }
-            }
-
-
+            if (index >= 0 && index < bow.Count)
+                LoadBowData(bow[index]);
+            else
+                ResetBowData();
 
             Debug.Log("Data loaded from file successfully. " + Application.persistentDataPath + "/" + filename);
         }
@@ -221,7 +193,7 @@ public class InputHandler : MonoBehaviour
 
             for (int i = 0; i < bowNum; i++)
             {
-                switch (bow[i].index)
+                switch (i)
                 {
                     case 0:
                         {

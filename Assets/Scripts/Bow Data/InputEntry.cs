@@ -5,7 +5,6 @@ using System;
 [Serializable]
 public class InputEntry
 {
-    public int index;
     public bool RH;
     public string handleBrand;
     public string handleName;
@@ -23,9 +22,8 @@ public class InputEntry
     public string sightName;
     public string Info;
 
-    public InputEntry (int index, bool RH, string handleBrand, string handleName, string limbBrand, string limbName, string stringSize, string stringStrand, string stringMaterial, string servingSize, string servingBrand, string servingMaterial, string plungerBrand, string plungerName, string sightBrand, string sightName, string Info)
+    public InputEntry (bool RH, string handleBrand, string handleName, string limbBrand, string limbName, string stringSize, string stringStrand, string stringMaterial, string servingSize, string servingBrand, string servingMaterial, string plungerBrand, string plungerName, string sightBrand, string sightName, string Info)
     {
-        this.index = index;
         this.RH = RH;
         this.handleBrand = handleBrand;
         this.handleName = handleName;
