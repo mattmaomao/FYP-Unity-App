@@ -29,6 +29,9 @@ public class ScoreAnalysis : MonoBehaviour
     [SerializeField] RectTransform scoreLineContainer;
     [SerializeField] GameObject scoreLineScrollContainer;
     [SerializeField] UILineRenderer scoreUILine;
+    [SerializeField] TextMeshProUGUI vertiMaxText;
+    [SerializeField] TextMeshProUGUI vertiMidText;
+    [SerializeField] TextMeshProUGUI vertiMinText;
     [SerializeField] List<GameObject> score_DateObjList = new();
 
     [Header("Grouping")]
@@ -122,7 +125,7 @@ public class ScoreAnalysis : MonoBehaviour
         for (int i = 0; i < scoreRawList.Count; i++)
         {
             // change value
-            scoreBars[i].changeValue(scorePercentageList[i].ToString("F2") + "%");
+            scoreBars[i].changeValue(scorePercentageList[i].ToString("F1") + "%");
 
             // calculate bar height
             scoreBars[i].changeBarHeight(maxHeight * scorePercentageList[i] / maxPercentage);
@@ -205,6 +208,10 @@ public class ScoreAnalysis : MonoBehaviour
             if (score > maxScore)
                 maxScore = score;
         }
+
+        vertiMaxText.text = maxScore.ToString("F0");
+        vertiMidText.text = ((maxScore + minScore) / 2).ToString("F0");
+        vertiMinText.text = minScore.ToString("F0");
 
         for (int i = 0; i < targetScoreNotes.Count; i++)
         {

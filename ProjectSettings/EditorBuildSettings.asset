@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Number Board.unity
     guid: d6f9181342e9c354082354c585d55db6
+  - enabled: 1
+    path: Assets/Scenes/number test.unity
+    guid: 29af3a342b5d09949b9f13d07cc6e111
   m_configObjects: {}

@@ -107,4 +107,8 @@ public class SettingManager : MonoBehaviour
         SceneManager.LoadScene("Number Board");
     }
 
+    public void Debug_ToNumberReg() {
+        SceneManager.LoadScene(2);
+    }
+
 }

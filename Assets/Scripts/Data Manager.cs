@@ -141,7 +141,7 @@ public class DataManager : MonoBehaviour
                         float temp = distance * 5;
                         score = temp <= 1f ? 11 : temp >= 5 ? 0 : Mathf.CeilToInt(10 - temp);
                     }
-                    scoreNoteList[^1].updateScore(k, k, score, new float[] { clickPosition.x, clickPosition.y });
+                    scoreNoteList[^1].updateScore(j, k, score, new float[] { clickPosition.x, clickPosition.y });
                 }
         }
         SaveScoreNoteToFile();
