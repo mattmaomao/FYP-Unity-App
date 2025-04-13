@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI endgameText1;
     [SerializeField] TextMeshProUGUI endgameText2;
 
+    [Header("SE clips")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip arrowSE;
+    [SerializeField] AudioClip beepSE;
+
     void Start()
     {
         fastestTimeText.text = $"Fastest Time:\n{PlayerPrefs.GetFloat("FastestTime", 99) / 60:00}:{PlayerPrefs.GetFloat("FastestTime", 99) % 60:00}";
@@ -49,7 +55,7 @@ public class GameManager : MonoBehaviour
         if (!ready)
         {
             timer += Time.deltaTime;
-            countDownText.text = $"Game Starting In:\n<color=red>{(readyTime - timer).ToString("0")}</color>";
+            countDownText.text = $"Game Starting In:\n<color=red>{Mathf.Ceil(readyTime - timer).ToString("0")}</color>";
             if (timer >= readyTime)
             {
                 ready = true;
@@ -92,12 +98,12 @@ public class GameManager : MonoBehaviour
 
     void setupGame()
     {
-        startingNum = Random.Range(10, 75);
+        startingNum = UnityEngine.Random.Range(10, 75);
         List<int> numbers = Enumerable.Range(startingNum, 25).ToList();
         // shuffle
         for (int i = 0; i < numbers.Count; i++)
         {
-            int rnd = Random.Range(i, numbers.Count);
+            int rnd = UnityEngine.Random.Range(i, numbers.Count);
             var temp = numbers[i];
             numbers[i] = numbers[rnd];
             numbers[rnd] = temp;
@@ -112,6 +118,7 @@ public class GameManager : MonoBehaviour
         startingNumberText.text = $"Starting Number: <color=red>{startingNum}</color>";
         currNumberText.text = "Current Number: -";
         playing = true;
+        StartCoroutine(countDownSE());
     }
 
     void endGame() {
@@ -153,5 +160,25 @@ public class GameManager : MonoBehaviour
     public void ExitGame()
     {
         SceneManager.LoadScene("Main Scene");
+    }
+
+    // audio 
+    IEnumerator countDownSE() {
+        playSE(arrowSE);
+        yield return new WaitForSeconds(1f);
+        playSE(arrowSE);
+        yield return new WaitForSeconds(1f);
+        playSE(arrowSE);
+        yield return new WaitForSeconds(1f);
+        playSE(beepSE);
+    }
+
+    public void playSE(AudioClip clip)
+    {
+        audioSource.volume = PlayerPrefs.GetFloat("Volume", 1);
+
+        if (audioSource.isPlaying)
+            audioSource.Stop();
+        audioSource.PlayOneShot(clip);
     }
 }

@@ -9,6 +9,7 @@ using System.IO;
 
 public class InputHandler : MonoBehaviour
 {
+    [SerializeField] GameObject bowBtns;
     [SerializeField] GameObject inputArea;
     public int index;
     public Slider LRH;
@@ -45,9 +46,15 @@ public class InputHandler : MonoBehaviour
     List<InputEntry> bow = new List<InputEntry>();
     [SerializeField] string filename;
 
+    void Start()
+    {
+        inputArea.SetActive(false);
+    }
+    
     void OnEnable()
     {
         LoadAllButtonName();
+        bowBtns.SetActive(true);
     }
 
     void OnDisable()
